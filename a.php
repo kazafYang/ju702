@@ -17,5 +17,8 @@ if ($result->num_rows > 0) {
 } else {
     echo "0 defult";
 }
+$url='http://hq.sinajs.cn/list=sz399006'; 
+$html = file_get_contents($url); 
+echo $html; 
 $conn->close();
 ?>
