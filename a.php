@@ -1,5 +1,6 @@
 <?php
-$conn = new mysqli("172.30.254.220", "root", "y13551960531", "ju70");
+include 'config_inc.php';
+$conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);
 // Check connection
 if ($conn->connect_error) {
     die("defult: " . $conn->connect_error);
