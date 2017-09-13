@@ -20,5 +20,6 @@ if ($result->num_rows > 0) {
 $url='http://hq.sinajs.cn/list=sz399006'; 
 $html = file_get_contents($url); 
 echo $html; 
+echo $url; 
 $conn->close();
 ?>
