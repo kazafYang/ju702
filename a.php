@@ -73,7 +73,7 @@ if ($conn->connect_error) {
  
 $sql = "SELECT id,begin_point,stat_time_hour FROM ". $table_name." limit 1";
 $result = $conn->query($sql);
- echo $result;
+// echo $result;
 if ($result->num_rows > 0) {
     // 输出数据
     while($row = $result->fetch_assoc()) {
