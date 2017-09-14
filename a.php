@@ -91,7 +91,7 @@ $sql = "select stat_time_min from ".$table_name." order by id desc limit 1;";
     $time_out_begin=($time_hour*3600)+($time_min*60)+$time_second+$time_length;
 $sql = "insert into ${TABLENAME}  (stat_date,stat_time_hour,stat_time_min,begin_point) VALUES ('$stat_date','$time_hour','$time_min','$begin_point')";    
    $conn->query($sql); 
-   nine_count     
+   nine_count();     
     }
 } 
 
