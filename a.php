@@ -17,6 +17,13 @@ while(($time_hour<>9 and $time_min<>30) or $time_hour<>13) {
 machining_price();
 }
                        }
+function kdjfifteen () {
+machining_price();
+$sql="select min15_point_max from  point_number where min15_point_max=(select max(min15_point_max) from  point_number) order by min15_point_max desc limit 9;"
+
+}  
+
+
 function nine_count () {
 $max=$begin_point;
 $min=$begin_point;
