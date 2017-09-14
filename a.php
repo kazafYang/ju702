@@ -73,7 +73,7 @@ if ($conn->connect_error) {
  
 $sql = "SELECT id,begin_point,stat_time_hour FROM ". $table_name." limit 1";
 $result = $conn->query($sql);
- echo $result
+ echo $result;
 if ($result->num_rows > 0) {
     // 输出数据
     while($row = $result->fetch_assoc()) {
@@ -86,19 +86,20 @@ if ($result->num_rows > 0) {
 while(1==1） {    
 machining_price();
     if ($time_hour<9 or ($time_hour==9 and $time_min<30)) {
-    sleep_time
+    sleep_time();
     }elseif ($time_hour=="11" and $time_min>"30") {
-    sleep_time     
+    sleep_time();     
     }elseif ($time_hour=="15" and $time_min>"1") {
+      echo "3点了！";
     exit;    
     }
     
     if ($time_hour==9 and $time_min==30) {
-    $time_length=960-$time_second
+    $time_length=960-$time_second;
     }elseif ($time_hour=="13" and $time_min=="0") {
-    $time_length=960-$time_second  
+    $time_length=960-$time_second;  
     }else{
-    $time_length=900-$time_second    
+    $time_length=900-$time_second;    
     }
 $sql = "select stat_time_min from ".$table_name." order by id desc limit 1;";    
     $result = $conn->query($sql);
