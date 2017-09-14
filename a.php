@@ -14,15 +14,15 @@ $time_second=$pieces[2];
 } 
 function sleep_time () {
 while(($time_hour<>9 and $time_min<>30) or $time_hour<>13) {
-machining_price
-} 
+machining_price();
+}
                        }
 function nine_count () {
 $max=$begin_point;
 $min=$begin_point;
 $time_out_now=($time_hour*3600)+($time_min*60)+$time_second;
 while( $time_out_now <= $time_out_begin) {
-     machining_price
+     machining_price();
 $time_out_now=($time_hour*3600)+($time_min*60)+$time_second;
 if ($begin_point>=$max){
     $max=$begin_point;
@@ -34,9 +34,9 @@ if ($begin_point<=$min){
     $sql="update ${TABLENAME} set min15_point_min=$min order by id desc limit 1 ; "
     $conn->query($sql);    
 } 
-kdjfifteen        #得到最大最小值以后开始进行kdj的方法计算；
-kdjthirty
-kdjsixty    
+kdjfifteen();        #得到最大最小值以后开始进行kdj的方法计算；
+kdjthirty();
+kdjsixty();    
 } 
 }
 
@@ -69,7 +69,7 @@ if ($result->num_rows > 0) {
 }
 #code begin
 while(1=2） {    
-machining_price
+machining_price();
     if ($time_hour<9 or ($time_hour==9 and $time_min<30)) {
     sleep_time
     }elseif ($time_hour=="11" and $time_min>"30") {
