@@ -24,29 +24,29 @@ $time_out_now=($time_hour*3600)+($time_min*60)+$time_second;
 while( $time_out_now <= $time_out_begin) {
      machining_price();
 $time_out_now=($time_hour*3600)+($time_min*60)+$time_second;
-if ($begin_point>=$max){
+if ($begin_point>=$max)
+{
     $max=$begin_point;
     $sql="update ".$table_name ." set min15_point_max=$max order by id desc limit 1 ; "
 }
-   if ($conn->query($sql) === TRUE) {
+   if ($conn->query($sql) === TRUE) 
+   {
     echo "max:新记录插入成功";
-     } else {
+     } 
+  else {
     echo "maxError: " . $sql . "<br>" . $conn->error;
 }
   
-if ($begin_point<=$min){
+if ($begin_point<=$min)
+{
     $min=$begin_point; 
     $sql="update " .$table_name ." set min15_point_min=$min order by id desc limit 1 ; "
-    if ($conn->query($sql) === TRUE) {
-    echo "min:新记录插入成功";
-     } else {
-    echo "min:Error: " . $sql . "<br>" . $conn->error;
-}
 } 
    if ($conn->query($sql) === TRUE) {
-    echo "max:新记录插入成功";
-     } else {
-    echo "maxError: " . $sql . "<br>" . $conn->error;
+    echo "min:新记录插入成功";
+     } 
+  else {
+    echo "minError: " . $sql . "<br>" . $conn->error;
 }
 kdjfifteen();        #得到最大最小值以后开始进行kdj的方法计算；
 kdjthirty();
