@@ -41,7 +41,7 @@ if ($begin_point>=$max)
 if ($begin_point<=$min)
 {
     $min=$begin_point; 
-    $sql="update " .$table_name ." set min15_point_min=$min order by id desc limit 1 ; "
+    $sql="update " .$table_name." set min15_point_min=$min order by id desc limit 1 ; ";
 } 
    if ($conn->query($sql) === TRUE) {
     echo "min:新记录插入成功";
