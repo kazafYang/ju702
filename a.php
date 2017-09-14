@@ -4,10 +4,7 @@ function machining_price ()
 { 
 $url='http://hq.sinajs.cn/list=sz399006'; 
 $html = file_get_contents($url); 
-//echo $html; 
-//echo $url; 
 $pieces = explode(",", $html);
-//echo $pieces[31]. "<br>";
 $begin_point=$pieces[3];
 $stat_date=$pieces[30];
 $pieces = explode(":", $pieces[31]);    
@@ -17,8 +14,9 @@ $time_second=$pieces[2];
 } 
 function sleep_time () 
 {
-    // 从现在起 10 秒后唤醒
-//time_sleep_until(time()+10);
+while(（$time_hour<9) or ($time_hour=9 and $time_min<30) or ($time_hour>11 and $time_min>30 and $time_hour<13)） {
+machining_price
+} 
 }
 
 
@@ -38,7 +36,7 @@ if ($conn->connect_error) {
  
 $sql = "SELECT id,begin_point,stat_time_hour FROM point_number";
 $result = $conn->query($sql);
- 
+ echo $result
 if ($result->num_rows > 0) {
     // 输出数据
     while($row = $result->fetch_assoc()) {
