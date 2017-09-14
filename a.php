@@ -83,7 +83,7 @@ if ($result->num_rows > 0) {
     echo "0 defult";
 }
 #code begin
-while(1==1） {    
+while(1==1) {    
 machining_price();
     if ($time_hour<9 or ($time_hour==9 and $time_min<30)) {
     sleep_time();
@@ -105,7 +105,7 @@ $sql = "select stat_time_min from ".$table_name." order by id desc limit 1;";
     $result = $conn->query($sql);
     if ($result<>$time_min){
     $time_out_begin=($time_hour*3600)+($time_min*60)+$time_second+$time_length;
-$sql = "insert into ${TABLENAME}  (stat_date,stat_time_hour,stat_time_min,begin_point) VALUES ('$stat_date','$time_hour','$time_min','$begin_point')";    
+$sql = "insert into ".$table." (stat_date,stat_time_hour,stat_time_min,begin_point) VALUES ('$stat_date','$time_hour','$time_min','$begin_point')";    
    $conn->query($sql); 
    nine_count();     
     }
