@@ -27,7 +27,8 @@ $time_out_now=($time_hour*3600)+($time_min*60)+$time_second;
 if ($begin_point>=$max)
 {
     $max=$begin_point;
-    $sql="update ".$table_name ." set min15_point_max=$max order by id desc limit 1 ; "
+    $sql="update ".$table_name." set min15_point_max=$max order by id desc limit 1 ; ";
+    echo $sql;
 }
    if ($conn->query($sql) === TRUE) 
    {
