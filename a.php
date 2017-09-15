@@ -55,7 +55,7 @@ if ($begin_point<=$min)
   else {
     echo "minError: " . $sql . "<br>" . $conn->error;
 }
-kdjfifteen();        #得到最大最小值以后开始进行kdj的方法计算；
+kdjfifteen(); #begin:kdj
 kdjthirty();
 kdjsixty();    
 } 
@@ -96,8 +96,8 @@ machining_price();
     }elseif ($time_hour=="11" and $time_min>"30") {
     sleep_time();     
     }elseif ($time_hour=="15" and $time_min>"1") {
-      echo "3点了！";
-    exit;    
+      echo "3point!";
+    exit(0);    
     }
     
     if ($time_hour==9 and $time_min==30) {
