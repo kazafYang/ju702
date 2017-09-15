@@ -19,7 +19,7 @@ machining_price();
                        }
 function kdjfifteen () {
 machining_price();
-$sql="select min15_point_max from  point_number where min15_point_max=(select max(min15_point_max) from  point_number) order by min15_point_max desc limit 9;"
+$sql="select min15_point_max from  point_number where min15_point_max=(select max(min15_point_max) from  point_number) order by min15_point_max desc limit 9;";
 }  
 
 
