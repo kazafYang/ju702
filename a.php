@@ -1,7 +1,17 @@
 <?php
 include 'config_inc.php';
+
+$table_name="point_number";
+$begin_point="";
+$stat_date="";
+$time_hour="";
+$time_min="";
+$time_second="";
+$time_length=0;
+
 function machining_price () 
-{ 
+{
+echo "comming machining_price\n" 
 $url='http://hq.sinajs.cn/list=sz399006'; 
 $html = file_get_contents($url); 
 $pieces = explode(",", $html);
@@ -13,6 +23,7 @@ $time_min=$pieces[1];
 $time_second=$pieces[2];
 } 
 function sleep_time () {
+echo "comming sleep_time";
 while(($time_hour<>9 and $time_min<>30) or $time_hour<>13) {
 machining_price();
 }
@@ -24,6 +35,7 @@ $sql="select min15_point_max from  point_number where min15_point_max=(select ma
 
 
 function nine_count () {
+echo "comming nine_count"
 $max=$begin_point;
 $min=$begin_point;
 $time_out_now=($time_hour*3600)+($time_min*60)+$time_second;
@@ -60,17 +72,6 @@ kdjthirty();
 kdjsixty();    
 } 
 }
-
-
-$table_name="point_number";
-$begin_point="";
-$stat_date="";
-$time_hour="";
-$time_min="";
-$time_second="";
-$time_length=0;
-
-
 $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);
 // Check connection
 if ($conn->connect_error) {
@@ -92,6 +93,7 @@ if ($result->num_rows > 0) {
 while(1==1) {    
 machining_price();
     if ($time_hour<9 or ($time_hour==9 and $time_min<30)) {
+      echo "comming mainwhile if";
     sleep_time();
     }elseif ($time_hour=="11" and $time_min>"30") {
     sleep_time();     
