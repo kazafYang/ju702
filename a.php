@@ -43,7 +43,7 @@ $time_out_now=($time_hour*3600)+($time_min*60)+$time_second;
 while( $time_out_now <= $time_out_begin) {
 machining_price();
 $time_out_now=($time_hour*3600)+($time_min*60)+$time_second;
-  echo "$max--$begin_point"  
+  echo "$max--$begin_point\n"  
 if ($begin_point>=$max)
 {
     $max=$begin_point;
