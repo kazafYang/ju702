@@ -114,8 +114,8 @@ $sql = "select stat_time_min from ".$table_name." order by id desc limit 1;";
     $result = $conn->query($sql);
     if ($result<>$time_min){
     $time_out_begin=($time_hour*3600)+($time_min*60)+$time_second+$time_length;
-   echo "table:$table_name\n"
-   $sql = "insert into $table_name (stat_date,stat_time_hour,stat_time_min,begin_point) VALUES ('$stat_date','$time_hour','$time_min','$begin_point')";    
+   echo "table:$table_name\n";
+   $sql = "insert into $table_name (stat_date,stat_time_hour,stat_time_min,begin_point) VALUES ('$stat_date','$time_hour','$time_min','$begin_point');";    
    if ($conn->query($sql) === TRUE) {
     echo "new inser into\n";
 } else {
