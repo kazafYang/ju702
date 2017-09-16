@@ -42,7 +42,7 @@ $rsv=($begin_point-$min15_point_min)/($min15_point_max-$min15_point_min)*100;
 $k=2/3*$min15_k+1/3*$rsv;
 $d=2/3*$min15_d+1/3*$k;
 $j=3*$k-2*$d;
-update_sql="update $table_name set min15_k='$k' , min15_d='$d' , min15_j='$j' order by id desc limit 1 ; ";  
+$sql="update $table_name set min15_k='$k' , min15_d='$d' , min15_j='$j' order by id desc limit 1 ; ";  
 }  
 
 
@@ -59,8 +59,8 @@ $time_out_now=($time_hour*3600)+($time_min*60)+$time_second;
 if ($begin_point>=$max)
 {
     $max=$begin_point;
-    echo "$max\n"
-    $sql="update $table_name set min15_point_max=$max order by id desc limit 1 ; ";
+    echo "$max\n";
+    $sql="update $table_name set min15_point_max=$max order by id desc limit 1 ;";
     echo $sql;
 }
    if ($conn->query($sql) === TRUE) 
@@ -124,9 +124,11 @@ machining_price();
     }else{
     $time_length=900-$time_second;    
     }
-$sql = "select stat_time_min from ".$table_name." order by id desc limit 1;";    
+$sql = "select stat_time_min from $table_name order by id desc limit 1;";    
     $result = $conn->query($sql);
-    if ($result<>$time_min){
+    $row=$result->fetch_assoc();
+    echo "stat_time_min:"$row[stat_time_min]."\n";
+    if ($row[stat_time_min]<>$time_min){
     $time_out_begin=($time_hour*3600)+($time_min*60)+$time_second+$time_length;
    echo "table:$table_name\n";
    $sql = "insert into $table_name (stat_date,stat_time_hour,stat_time_min,begin_point) VALUES ('$stat_date','$time_hour','$time_min','$begin_point');";    
