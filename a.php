@@ -41,20 +41,21 @@ $max=$begin_point;
 $min=$begin_point;
 $time_out_now=($time_hour*3600)+($time_min*60)+$time_second;
 while( $time_out_now <= $time_out_begin) {
-     machining_price();
+machining_price();
 $time_out_now=($time_hour*3600)+($time_min*60)+$time_second;
+  echo "$max--$begin_point"  
 if ($begin_point>=$max)
 {
     $max=$begin_point;
-    $sql="update ".$table_name." set min15_point_max=$max order by id desc limit 1 ; ";
+    $sql="update $table_name set min15_point_max=$max order by id desc limit 1 ; ";
     echo $sql;
 }
    if ($conn->query($sql) === TRUE) 
    {
-    echo "max:新记录插入成功";
+    echo "max:inser into";
      } 
   else {
-    echo "maxError: " . $sql . "<br>" . $conn->error;
+    echo "maxError: " . $sql . $conn->error."\n";
 }
   
 if ($begin_point<=$min)
@@ -119,7 +120,7 @@ $sql = "select stat_time_min from ".$table_name." order by id desc limit 1;";
    if ($conn->query($sql) === TRUE) {
     echo "new inser into\n";
 } else {
-    echo "Error: " . $sql . "\n" . $conn->error;
+    echo "Error: " . $sql . $conn->error."\n";
 }
    nine_count();     
     }
