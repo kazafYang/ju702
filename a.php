@@ -30,9 +30,19 @@ machining_price();
 }
                        }
 function kdjfifteen () {
-global $time_hour,$time_min,$time_second,$begin_point;
+global $begin_point;
 machining_price();
 $sql="select min15_point_max from  $table_name where min15_point_max=(select max(min15_point_max) from  $table_name) order by min15_point_max desc limit 9;";
+$min15_point_max = $conn->query($sql);
+$sql="select min15_point_min from  point_number where min15_point_min=(select min(min15_point_min) from  point_number) order by min15_point_min desc limit 9;";
+$min15_point_min = $conn->query($sql);
+$min15_k="select min15_k from point_number order by point_number.id  desc  limit 1,1;";  
+$min15_d="select min15_d from point_number order by point_number.id  desc  limit 1,1;";
+$rsv=($begin_point-$min15_point_min)/($min15_point_max-$min15_point_min)*100;
+$k=2/3*$min15_k+1/3*$rsv;
+$d=2/3*$min15_d+1/3*$k;
+$j=3*$k-2*$d;
+update_sql="update $table_name set min15_k='$k' , min15_d='$d' , min15_j='$j' order by id desc limit 1 ; ";  
 }  
 
 
