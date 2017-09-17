@@ -30,20 +30,20 @@ machining_price();
 }
                        }
 function kdjfifteen () {
-global $begin_point;
+global $begin_point,$conn,$table_name;
 machining_price();
 $sql="select min15_point_max from  $table_name where min15_point_max=(select max(min15_point_max) from  $table_name) order by min15_point_max desc limit 9;";
 $result = $conn->query($sql);
 $row=$result->fetch_assoc();
 $min15_point_max=$row[min15_point_max];
-$sql="select min15_point_min from  point_number where min15_point_min=(select min(min15_point_min) from  point_number) order by min15_point_min desc limit 9;";
+$sql="select min15_point_min from  $table_name where min15_point_min=(select min(min15_point_min) from  $table_name) order by min15_point_min desc limit 9;";
 $result = $conn->query($sql);
 $row=$result->fetch_assoc();
-$min15_point_min=$row[min15_point_min;
-$min15_k="select min15_k from point_number order by point_number.id  desc  limit 1,1;"; 
+$min15_point_min=$row[min15_point_min];
+$sql="select min15_k from $table_name order by point_number.id  desc  limit 1,1;"; 
 $row=$result->fetch_assoc();
 $min15_k=$row[min15_k];                      
-$min15_d="select min15_d from point_number order by point_number.id  desc  limit 1,1;";
+$sql="select min15_d from $table_name order by point_number.id  desc  limit 1,1;";
 $row=$result->fetch_assoc();
 $min15_d=$row[min15_d];
 echo "min15_point_max:$min15_point_max~min15_point_min:$min15_point_max~min15_k:$min15_k~min15_d:$min15_d";                      
@@ -51,16 +51,90 @@ $rsv=($begin_point-$min15_point_min)/($min15_point_max-$min15_point_min)*100;
 $k=2/3*$min15_k+1/3*$rsv;
 $d=2/3*$min15_d+1/3*$k;
 $j=3*$k-2*$d;
-$sql="update $table_name set min15_k='$k' , min15_d='$d' , min15_j='$j' order by id desc limit 1 ; ";  
+echo "15kdj:$k,$d,$j\n";
+$sql="update $table_name set min15_k='$k' , min15_d='$d' , min15_j='$j' order by id desc limit 1 ; ";
+   if ($conn->query($sql) === TRUE) 
+   {
+    echo "15kdjupdate:update\n";
+     } 
+  else {
+    echo "maxError: " . $sql . $conn->error."\n";
+}  
 }  
 
+function kdjthirty () {
+global $begin_point,$conn,$table_name;
+machining_price();
+$sql="select min15_point_max from  point_number where min15_point_max=(select max(min15_point_max) from  point_number) order by min15_point_max desc limit 18;";
+$result = $conn->query($sql);
+$row=$result->fetch_assoc();
+$min15_point_max=$row[min15_point_max];
+$sql="select min15_point_min from  point_number where min15_point_min=(select min(min15_point_min) from  point_number) order by min15_point_min desc limit 18;";
+$result = $conn->query($sql);
+$row=$result->fetch_assoc();
+$min15_point_min=$row[min15_point_min];
+$sql="select min30_k from point_number order by point_number.id  desc  limit 1,1;"; 
+$row=$result->fetch_assoc();
+$min30_k=$row[min30_k];                      
+$sql="select min15_d from $table_name order by point_number.id  desc  limit 1,1;";
+$row=$result->fetch_assoc();
+$min30_d=$row[min30_d];
+echo "min15_point_max:$min15_point_max~min15_point_min:$min15_point_max~min30_k:$min30_k~min30_d:$min30_d";                      
+$rsv=($begin_point-$min15_point_min)/($min15_point_max-$min15_point_min)*100;
+$k=2/3*$min30_k+1/3*$rsv;
+$d=2/3*$min30_d+1/3*$k;
+$j=3*$k-2*$d;
+echo "15kdj:$k,$d,$j\n";
+$sql="update $table_name set min30_k='$k' , min30_d='$d' , min30_j='$j' order by id desc limit 1 ; ";
+   if ($conn->query($sql) === TRUE) 
+   {
+    echo "30kdjupdate:update\n";
+     } 
+  else {
+    echo "maxError: " . $sql . $conn->error."\n";
+}  
+}  
+
+function kdjsixty () {
+global $begin_point,$conn,$table_name;
+machining_price();
+$sql="select min15_point_max from  point_number where min15_point_max=(select max(min15_point_max) from  point_number) order by min15_point_max desc limit 18;";
+$result = $conn->query($sql);
+$row=$result->fetch_assoc();
+$min15_point_max=$row[min15_point_max];
+$sql="select min15_point_min from  point_number where min15_point_min=(select min(min15_point_min) from  point_number) order by min15_point_min desc limit 18;";
+$result = $conn->query($sql);
+$row=$result->fetch_assoc();
+$min15_point_min=$row[min15_point_min];
+$sql="select min30_k from point_number order by point_number.id  desc  limit 1,1;"; 
+$row=$result->fetch_assoc();
+$min60_k=$row[min60_k];                      
+$sql="select min15_d from $table_name order by point_number.id  desc  limit 1,1;";
+$row=$result->fetch_assoc();
+$min60_d=$row[min60_d];
+echo "min15_point_max:$min15_point_max~min15_point_min:$min15_point_max~min60_k:$min60_k~min60_d:$min60_d";                      
+$rsv=($begin_point-$min15_point_min)/($min15_point_max-$min15_point_min)*100;
+$k=2/3*$min60_k+1/3*$rsv;
+$d=2/3*$min60_d+1/3*$k;
+$j=3*$k-2*$d;
+echo "60kdj:$k,$d,$j\n";
+$sql="update $table_name set min60_k='$k' , min60_d='$d' , min60_j='$j' order by id desc limit 1 ; ";
+   if ($conn->query($sql) === TRUE) 
+   {
+    echo "60kdjupdate:update\n";
+     } 
+  else {
+    echo "maxError: " . $sql . $conn->error."\n";
+}  
+}  
 
 function nine_count () {
-global $time_hour,$time_min,$time_second,$begin_point,$table_name;
+global $time_hour,$time_min,$time_second,$begin_point,$table_name,$time_out_begin,$conn;
 echo "comming nine_count\n";
 $max=$begin_point;
 $min=$begin_point;
 $time_out_now=($time_hour*3600)+($time_min*60)+$time_second;
+echo "time_out_now:$time_out_now~time_out_begin:$time_out_begin\n"; 
 while( $time_out_now <= $time_out_begin) {
 machining_price();
 $time_out_now=($time_hour*3600)+($time_min*60)+$time_second;
@@ -70,7 +144,7 @@ if ($begin_point>=$max)
     $max=$begin_point;
     echo "$max\n";
     $sql="update $table_name set min15_point_max=$max order by id desc limit 1 ;";
-    echo $sql;
+    echo $sql."\n";
 }
    if ($conn->query($sql) === TRUE) 
    {
@@ -86,10 +160,10 @@ if ($begin_point<=$min)
     $sql="update " .$table_name." set min15_point_min=$min order by id desc limit 1 ; ";
 } 
    if ($conn->query($sql) === TRUE) {
-    echo "min:新记录插入成功";
+    echo "min:新记录插入成功\n";
      } 
   else {
-    echo "minError: " . $sql . "<br>" . $conn->error;
+    echo "minError: " . $sql . $conn->error."\n";
 }
 kdjfifteen(); #begin:kdj
 kdjthirty();
@@ -101,7 +175,7 @@ $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_
 if ($conn->connect_error) {
     die("defult: " . $conn->connect_error);
 } 
- 
+/* 
 $sql = "SELECT id,begin_point,stat_time_hour FROM ". $table_name." limit 1";
 $result = $conn->query($sql);
 // echo $result;
@@ -113,6 +187,7 @@ if ($result->num_rows > 0) {
 } else {
     echo "0 defult";
 }
+*/
 #code begin
 while(1==1) {    
 machining_price();
@@ -136,7 +211,7 @@ machining_price();
 $sql = "select stat_time_min from $table_name order by id desc limit 1;";    
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();
-    echo "stat_time_min:"$row[stat_time_min]."\n";
+    echo "stat_time_min:$row[stat_time_min]\n";
     if ($row[stat_time_min]<>$time_min){
     $time_out_begin=($time_hour*3600)+($time_min*60)+$time_second+$time_length;
    echo "table:$table_name\n";
