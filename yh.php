@@ -14,7 +14,7 @@ function machining_price ()
 {
 echo "comming machining_price\n";
 global $stat_date,$time_hour,$time_min,$time_second,$begin_point,$code;
-$url='http://hq.sinajs.cn/list=sh$code'; 
+$url='http://hq.sinajs.cn/list=sh'.$code; 
 $html = file_get_contents($url); 
 $pieces = explode(",", $html);
 $begin_point=$pieces[3];
@@ -269,7 +269,8 @@ $sql = "select id,stat_time_min from $table_name order by id desc limit 1;";
     if ($row[stat_time_min]<>$time_min){
     $time_out_begin=($time_hour*3600)+($time_min*60)+$time_second+$time_length;
    echo "table:$table_name\n";
-   $sql = "insert into $table_name (id,stat_date,stat_time_hour,stat_time_min,begin_point) VALUES ('$row[id]+1','$stat_date','$time_hour','$time_min','$begin_point');";    
+   $row[id]=$row[id]+1;   
+   $sql = "insert into $table_name (id,stat_date,stat_time_hour,stat_time_min,begin_point) VALUES ('$row[id]','$stat_date','$time_hour','$time_min','$begin_point');";    
    if ($conn->query($sql) === TRUE) {
     echo "new inser into\n";
 } else {
