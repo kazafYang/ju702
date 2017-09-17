@@ -77,7 +77,7 @@ $result = $conn->query($sql);
 $row=$result->fetch_assoc();
 $min15_point_min=$row[min15_point_min];
 
-if ($time_hour_begin==9 and $time_min_begin==30) || ($time_hour_begin==10 and $time_min_begin==1) || ($time_hour_begin==10 and $time_min_begin==31) || ($time_hour_begin==11 and $time_min_begin==1) || ($time_hour_begin==13 and $time_min_begin==0) || ($time_hour_begin==13 and $time_min_begin==31) || ($time_hour_begin==14 and $time_min_begin==1) {
+if ($time_hour_begin==9 and $time_min_begin==30) or ($time_hour_begin==10 and $time_min_begin==1) or ($time_hour_begin==10 and $time_min_begin==31) or ($time_hour_begin==11 and $time_min_begin==1) or ($time_hour_begin==13 and $time_min_begin==0) or ($time_hour_begin==13 and $time_min_begin==31) or ($time_hour_begin==14 and $time_min_begin==1) {
 $sql="select min30_k from point_number order by point_number.id  desc  limit 1,1;";
 $result = $conn->query($sql);  
 $row=$result->fetch_assoc();
@@ -125,7 +125,7 @@ $result = $conn->query($sql);
 $row=$result->fetch_assoc();
 $min15_point_min=$row[min15_point_min];
 
-if ($time_hour_begin==9 and $time_min_begin==30) || ($time_hour_begin==10 and $time_min_begin==31) || ($time_hour_begin==13 and $time_min_begin==0) || ($time_hour_begin==14 and $time_min_begin==1) {
+if ($time_hour_begin==9 and $time_min_begin==30) or ($time_hour_begin==10 and $time_min_begin==31) or ($time_hour_begin==13 and $time_min_begin==0) or ($time_hour_begin==14 and $time_min_begin==1) {
 $sql="select min60_k from point_number order by point_number.id  desc  limit 1,1;"
 $result = $conn->query($sql);
 $row=$result->fetch_assoc();
@@ -135,7 +135,7 @@ $result = $conn->query($sql);
 $row=$result->fetch_assoc();
 $min60_d=$row[min60_d];
 }
-elseif ($time_hour_begin==9 and $time_min_begin==46) || ($time_hour_begin==10 and $time_min_begin==46) || ($time_hour_begin==13 and $time_min_begin==16) || ($time_hour_begin==14 and $time_min_begin==16) {
+elseif ($time_hour_begin==9 and $time_min_begin==46) or ($time_hour_begin==10 and $time_min_begin==46) or ($time_hour_begin==13 and $time_min_begin==16) or ($time_hour_begin==14 and $time_min_begin==16) {
 $sql="select min60_k from point_number order by point_number.id  desc  limit 2,1;";
 $result = $conn->query($sql);
 $row=$result->fetch_assoc();
@@ -145,7 +145,7 @@ $result = $conn->query($sql);
 $row=$result->fetch_assoc();
 $min60_d=$row[min60_d];
 }
-elseif($time_hour_begin==10 and $time_min_begin==1) || ($time_hour_begin==11 and $time_min_begin==1) || ($time_hour_begin==13 and $time_min_begin==31) || ($time_hour_begin==14 and $time_min_begin==31) {
+elseif($time_hour_begin==10 and $time_min_begin==1) or ($time_hour_begin==11 and $time_min_begin==1) or ($time_hour_begin==13 and $time_min_begin==31) or ($time_hour_begin==14 and $time_min_begin==31) {
 $sql="select min60_k from point_number order by point_number.id  desc  limit 3,1;";
 $result = $conn->query($sql);
 $row=$result->fetch_assoc();
