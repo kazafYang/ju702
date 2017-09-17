@@ -2,7 +2,7 @@
 include 'config_inc.php';
 
 $table_name="point_number_jg";
-$code="sh512660";
+$code="512660";
 $begin_point="";
 $stat_date="";
 $time_hour="";
@@ -13,8 +13,8 @@ $time_length=0;
 function machining_price () 
 {
 echo "comming machining_price\n";
-global $stat_date,$time_hour,$time_min,$time_second,$begin_point;
-$url='http://hq.sinajs.cn/list=$code'; 
+global $stat_date,$time_hour,$time_min,$time_second,$begin_point,$code;
+$url='http://hq.sinajs.cn/list=sh$code'; 
 $html = file_get_contents($url); 
 $pieces = explode(",", $html);
 $begin_point=$pieces[3];
@@ -262,14 +262,14 @@ machining_price();
     }else{
     $time_length=900-$time_second;    
     }
-$sql = "select stat_time_min from $table_name order by id desc limit 1;";    
+$sql = "select id,stat_time_min from $table_name order by id desc limit 1;";    
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();
     echo "stat_time_min:$row[stat_time_min]\n";
     if ($row[stat_time_min]<>$time_min){
     $time_out_begin=($time_hour*3600)+($time_min*60)+$time_second+$time_length;
    echo "table:$table_name\n";
-   $sql = "insert into $table_name (stat_date,stat_time_hour,stat_time_min,begin_point) VALUES ('$stat_date','$time_hour','$time_min','$begin_point');";    
+   $sql = "insert into $table_name (id,stat_date,stat_time_hour,stat_time_min,begin_point) VALUES ('$row[id]+1','$stat_date','$time_hour','$time_min','$begin_point');";    
    if ($conn->query($sql) === TRUE) {
     echo "new inser into\n";
 } else {
