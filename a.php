@@ -111,11 +111,11 @@ $sql="select min15_point_min from  point_number where min15_point_min=(select mi
 $result = $conn->query($sql);
 $row=$result->fetch_assoc();
 $min15_point_min=$row[min15_point_min];
-$sql="select min30_k from point_number order by id  desc  limit 1,1;"; 
+$sql="select min60_k from point_number order by id  desc  limit 1,1;"; 
 $result = $conn->query($sql);  
 $row=$result->fetch_assoc();
 $min60_k=$row[min60_k];                      
-$sql="select min15_d from $table_name order by id  desc  limit 1,1;";
+$sql="select min60_d from $table_name order by id  desc  limit 1,1;";
 $result = $conn->query($sql);  
 $row=$result->fetch_assoc();
 $min60_d=$row[min60_d];
@@ -141,8 +141,8 @@ echo "comming nine_count\n";
 $max=$begin_point;
 $min=$begin_point;
 $time_out_now=($time_hour*3600)+($time_min*60)+$time_second;
-echo "time_out_now:$time_out_now~time_out_begin:$time_out_begin\n"; 
 while( $time_out_now <= $time_out_begin) {
+echo "time_out_now:$time_out_now~time_out_begin:$time_out_begin\n"; 
 machining_price();
 $time_out_now=($time_hour*3600)+($time_min*60)+$time_second;
   echo "$max--$begin_point\n";  
