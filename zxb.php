@@ -2,7 +2,7 @@
 include 'config_inc.php';
 
 $table_name="point_number_zxb";
-$code="sz159902";
+$code="159902";
 $begin_point="";
 $stat_date="";
 $time_hour="";
@@ -13,8 +13,8 @@ $time_length=0;
 function machining_price () 
 {
 echo "comming machining_price\n";
-global $stat_date,$time_hour,$time_min,$time_second,$begin_point;
-$url='http://hq.sinajs.cn/list=$code'; 
+global $stat_date,$time_hour,$time_min,$time_second,$begin_point,$code;
+$url='http://hq.sinajs.cn/list=sz$code'; 
 $html = file_get_contents($url); 
 $pieces = explode(",", $html);
 $begin_point=$pieces[3];
@@ -262,7 +262,7 @@ machining_price();
     }else{
     $time_length=900-$time_second;    
     }
-$sql = "select stat_time_min,id from $table_name order by id desc limit 1;";    
+$sql = "select id,stat_time_min from $table_name order by id desc limit 1;";    
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();
     echo "stat_time_min:$row[stat_time_min]\n";
