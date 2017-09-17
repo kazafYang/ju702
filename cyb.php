@@ -2,6 +2,7 @@
 include 'config_inc.php';
 
 $table_name="point_number";
+$code="sz399006";
 $begin_point="";
 $stat_date="";
 $time_hour="";
@@ -13,7 +14,7 @@ function machining_price ()
 {
 echo "comming machining_price\n";
 global $stat_date,$time_hour,$time_min,$time_second,$begin_point;
-$url='http://hq.sinajs.cn/list=sz399006'; 
+$url='http://hq.sinajs.cn/list=$code'; 
 $html = file_get_contents($url); 
 $pieces = explode(",", $html);
 $begin_point=$pieces[3];
@@ -68,31 +69,31 @@ $sql="update $table_name set min15_k='$k' , min15_d='$d' , min15_j='$j' order by
 function kdjthirty () {
 global $begin_point,$conn,$table_name;
 machining_price();
-$sql="select min15_point_max from  point_number where min15_point_max=(select max(min15_point_max) from  point_number) order by min15_point_max desc limit 18;";
+$sql="select min15_point_max from  $table_name where min15_point_max=(select max(min15_point_max) from  $table_name) order by min15_point_max desc limit 18;";
 $result = $conn->query($sql);
 $row=$result->fetch_assoc();
 $min15_point_max=$row[min15_point_max];
-$sql="select min15_point_min from  point_number where min15_point_min=(select min(min15_point_min) from  point_number) order by min15_point_min desc limit 18;";
+$sql="select min15_point_min from  $table_name where min15_point_min=(select min(min15_point_min) from  $table_name) order by min15_point_min desc limit 18;";
 $result = $conn->query($sql);
 $row=$result->fetch_assoc();
 $min15_point_min=$row[min15_point_min];
 
 if (($time_hour_begin==9 and $time_min_begin==30) or ($time_hour_begin==10 and $time_min_begin==1) or ($time_hour_begin==10 and $time_min_begin==31) or ($time_hour_begin==11 and $time_min_begin==1) or ($time_hour_begin==13 and $time_min_begin==0) or ($time_hour_begin==13 and $time_min_begin==31) or ($time_hour_begin==14 and $time_min_begin==1)) {
-$sql="select min30_k from point_number order by point_number.id  desc  limit 1,1;";
+$sql="select min30_k from $table_name order by id  desc  limit 1,1;";
 $result = $conn->query($sql);  
 $row=$result->fetch_assoc();
 $min30_k=$row[min30_k]; 
-$sql="select min30_d from point_number order by point_number.id  desc  limit 1,1;";
+$sql="select min30_d from $table_name order by id  desc  limit 1,1;";
 $result = $conn->query($sql);  
 $row=$result->fetch_assoc();
 $min30_d=$row[min30_d];
 }
 else {
-$sql="select min30_k from point_number order by point_number.id  desc  limit 2,1;";
+$sql="select min30_k from $table_name order by id  desc  limit 2,1;";
 $result = $conn->query($sql);  
 $row=$result->fetch_assoc();
 $min30_k=$row[min30_k]; 
-$sql="select min30_d from point_number order by point_number.id  desc  limit 2,1;";
+$sql="select min30_d from $table_name order by id  desc  limit 2,1;";
 $result = $conn->query($sql);  
 $row=$result->fetch_assoc();
 $min30_d=$row[min30_d];
@@ -116,51 +117,51 @@ $sql="update $table_name set min30_k='$k' , min30_d='$d' , min30_j='$j' order by
 function kdjsixty () {
 global $begin_point,$conn,$table_name;
 machining_price();
-$sql="select min15_point_max from  point_number where min15_point_max=(select max(min15_point_max) from  point_number) order by min15_point_max desc limit 18;";
+$sql="select min15_point_max from  $table_name where min15_point_max=(select max(min15_point_max) from  $table_name) order by min15_point_max desc limit 36;";
 $result = $conn->query($sql);
 $row=$result->fetch_assoc();
 $min15_point_max=$row[min15_point_max];
-$sql="select min15_point_min from  point_number where min15_point_min=(select min(min15_point_min) from  point_number) order by min15_point_min desc limit 18;";
+$sql="select min15_point_min from  $table_name where min15_point_min=(select min(min15_point_min) from  $table_name) order by min15_point_min desc limit 36;";
 $result = $conn->query($sql);
 $row=$result->fetch_assoc();
 $min15_point_min=$row[min15_point_min];
 
 if (($time_hour_begin==9 and $time_min_begin==30) or ($time_hour_begin==10 and $time_min_begin==31) or ($time_hour_begin==13 and $time_min_begin==0) or ($time_hour_begin==14 and $time_min_begin==1)) {
-$sql="select min60_k from point_number order by point_number.id  desc  limit 1,1;"
+$sql="select min60_k from $table_name order by id  desc  limit 1,1;";
 $result = $conn->query($sql);
 $row=$result->fetch_assoc();
 $min60_k=$row[min60_k];
-$sql="select min60_d from point_number order by point_number.id  desc  limit 1,1;"
+$sql="select min60_d from $table_name order by id  desc  limit 1,1;";
 $result = $conn->query($sql);
 $row=$result->fetch_assoc();
 $min60_d=$row[min60_d];
 }
 elseif (($time_hour_begin==9 and $time_min_begin==46) or ($time_hour_begin==10 and $time_min_begin==46) or ($time_hour_begin==13 and $time_min_begin==16) or ($time_hour_begin==14 and $time_min_begin==16)) {
-$sql="select min60_k from point_number order by point_number.id  desc  limit 2,1;";
+$sql="select min60_k from $table_name order by id  desc  limit 2,1;";
 $result = $conn->query($sql);
 $row=$result->fetch_assoc();
 $min60_k=$row[min60_k];
-$sql="select min60_d from point_number order by point_number.id  desc  limit 2,1;";
+$sql="select min60_d from $table_name order by id  desc  limit 2,1;";
 $result = $conn->query($sql);
 $row=$result->fetch_assoc();
 $min60_d=$row[min60_d];
 }
 elseif(($time_hour_begin==10 and $time_min_begin==1) or ($time_hour_begin==11 and $time_min_begin==1) or ($time_hour_begin==13 and $time_min_begin==31) or ($time_hour_begin==14 and $time_min_begin==31)) {
-$sql="select min60_k from point_number order by point_number.id  desc  limit 3,1;";
+$sql="select min60_k from $table_name order by id  desc  limit 3,1;";
 $result = $conn->query($sql);
 $row=$result->fetch_assoc();
 $min60_k=$row[min60_k];
-$sql="select min60_d from point_number order by point_number.id  desc  limit 3,1;";
+$sql="select min60_d from $table_name order by id  desc  limit 3,1;";
 $result = $conn->query($sql);
 $row=$result->fetch_assoc();
 $min60_d=$row[min60_d];
 }
 else{
-$sql="select min60_k from point_number order by point_number.id  desc  limit 4,1;";
+$sql="select min60_k from $table_name order by id  desc  limit 4,1;";
 $result = $conn->query($sql);
 $row=$result->fetch_assoc();
 $min60_k=$row[min60_k];
-$sql="select min60_d from point_number order by point_number.id  desc  limit 4,1;";
+$sql="select min60_d from $table_name order by id  desc  limit 4,1;";
 $result = $conn->query($sql);
 $row=$result->fetch_assoc();
 $min60_d=$row[min60_d];
@@ -201,10 +202,10 @@ if ($begin_point>=$max)
 }
    if ($conn->query($sql) === TRUE) 
    {
-    echo "max:inser into";
+    echo "max新纪录更新成功\n";
      } 
   else {
-    echo "maxError: " . $sql . $conn->error."\n";
+    echo "max新纪录更新Error: " . $sql . $conn->error."\n";
 }
   
 if ($begin_point<=$min)
@@ -213,10 +214,10 @@ if ($begin_point<=$min)
     $sql="update " .$table_name." set min15_point_min=$min order by id desc limit 1 ; ";
 } 
    if ($conn->query($sql) === TRUE) {
-    echo "min:新记录插入成功\n";
+    echo "min:新记录更新成功\n";
      } 
   else {
-    echo "minError: " . $sql . $conn->error."\n";
+    echo "min新纪录更新Error: " . $sql . $conn->error."\n";
 }
 kdjfifteen(); #begin:kdj
 kdjthirty();
