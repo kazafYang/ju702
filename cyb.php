@@ -26,7 +26,7 @@ $time_second=$pieces[2];
 } 
 function sleep_time () {
 echo "comming sleep_time\n";
-while(($time_hour<>9 and $time_min<>30) or $time_hour<>13) {
+while(($time_hour==9 and $time_min<30) or ($time_hour<13 and $time_hour>=11) or $time_hour<9) {
 machining_price();
 }
                        }
@@ -252,7 +252,7 @@ machining_price();
     sleep_time();     
     }elseif ($time_hour=="15" and $time_min>"1") {
       echo "3point!\n";
-  //  exit(0);    
+      exit(0);    
     }
     
     if ($time_hour==9 and $time_min==30) {
