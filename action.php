@@ -9,7 +9,7 @@ foreach ($code as $value)
     $sql = "SELECT id,begin_point,stat_time_hour FROM $value order by id desc limit 1";
     $result = $conn->query($sql);
     $row = $result->fetch_assoc();
-    $showinfo=$row[id].$showinfo;
-    echo $showinfo;
+    $showinfo=$row[id].",".$showinfo;
 }
+echo $showinfo;
 ?>
