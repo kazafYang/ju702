@@ -6,7 +6,7 @@ $code=array("point_number","point_number_zxb","point_number_sz");
 foreach ($code as $value)
 {
    // echo $value . "<br>";
-    $sql = "SELECT id,begin_point,stat_time_hour FROM $value limit 1";
+    $sql = "SELECT id,begin_point,stat_time_hour FROM $value order by id desc limit 1";
     $result = $conn->query($sql);
     $row = $result->fetch_assoc();
     $showinfo=$row[id].$showinfo;
