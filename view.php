@@ -5,8 +5,7 @@ $code=array("point_number","point_number_sz","point_number_sz100","point_number_
                                                                                                                                                                               
 $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);                                                                                    
 foreach ($code as $value)                                                                                                                                                     
-{                                                                                                                                                                             
-   // echo $value . "<br>";                                                                                                                                                   
+{                                                                                                                                                                                                                                                                                                                         
     $sql = "SELECT code,min15_k,min15_d,min15_j,min30_k,min30_d,min30_j,min60_k,min60_d,min60_j FROM $value order by id desc limit 1";                                                                  
     $result = $conn->query($sql);                                                                                                                                             
     $row = $result->fetch_assoc();                                                                                                                                            
