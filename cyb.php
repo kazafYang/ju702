@@ -250,7 +250,7 @@ machining_price();
     sleep_time();
     }elseif ($time_hour=="11" and $time_min>"30") {
     sleep_time();     
-    }elseif ($time_hour=="15" and $time_min>"1") {
+    }elseif ($time_hour>="15") {
       echo "3point!\n";
       exit(0);    
     }
