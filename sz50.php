@@ -26,6 +26,7 @@ $time_second=$pieces[2];
 } 
 function sleep_time () {
 echo "comming sleep_time\n";
+  global $time_hour,$time_min;
 while(($time_hour==9 and $time_min<30) or ($time_hour<13 and $time_hour>=11) or $time_hour<9) {
 machining_price();
 }
