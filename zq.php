@@ -34,7 +34,7 @@ machining_price();
     if ($time_hour<9 or ($time_hour==9 and $time_min<30)) {
       echo "comming mainwhile if--9\n";
     sleep_time();
-    }elseif ($time_hour=="11" and $time_min>"30") {
+    }elseif ($time_hour=="11" and $time_min>="30") {
     sleep_time();     
     }elseif ($time_hour>="15") {
       echo "3point!\n";
