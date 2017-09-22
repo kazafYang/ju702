@@ -3,7 +3,12 @@ function machining_price ()
 {
 echo "comming machining_price\n";
 global $stat_date,$time_hour,$time_min,$time_second,$begin_point,$code;
+if ($code<500000) {
 $url='http://hq.sinajs.cn/list=sz'.$code; 
+}  else{
+$url='http://hq.sinajs.cn/list=sh'.$code; 
+} 
+
 $html = file_get_contents($url); 
 $pieces = explode(",", $html);
 $begin_point=$pieces[3];
