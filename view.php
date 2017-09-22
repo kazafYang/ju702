@@ -53,7 +53,9 @@ foreach ($code as $value)
     }   
     if ($row[min60_k] <20 or $row[min60_d] <20 ){
     $buyinfo=$buyinfo.$row[code]."#60分k/d小于20#";
-    }          
+    }
+    $sellinfo=$sellinfo."<br>";
+    $buyinfo=$buyinfo."<br>";
     $showinfo=$showinfo.",".$row[code].",15mk:".$row[min15_k].",15md:".$row[min15_d].",15mj：".$row[min15_j].",30mk：".$row[min30_k].",30md：".$row[min30_d].",30mj：".$row[min30_j].",60mK：".$row[min60_k].",60md：".$row[min60_d].",60mj：".$row[min60_j]."<br>";                         
 }                                                                                                                                                                             
 echo $showinfo;  
