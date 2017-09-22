@@ -25,7 +25,7 @@ foreach ($code as $value)
     elseif($row[min30_k] >=85 or $row[min30_d] >=80){
     $sellinfo=$sellinfo.$row[code]."=30k/d>=85";  
     }
-    if ($row[min60_k] >=75) or $row[min60_d] >=75{
+    if ($row[min60_k] >=75 or $row[min60_d] >=75) {
     $sellinfo=$sellinfo.$row[code]."=60k/d>=75";
     }
     elseif($row[min60_k] >=85 or $row[min60_d] >=80){
