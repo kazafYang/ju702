@@ -28,7 +28,7 @@ foreach ($code as $value)
    if (($row[min30_k] >=75 and $row[min30_k] <80) or ($row[min30_d] >=75 and $row[min30_d] <80)){
     $sellinfo=$sellinfo.$row[code]."=30k/d>=75#begin 30分大于75#";
     } 
-    elseif(($row[min30_k] >=80 and ($row[min30_k] <85) or ($row[min30_d] >=80 and $row[min30_d] <85)){
+    elseif(($row[min30_k] >=80 and $row[min30_k] <85) or ($row[min30_d] >=80 and $row[min30_d] <85)) {
     $sellinfo=$sellinfo.$row[code]."80<=30k/d<85#begin 30分大于80#";  
     }
     elseif($row[min30_k] >=85  or $row[min30_d] >=85 ){
@@ -41,7 +41,7 @@ foreach ($code as $value)
     elseif(($row[min60_k] >=80 and $row[min60_k] <85) or ($row[min60_d] >=80 and $row[min60_k] <85)){
     $sellinfo=$sellinfo.$row[code]."80<=60k/d<85#begin 60分大于80#";  
     }
-    elseif( $row[min60_k] >=85 or ($row[min60_d] >=85 ){
+    elseif( $row[min60_k] >=85 or $row[min60_d] >=85 ){
     $sellinfo=$sellinfo.$row[code]."85<=60k/d#begin 60分大于85#";  
     } 
            
