@@ -19,7 +19,7 @@ foreach ($code as $value)
     $sellinfo=$sellinfo.$row[code]."#75<=15k/d<80#begin 15分大于75#";
     } 
     elseif(($row[min15_k] <85 and $row[min15_k] >=80) or ($row[min15_d] >=80 and $row[min15_d] <85)) {
-    $sellinfo=$sellinfo.$row[code]."#80<=15k/d<85#begin 15分大于80";  
+    $sellinfo=$sellinfo.$row[code]."#80<=15k/d<85#begin 15分大于80#";  
     }
      elseif( $row[min15_k] >=85 or $row[min15_d] >=85) {
     $sellinfo=$sellinfo.$row[code]."#85<=15k/d#begin 15分大于85#";
