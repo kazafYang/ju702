@@ -41,13 +41,15 @@ machining_price();
     exit(0);    
     }
     
-    if ($time_hour==9 and $time_min==30) {
+/*    if ($time_hour==9 and $time_min==30) {
     $time_length=960-$time_second;
     }elseif ($time_hour=="13" and $time_min=="0") {
     $time_length=960-$time_second;  
     }else{
     $time_length=900-$time_second;    
     }
+    */
+$time_length=900-$time_second;    
 $sql = "select id,stat_time_min from $table_name order by id desc limit 1;";    
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();
