@@ -26,33 +26,33 @@ foreach ($code as $value)
      }  
   
    if (($row[min30_k] >=75 and $row[min30_k] <80) or ($row[min30_d] >=75 and $row[min30_d] <80)){
-    $sellinfo=$sellinfo.$row[code]."#30k/d>=75#begin 30分大于75#";
+    $sellinfo=$sellinfo.$row[code]."~~~~#30k/d>=75#begin 30分大于75#~~~~";
     } 
     elseif(($row[min30_k] >=80 and $row[min30_k] <85) or ($row[min30_d] >=80 and $row[min30_d] <85)) {
-    $sellinfo=$sellinfo.$row[code]."#80<=30k/d<85#begin 30分大于80#";  
+    $sellinfo=$sellinfo.$row[code]."~~~~#80<=30k/d<85#begin 30分大于80#~~~~";  
     }
     elseif($row[min30_k] >=85  or $row[min30_d] >=85 ){
-    $sellinfo=$sellinfo.$row[code]."#85<=30k/d#begin 30分大于85#";  
+    $sellinfo=$sellinfo.$row[code]."~~~~#85<=30k/d#begin 30分大于85#~~~~";  
     }  
            
    if (($row[min60_k] >=75 and $row[min60_k]<80) or ($row[min60_d] >=75 and $row[min60_d] <80)) {
-    $sellinfo=$sellinfo.$row[code]."#75<=60k/d<80#begin 60分大于75#";
+    $sellinfo=$sellinfo.$row[code]."----#75<=60k/d<80#begin 60分大于75#----";
     }
     elseif(($row[min60_k] >=80 and $row[min60_k] <85) or ($row[min60_d] >=80 and $row[min60_k] <85)){
-    $sellinfo=$sellinfo.$row[code]."#80<=60k/d<85#begin 60分大于80#";  
+    $sellinfo=$sellinfo.$row[code]."----#80<=60k/d<85#begin 60分大于80#----";  
     }
     elseif( $row[min60_k] >=85 or $row[min60_d] >=85 ){
-    $sellinfo=$sellinfo.$row[code]."#85<=60k/d#begin 60分大于85#";  
+    $sellinfo=$sellinfo.$row[code]."----#85<=60k/d#begin 60分大于85#----";  
     } 
            
     if ($row[min15_k] <20 or $row[min15_d] <20 ){
     $buyinfo=$buyinfo.$row[code]."#15分k/d小于20#";
     }  
     if ($row[min30_k] <20 or $row[min30_d] <20 ){
-    $buyinfo=$buyinfo.$row[code]."#30分k/d小于20#";
+    $buyinfo=$buyinfo.$row[code]."~~~~#30分k/d小于20#~~~~";
     }   
     if ($row[min60_k] <20 or $row[min60_d] <20 ){
-    $buyinfo=$buyinfo.$row[code]."#60分k/d小于20#";
+    $buyinfo=$buyinfo.$row[code]."----#60分k/d小于20#----";
     }
     $sellinfo=$sellinfo."<br>";
     $buyinfo=$buyinfo."<br>";
