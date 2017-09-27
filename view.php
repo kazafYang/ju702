@@ -1,8 +1,8 @@
 <?php                                                                                                                                                                         
 include 'config_inc.php';                                                                                                                                                     
-$showinfo="info";
-$sellinfo="sell:";
-$buyinfo="buy:";
+$showinfo="info:<br>";
+$sellinfo="sell:<br>";
+$buyinfo="buy:<br>";
 $code=array("point_number","point_number_sz","point_number_sz100","point_number_zxb","point_number_hs","point_number_zq","point_number_jg","point_number_yh");                
                                                                                                                                                                               
 $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);                                                                                    
