@@ -2,7 +2,7 @@
 function machining_price () 
 {
 echo "comming machining_price\n";
-global $stat_date,$time_hour,$time_min,$time_second,$begin_point,$code;
+global $stat_date,$time_hour,$time_min,$time_second,$begin_point,$code,$buy_one_price,$sell_one_price;
 if ($code<500000) {
 $url='http://hq.sinajs.cn/list=sz'.$code; 
 }  else{
@@ -12,6 +12,8 @@ $url='http://hq.sinajs.cn/list=sh'.$code;
 $html = file_get_contents($url); 
 $pieces = explode(",", $html);
 $begin_point=$pieces[3];
+$buy_one_price=$pieces[6];  //买一价
+$sell_one_price=$pieces[7]; //卖一价 
 $stat_date=$pieces[30];
 $pieces = explode(":", $pieces[31]);    
 $time_hour=$pieces[0];
@@ -180,7 +182,7 @@ $sql="update $table_name set min60_k='$k' , min60_d='$d' , min60_j='$j' order by
 }  
 
 function nine_count () {
-global $time_hour,$time_min,$time_second,$begin_point,$table_name,$time_out_begin,$conn;
+global $time_hour,$time_min,$time_second,$begin_point,$table_name,$time_out_begin,$conn,$buy_one_price,$sell_one_price;
 echo "comming nine_count\n";
 $max=$begin_point;
 $min=$begin_point;
@@ -199,7 +201,8 @@ if ($begin_point>=$max)
     $sql="update $table_name set min15_point_max=$max order by id desc limit 1 ;";
     echo $sql."\n";
 }
-   if ($conn->query($sql) === TRUE) 
+   if ($conn->query($sql);
+       === TRUE) 
    {
     echo "max新纪录更新成功\n";
      } 
@@ -218,6 +221,10 @@ if ($begin_point<=$min)
   else {
     echo "min新纪录更新Error: " . $sql . $conn->error."\n";
 }
+//更新买一，卖一实时价格  
+$sql="update $table_name set now_price=$begin_point,buy_one_price=$buy_one_price,sell_one_price=$sell_one_price order by id desc limit 1 ;";
+$conn->query($sql);
+  
 kdjfifteen(); #begin:kdj
 kdjthirty();
 kdjsixty();    
