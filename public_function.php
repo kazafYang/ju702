@@ -201,7 +201,7 @@ if ($begin_point>=$max)
     $sql="update $table_name set min15_point_max=$max order by id desc limit 1 ;";
     echo $sql."\n";
 }
-   if ($conn->query($sql)=== TRUE); 
+   if ($conn->query($sql)=== TRUE)
    {
     echo "max新纪录更新成功\n";
      } 
