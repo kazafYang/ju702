@@ -1,4 +1,5 @@
 #!/bin/base
+ps -ef|grep php|grep -v grep|awk '{print $2}'|xargs kill -9 #kill all find php delete php distinct
 php cyb.php &
 php hs.php &
 php jg.php &
