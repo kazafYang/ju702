@@ -217,6 +217,62 @@ $sql="update $table_name set kdjday_k='$k' , kdjday_d='$d' , kdjday_j='$j' order
     echo "daykdj:updateError: " . $sql . $conn->error."\n";
 }  
 }
+// cci count
+function cci () {
+echo "comming cci\n";
+$min15_point_max = array();
+$min15_point_min = array();
+$now_price = array();
+global $time_hour,$time_min; 
+
+for ($i=1;$i<15;$i++){
+$sql="select max(min15_point_max) from (select * from $table_name order by id desc limit $i,1) as a;";
+$result=mysqli_query($conn,$sql);
+$row=mysqli_fetch_row($result);
+$min15_point_max=$row[0];
+
+$sql="select min(min15_point_min) from (select * from $table_name order by id desc limit $i,1) as a;";
+$result=mysqli_query($conn,$sql);
+$row=mysqli_fetch_row($result);
+$min15_point_min=$row[0];
+
+
+$sql="select now_price from $table_name order by id desc limit 1,$i;";
+$result=mysqli_query($conn,$sql);
+$row=mysqli_fetch_row($result);
+$now_price=$row[0];
+
+$min15_point_max[]=$min15_point_max;
+$min15_point_min[]=$min15_point_min;
+$now_price[]=$now_price;
+} 
+
+$typ1=($min15_point_max[0]+$min15_point_min[0]+$now_price[0])/3;
+$typ2=($min15_point_max[1]+$min15_point_min[1]+$now_price[1])/3;
+$typ3=($min15_point_max[2]+$min15_point_min[2]+$now_price[2])/3;
+$typ4=($min15_point_max[3]+$min15_point_min[3]+$now_price[3])/3;
+$typ5=($min15_point_max[4]+$min15_point_min[4]+$now_price[4])/3;
+$typ6=($min15_point_max[5]+$min15_point_min[5]+$now_price[5])/3;
+$typ7=($min15_point_max[6]+$min15_point_min[6]+$now_price[6])/3;
+$typ8=($min15_point_max[7]+$min15_point_min[7]+$now_price[7])/3;
+$typ9=($min15_point_max[8]+$min15_point_min[8]+$now_price[8])/3;
+$typ10=($min15_point_max[9]+$min15_point_min[9]+$now_price[9])/3;
+$typ11=($min15_point_max[10]+$min15_point_min[10]+$now_price[10])/3;
+$typ12=($min15_point_max[11]+$min15_point_min[11]+$now_price[11])/3;
+$typ13=($min15_point_max[12]+$min15_point_min[12]+$now_price[12])/3;
+$typ14=($min15_point_max[13]+$min15_point_min[13]+$now_price[13])/3;
+$matyp=($typ1+$typ2+$typ3+$typ4+$typ5+$typ6+$typ7+$typ8+$typ9+$typ10+$typ11+$typ12+$typ13+$typ14)/14;
+$aytyp=(abs($typ1-$matyp)+abs($typ2-$matyp)+abs($typ3-$matyp)+abs($typ4-$matyp)+abs($typ5-$matyp)+abs($typ6-$matyp)+abs($typ7-$matyp)+abs($typ8-$matyp)+abs($typ9-$matyp)+abs($typ10-$matyp)+abs($typ11-$matyp)+abs($typ12-$matyp)+abs($typ13-$matyp)+abs($typ14-$matyp))/14;
+$cci=($typ1-$matyp)/$aytyp/0.015;
+$sql="update $table_name set cci='$cci' order by id desc limit 1 ; ";
+   if ($conn->query($sql) === TRUE) {
+    echo "cci:新记录更新成功\n";
+     } 
+  else {
+    echo "cci新纪录更新Error: " . $sql . $conn->error."\n";
+}
+}  
+
 
 function nine_count () {
 global $time_hour,$time_min,$time_second,$begin_point,$table_name,$time_out_begin,$conn,$buy_one_price,$sell_one_price;
@@ -265,6 +321,7 @@ kdjfifteen(); #begin:kdj
 kdjthirty();
 kdjsixty(); 
 kdjday();
+cci();
 } 
 }
 ?>
