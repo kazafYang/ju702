@@ -179,7 +179,44 @@ $sql="update $table_name set min60_k='$k' , min60_d='$d' , min60_j='$j' order by
   else {
     echo "60kdjError: " . $sql . $conn->error."\n";
 }  
+}
+//day kdj
+function kdjday () {
+global $begin_point,$conn,$table_name,$stat_date;
+machining_price();
+$sql="select max(min15_point_max) from (select * from $table_name order by id desc limit 144) as a;";
+$result=mysqli_query($conn,$sql);
+$row=mysqli_fetch_row($result);
+$min15_point_max=$row[0];
+$sql="select min(min15_point_min) from (select * from $table_name order by id desc limit 144) as a;";
+$result=mysqli_query($conn,$sql);
+$row=mysqli_fetch_row($result);
+$min15_point_min=$row[0];
+
+$sql="select kdjday_k from $table_name where stat_date<'$stat_date' order by stat_date desc limit 1;";
+$result = $conn->query($sql);  
+$row=$result->fetch_assoc();
+$kdjday_k=$row[kdjday_k]; 
+$sql="select kdjday_d from $table_name where stat_date<'$stat_date' order by stat_date desc limit 1;";
+$result = $conn->query($sql);  
+$row=$result->fetch_assoc();
+$kdjday_d=$row[kdjday_d];
+
+echo "begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~kdjday_k:$kdjday_k~kdjday_d:$kdjday_d\n";                       
+$rsv=($begin_point-$min15_point_min)/($min15_point_max-$min15_point_min)*100;
+$k=2/3*$kdjday_k+1/3*$rsv;
+$d=2/3*$kdjday_d+1/3*$k;
+$j=3*$k-2*$d;
+echo "daykdj:$k,$d,$j\n";
+$sql="update $table_name set kdjday_k='$k' , kdjday_d='$d' , kdjday_j='$j' order by id desc limit 1 ; ";
+   if ($conn->query($sql) === TRUE) 
+   {
+    echo "daykdjupdate:update\n";
+     } 
+  else {
+    echo "daykdj:updateError: " . $sql . $conn->error."\n";
 }  
+}
 
 function nine_count () {
 global $time_hour,$time_min,$time_second,$begin_point,$table_name,$time_out_begin,$conn,$buy_one_price,$sell_one_price;
@@ -226,7 +263,8 @@ $conn->query($sql);
   
 kdjfifteen(); #begin:kdj
 kdjthirty();
-kdjsixty();    
+kdjsixty(); 
+kdjday();
 } 
 }
 ?>
