@@ -220,13 +220,14 @@ $sql="update $table_name set kdjday_k='$k' , kdjday_d='$d' , kdjday_j='$j' order
 // cci count
 function cci () {
 echo "comming cci\n";
-$min15_point_max = array();
+$min15_point_max= array();
 $min15_point_min = array();
 $now_price = array();
-global $time_hour,$time_min; 
+global $conn,$table_name; 
 
 for ($i=1;$i<15;$i++){
 $sql="select max(min15_point_max) from (select * from $table_name order by id desc limit $i,1) as a;";
+echo $sql."/n";
 $result=mysqli_query($conn,$sql);
 $row=mysqli_fetch_row($result);
 $min15_point_max=$row[0];
