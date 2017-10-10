@@ -230,22 +230,22 @@ $sql="select max(min15_point_max) from (select * from $table_name order by id de
 echo $sql."/n";
 $result=mysqli_query($conn,$sql);
 $row=mysqli_fetch_row($result);
-$min15_point_max=$row[0];
+$date_point_max=$row[0];
 
 $sql="select min(min15_point_min) from (select * from $table_name order by id desc limit $i,1) as a;";
 $result=mysqli_query($conn,$sql);
 $row=mysqli_fetch_row($result);
-$min15_point_min=$row[0];
+$date_point_min=$row[0];
 
 
 $sql="select now_price from $table_name order by id desc limit 1,$i;";
 $result=mysqli_query($conn,$sql);
 $row=mysqli_fetch_row($result);
-$now_price=$row[0];
+$date_now_price=$row[0];
 
-$min15_point_max[]=$min15_point_max;
-$min15_point_min[]=$min15_point_min;
-$now_price[]=$now_price;
+$min15_point_max[]=$date_point_max;
+$min15_point_min[]=$date_point_min;
+$now_price[]=$date_now_price;
 } 
 
 $typ1=($min15_point_max[0]+$min15_point_min[0]+$now_price[0])/3;
