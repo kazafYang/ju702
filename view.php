@@ -45,10 +45,16 @@ foreach ($code as $value)
     $sellinfo=$sellinfo.$row[code]."----#85<=60k/d#begin 60分大于85#----";  
     } 
   
-    if ($row[kdjday_k] >=80){
-    $sellinfo=$sellinfo.$row[code]."----#85<=60k/d#begin 日kdj大于80#----"; 
+    if (($row[kdjday_k] >=75 and $row[kdjday_k]<80) or ($row[kdjday_d] >=75 and $row[kdjday_d] <80)) {
+    $sellinfo=$sellinfo.$row[code]."----#75<=60k/d<80#begin 日线大于75小于80，小幅出筹#----";
+    }  
+    elseif (($row[kdjday_k] >=80 and $row[kdjday_k] <85) or ($row[kdjday_d] >=80 and $row[kdjday_d] <85)){
+    $sellinfo=$sellinfo.$row[code]."----#80<=日线k/d#begin 日kdj小于85，开始卖出#----"; 
     }
-           
+     elseif ($row[kdjday_k] >=85 or $row[kdjday_d] >=85){
+    $sellinfo=$sellinfo.$row[code]."----#日线k/d>=85#begin 日kdj小于85，清理出局#----"; 
+    }
+  
     if ($row[min15_k] <20 or $row[min15_d] <20 ){
     $buyinfo=$buyinfo.$row[code]."#15分k/d小于20#";
     }  
@@ -59,7 +65,7 @@ foreach ($code as $value)
     $buyinfo=$buyinfo.$row[code]."----#60分k/d小于20#----";
     }
     if ($row[kdjday_k] <20 or $row[kdjday_d] <20 ){
-    $buyinfo=$buyinfo.$row[code]."----#日线k/d小于20#----";
+    $buyinfo=$buyinfo.$row[code]."----#日线k/d小于20，开始关注小幅布局#----";
     }
     $sellinfo=$sellinfo."<br>";
     $buyinfo=$buyinfo."<br>";
