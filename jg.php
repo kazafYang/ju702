@@ -48,13 +48,12 @@ machining_price();
     }else{
     $time_length=900-$time_second;    
     } */
-    $time_length=900-$time_second;
+    $time_out_begin=($time_hour*3600)+($time_min*60)+900;
 $sql = "select id,stat_time_min from $table_name order by id desc limit 1;";    
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();
     echo "stat_time_min:$row[stat_time_min]\n";
     if ($row[stat_time_min]<>$time_min){
-    $time_out_begin=($time_hour*3600)+($time_min*60)+$time_second+$time_length;
    echo "table:$table_name\n";
    $row[id]=$row[id]+1;
    $sql = "insert into $table_name (id,stat_date,stat_time_hour,stat_time_min,begin_point) VALUES ('$row[id]','$stat_date','$time_hour','$time_min','$begin_point');";    
