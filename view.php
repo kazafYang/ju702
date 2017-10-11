@@ -8,13 +8,13 @@ $code=array("point_number","point_number_sz","point_number_sz100","point_number_
 $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);                                                                                    
 foreach ($code as $value)                                                                                                                                                     
 {                                                                                                                                                                                                                                                                                                                         
-    $sql = "SELECT code,min15_k,min15_d,min15_j,min30_k,min30_d,min30_j,min60_k,min60_d,min60_j FROM $value order by id desc limit 1";                                                                  
+    $sql = "SELECT code,min15_k,min15_d,min15_j,min30_k,min30_d,min30_j,min60_k,min60_d,min60_j,kdjday_k,kdjday_d,kdjday_j FROM $value order by id desc limit 1";                                                                  
     $result = $conn->query($sql);                                                                                                                                             
     $row = $result->fetch_assoc();
     $row[min15_k]=round($row[min15_k],2);$row[min15_d]=round($row[min15_d],2);$row[min15_j]=round($row[min15_j],2);
     $row[min30_k]=round($row[min30_k],2);$row[min30_d]=round($row[min30_d],2);$row[min30_j]=round($row[min30_j],2);
     $row[min60_k]=round($row[min60_k],2);$row[min60_d]=round($row[min60_d],2);$row[min60_j]=round($row[min60_j],2);
-    
+    $row[kdjday_k]=round($row[kdjday_k],2);$row[kdjday_d]=round($row[kdjday_d],2);$row[kdjday_j]=round($row[kdjday_j],2);
   if (($row[min15_k] >=75 and $row[min15_k] <80) or ($row[min15_d] >=75 and $row[min15_d] <80)){
     $sellinfo=$sellinfo.$row[code]."#75<=15k/d<80#begin 15分大于75#";
     } 
@@ -44,6 +44,10 @@ foreach ($code as $value)
     elseif( $row[min60_k] >=85 or $row[min60_d] >=85 ){
     $sellinfo=$sellinfo.$row[code]."----#85<=60k/d#begin 60分大于85#----";  
     } 
+  
+    if ($row[kdjday_k] >=80){
+    $sellinfo=$sellinfo.$row[code]."----#85<=60k/d#begin 日kdj大于80#----"; 
+    }
            
     if ($row[min15_k] <20 or $row[min15_d] <20 ){
     $buyinfo=$buyinfo.$row[code]."#15分k/d小于20#";
@@ -53,6 +57,9 @@ foreach ($code as $value)
     }   
     if ($row[min60_k] <20 or $row[min60_d] <20 ){
     $buyinfo=$buyinfo.$row[code]."----#60分k/d小于20#----";
+    }
+    if ($row[kdjday_k] <20 or $row[kdjday_d] <20 ){
+    $buyinfo=$buyinfo.$row[code]."----#日线k/d小于20#----";
     }
     $sellinfo=$sellinfo."<br>";
     $buyinfo=$buyinfo."<br>";
