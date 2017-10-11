@@ -282,7 +282,7 @@ $max=$begin_point;
 $min=$begin_point;
 $sql="update $table_name set min15_point_max=$max,min15_point_min=$min order by id desc limit 1 ;";
 $conn->query($sql);  
-$time_out_now=($time_hour*3600)+($time_min*60)+$time_second;
+$time_out_now=($time_hour*3600)+($time_min*60);
 while( $time_out_now <= $time_out_begin) {
 echo "time_out_now:$time_out_now~time_out_begin:$time_out_begin\n"; 
 machining_price();
