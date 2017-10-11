@@ -15,57 +15,58 @@ foreach ($code as $value)
     $row[min30_k]=round($row[min30_k],2);$row[min30_d]=round($row[min30_d],2);$row[min30_j]=round($row[min30_j],2);
     $row[min60_k]=round($row[min60_k],2);$row[min60_d]=round($row[min60_d],2);$row[min60_j]=round($row[min60_j],2);
     $row[kdjday_k]=round($row[kdjday_k],2);$row[kdjday_d]=round($row[kdjday_d],2);$row[kdjday_j]=round($row[kdjday_j],2);
-  if (($row[min15_k] >=75 and $row[min15_k] <80) or ($row[min15_d] >=75 and $row[min15_d] <80)){
-    $sellinfo=$sellinfo.$row[code]."#75<=15k/d<80#begin 15分大于75#";
+//15min  
+if ((($row[min15_k] >= 80 and $row[min15_k] < 85 and ($row[min60_k] >= 50 or $row[min60_d] >= 50)) or ($row[min15_d]>=75 and $row[min15_d]<80 and ($row[min60_k] >= 50 or $row[min60_d] >= 50)))  { 
+   $sellinfo=$sellinfo.$row[code]."--15min:K/D值已经达到:". $row[min15_k]."/".$row[min15_d]."小幅抛筹》》》";
     } 
-    elseif(($row[min15_k] <85 and $row[min15_k] >=80) or ($row[min15_d] >=80 and $row[min15_d] <85)) {
-    $sellinfo=$sellinfo.$row[code]."#80<=15k/d<85#begin 15分大于80#";  
+elseif ((($row[min15_k] >= 85 and $row[min15_k] < 90 and ($row[min60_k] >= 50 or $row[min60_d] >= 50)) or ($row[min15_d]>=80 and $row[min15_d]<85 and ($row[min60_k] >= 50 or $row[min60_d] >= 50)))  { 
+   $sellinfo=$sellinfo.$row[code]."--15min:K/D值已经达到:". $row[min15_k]."/".$row[min15_d]."中幅抛筹》》》"; 
     }
-     elseif( $row[min15_k] >=85 or $row[min15_d] >=85) {
-    $sellinfo=$sellinfo.$row[code]."#85<=15k/d#begin 15分大于85#";
+elseif ((($row[min15_k] >= 90 and ($row[min60_k] >= 50 or $row[min60_d] >= 50)) or ($row[min15_d]>=85 and ($row[min60_k] >= 50 or $row[min60_d] >= 50)))  { 
+   $sellinfo=$sellinfo.$row[code]."--15min:K/D值已经达到:". $row[min15_k]."/".$row[min15_d]."清仓抛筹》》》"; 
      }  
-  
+//30min  
    if (($row[min30_k] >=75 and $row[min30_k] <80) or ($row[min30_d] >=75 and $row[min30_d] <80)){
-    $sellinfo=$sellinfo.$row[code]."~~~~#30k/d>=75#begin 30分大于75#~~~~";
+    $sellinfo=$sellinfo.$row[code]."--30min:K/D值已经达到:". $row[min30_k]."/".$row[min30_d]."30超买~~~~"; 
     } 
     elseif(($row[min30_k] >=80 and $row[min30_k] <85) or ($row[min30_d] >=80 and $row[min30_d] <85)) {
-    $sellinfo=$sellinfo.$row[code]."~~~~#80<=30k/d<85#begin 30分大于80#~~~~";  
+     $sellinfo=$sellinfo.$row[code]."--30min:K/D值已经达到:". $row[min30_k]."/".$row[min30_d]."30超买~~~~"; 
     }
     elseif($row[min30_k] >=85  or $row[min30_d] >=85 ){
-    $sellinfo=$sellinfo.$row[code]."~~~~#85<=30k/d#begin 30分大于85#~~~~";  
+     $sellinfo=$sellinfo.$row[code]."--30min:K/D值已经达到:". $row[min30_k]."/".$row[min30_d]."30超买~~~~";  
     }  
            
    if (($row[min60_k] >=75 and $row[min60_k]<80) or ($row[min60_d] >=75 and $row[min60_d] <80)) {
-    $sellinfo=$sellinfo.$row[code]."----#75<=60k/d<80#begin 60分大于75#----";
+    $sellinfo=$sellinfo.$row[code]."--60min:K/D值已经达到:". $row[min60_k]."/".$row[min60_d]."60超买---"; 
     }
     elseif(($row[min60_k] >=80 and $row[min60_k] <85) or ($row[min60_d] >=80 and $row[min60_k] <85)){
-    $sellinfo=$sellinfo.$row[code]."----#80<=60k/d<85#begin 60分大于80#----";  
+    $sellinfo=$sellinfo.$row[code]."--60min:K/D值已经达到:". $row[min60_k]."/".$row[min60_d]."60超买---"; 
     }
     elseif( $row[min60_k] >=85 or $row[min60_d] >=85 ){
-    $sellinfo=$sellinfo.$row[code]."----#85<=60k/d#begin 60分大于85#----";  
+    $sellinfo=$sellinfo.$row[code]."--60min:K/D值已经达到:". $row[min60_k]."/".$row[min60_d]."60超买---";   
     } 
   
     if (($row[kdjday_k] >=75 and $row[kdjday_k]<80) or ($row[kdjday_d] >=75 and $row[kdjday_d] <80)) {
-    $sellinfo=$sellinfo.$row[code]."----#75<=60k/d<80#begin 日线大于75小于80，小幅出筹#----";
+    $sellinfo=$sellinfo.$row[code]."--日线:K/D值已经达到:". $row[kdjday_k]."/".$row[kdjday_d]."日线超买关注风险---"; 
     }  
     elseif (($row[kdjday_k] >=80 and $row[kdjday_k] <85) or ($row[kdjday_d] >=80 and $row[kdjday_d] <85)){
-    $sellinfo=$sellinfo.$row[code]."----#80<=日线k/d#begin 日kdj小于85，开始卖出#----"; 
+    $sellinfo=$sellinfo.$row[code]."--日线:K/D值已经达到:". $row[kdjday_k]."/".$row[kdjday_d]."日线超买撤离#----"; 
     }
-     elseif ($row[kdjday_k] >=85 or $row[kdjday_d] >=85){
-    $sellinfo=$sellinfo.$row[code]."----#日线k/d>=85#begin 日kdj小于85，清理出局#----"; 
+    elseif ($row[kdjday_k] >=85 or $row[kdjday_d] >=85){
+    $sellinfo=$sellinfo.$row[code]."--日线:K/D值已经达到:". $row[kdjday_k]."/".$row[kdjday_d]."日线超买清理出局#----"; 
     }
   
     if ($row[min15_k] <20 or $row[min15_d] <20 ){
-    $buyinfo=$buyinfo.$row[code]."#15分k/d小于20#";
+    $buyinfo=$buyinfo.$row[code]."--15min:K/D值已经达到:". $row[min15_k]."/".$row[min15_d]."超卖区域，关注》》》";
     }  
     if ($row[min30_k] <20 or $row[min30_d] <20 ){
-    $buyinfo=$buyinfo.$row[code]."~~~~#30分k/d小于20#~~~~";
+    $buyinfo=$buyinfo.$row[code]."--30min:K/D值已经达到:". $row[min30_k]."/".$row[min30_d]."超卖区域，试探~~~~~";
     }   
     if ($row[min60_k] <20 or $row[min60_d] <20 ){
-    $buyinfo=$buyinfo.$row[code]."----#60分k/d小于20#----";
+    $buyinfo=$buyinfo.$row[code]."--60min:K/D值已经达到:". $row[min60_k]."/".$row[min60_d]."超卖区域，建仓》》》";
     }
     if ($row[kdjday_k] <20 or $row[kdjday_d] <20 ){
-    $buyinfo=$buyinfo.$row[code]."----#日线k/d小于20，开始关注小幅布局#----";
+    $buyinfo=$buyinfo.$row[code]."--日线K/D值已经达到:". $row[kdjday_k]."/".$row[kdjday_d]."超卖区域，加杠杆----";
     }
     $sellinfo=$sellinfo."<br>";
     $buyinfo=$buyinfo."<br>";
