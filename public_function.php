@@ -278,15 +278,16 @@ $sql="update $table_name set cci='$cci' order by id desc limit 1 ; ";
 function nine_count () {
 global $time_hour,$time_min,$time_second,$begin_point,$table_name,$time_out_begin,$conn,$buy_one_price,$sell_one_price;
 echo "comming nine_count\n";
+machining_price();   
 $max=$begin_point;
 $min=$begin_point;
+$time_out_now=($time_hour*3600)+($time_min*60);  
 $sql="update $table_name set min15_point_max=$max,min15_point_min=$min order by id desc limit 1 ;";
 $conn->query($sql);  
-$time_out_now=($time_hour*3600)+($time_min*60);
 while( $time_out_now <= $time_out_begin) {
 echo "time_out_now:$time_out_now~time_out_begin:$time_out_begin\n"; 
 machining_price();
-$time_out_now=($time_hour*3600)+($time_min*60)+$time_second;
+$time_out_now=($time_hour*3600)+($time_min*60);
   echo "$max--$begin_point\n";  
 if ($begin_point>=$max)
 {
