@@ -295,11 +295,14 @@ foreach ($code as $value)
     $row[min60_k]=round($row[min60_k],2);$row[min60_d]=round($row[min60_d],2);$row[min60_j]=round($row[min60_j],2);
     $row[kdjday_k]=round($row[kdjday_k],2);$row[kdjday_d]=round($row[kdjday_d],2);$row[kdjday_j]=round($row[kdjday_j],2);
 //15min
-    $sql = "select number,number_bate from trade_bate where code=$trade_code;";    
+    $sql = "select number,number_bate from trade_bate where code=$trade_code order by trade_type asc ;";    
     $result=mysqli_query($conn,$sql);
     $row=mysqli_fetch_row($result); 
     $number1=$row[0];$number_bate1=$row[1];$number2=$row[2];$number_bate2=$row[3];
     $number3=$row[4];$number_bate3=$row[5];$number4=$row[6];$number_bate4=$row[7];
+    $number5=$row[8];$number_bate5=$row[9];$number6=$row[10];$number_bate6=$row[11];
+    $number7=$row[12];$number_bate7=$row[13];$number8=$row[14];$number_bate8=$row[15];
+   
   if(($row[min15_k] >= 80 and $row[min15_k] < 85 and ($row[min60_k] >= 40 or $row[min60_d] >= 40)) or ($row[min15_d]>=75 and $row[min15_d]<80 and ($row[min60_k] >= 50 or $row[min60_d] >= 50)))
     {
     $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=1;";    
@@ -354,6 +357,7 @@ foreach ($code as $value)
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
     if($row[0]==0){
+    $number=$number5+$number5*$number_bate5;  
     $sql = "insert into trade_history (code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','5','$trade_buy_price','$trade_sell_price');";                                                                  
     $result = $conn->query($sql); 
        }
@@ -363,6 +367,7 @@ foreach ($code as $value)
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
     if($row[0]==0){
+    $number=$number6+$number6*$number_bate6;  
     $sql = "insert into trade_history (code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','6','$trade_buy_price','$trade_sell_price');";                                                                  
     $result = $conn->query($sql); 
        }
@@ -372,6 +377,7 @@ foreach ($code as $value)
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
     if($row[0]==0){
+    $number=$number7+$number7*$number_bate7;  
     $sql = "insert into trade_history (code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','7','$trade_buy_price','$trade_sell_price');";                                                                  
     $result = $conn->query($sql); 
        }
@@ -381,6 +387,7 @@ foreach ($code as $value)
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
     if($row[0]==0){
+    $number=$number8+$number8*$number_bate8;  
     $sql = "insert into trade_history (code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','8','$trade_buy_price','$trade_sell_price');";                                                                  
     $result = $conn->query($sql); 
        }
