@@ -298,11 +298,11 @@ foreach ($code as $value)
     {
     $sql = "select count(*) from $table_name where code=$code and stat_date=$stat_date and stat_time_hour=$stat_time_hour and stat_time_min=$stat_time_min and trade_type=1;";    
     $result = $conn->query($sql);
-    $row=$result->fetch_assoc();
-    $row[id]=$row[id]+1;           
-    if()
+    $row=$result->fetch_assoc();     
+    if($row[0]==0){
     $sql = "insert into $value (id,code,stat_time_hour,stat_time_min,status,number,trade_type) values ('','$code','$stat_time_hour','$stat_time_min','$status','$number','$trade_type');";                                                                  
     $result = $conn->query($sql); 
+       }
     } 
 elseif (($row[min15_k] >= 85 and $row[min15_k] < 90 and ($row[min60_k] >= 50 or $row[min60_d] >= 50)) or ($row[min15_d]>=80 and $row[min15_d]<85 and ($row[min60_k] >= 50 or $row[min60_d] >= 50)))  { 
    $sellinfo=$sellinfo.$row[code]."--15min:K/D值已经达到:". $row[min15_k]."/".$row[min15_d]."中幅抛筹》》》"; 
