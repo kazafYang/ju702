@@ -280,6 +280,12 @@ $code=array("point_number","point_number_sz","point_number_sz100","point_number_
 $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);                                                                                    
 foreach ($code as $value)                                                                                                                                                     
 {                                                                                                                                                                                                                                                                                                                         
+    
+/*    $sql = "select id,stat_time_min from $table_name order by id desc limit 1;";    
+    $result = $conn->query($sql);
+    $row=$result->fetch_assoc();
+    $row[id]=$row[id]+1;                      //先查询出数据数量  */
+  
     $sql = "SELECT code,min15_k,min15_d,min15_j,min30_k,min30_d,min30_j,min60_k,min60_d,min60_j,kdjday_k,kdjday_d,kdjday_j,cci FROM $value order by id desc limit 1";                                                                  
     $result = $conn->query($sql);                                                                                                                                             
     $row = $result->fetch_assoc();
@@ -289,13 +295,13 @@ foreach ($code as $value)
     $row[kdjday_k]=round($row[kdjday_k],2);$row[kdjday_d]=round($row[kdjday_d],2);$row[kdjday_j]=round($row[kdjday_j],2);
 //15min  
   if(($row[min15_k] >= 80 and $row[min15_k] < 85 and ($row[min60_k] >= 50 or $row[min60_d] >= 50)) or ($row[min15_d]>=75 and $row[min15_d]<80 and ($row[min60_k] >= 50 or $row[min60_d] >= 50)))
-    { 
-    $sql = "select id,stat_time_min from $table_name order by id desc limit 1;";    
+    {
+    $sql = "select count(*) from $table_name where code=$code and stat_date=$stat_date and stat_time_hour=$stat_time_hour and stat_time_min=$stat_time_min and trade_type=1;";    
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();
-    $row[id]=$row[id]+1;
-    
-    $sql = "SELECT code,min15_k,min15_d,min15_j,min30_k,min30_d,min30_j,min60_k,min60_d,min60_j,kdjday_k,kdjday_d,kdjday_j,cci FROM $value order by id desc limit 1";                                                                  
+    $row[id]=$row[id]+1;           
+    if()
+    $sql = "insert into $value (id,code,stat_time_hour,stat_time_min,status,number,trade_type) values ('','$code','$stat_time_hour','$stat_time_min','$status','$number','$trade_type');";                                                                  
     $result = $conn->query($sql); 
     } 
 elseif (($row[min15_k] >= 85 and $row[min15_k] < 90 and ($row[min60_k] >= 50 or $row[min60_d] >= 50)) or ($row[min15_d]>=80 and $row[min15_d]<85 and ($row[min60_k] >= 50 or $row[min60_d] >= 50)))  { 
