@@ -280,98 +280,108 @@ $code=array("point_number","point_number_sz","point_number_sz100","point_number_
 $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);                                                                                    
 foreach ($code as $value)                                                                                                                                                     
 {                                                                                                                                                                                                                                                                                                                         
-    
 /*    $sql = "select id,stat_time_min from $table_name order by id desc limit 1;";    
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();
     $row[id]=$row[id]+1;                      //先查询出数据数量  */
   
-    $sql = "SELECT code,min15_k,min15_d,min15_j,min30_k,min30_d,min30_j,min60_k,min60_d,min60_j,kdjday_k,kdjday_d,kdjday_j,cci FROM $value order by id desc limit 1";                                                                  
+    $sql = "SELECT code,stat_date,stat_time_hour,stat_time_min,min15_k,min15_d,min15_j,min30_k,min30_d,min30_j,min60_k,min60_d,min60_j,kdjday_k,kdjday_d,kdjday_j,cci,buy_one_price,sell_one_price FROM $value order by id desc limit 1";                                                                  
     $result = $conn->query($sql);                                                                                                                                             
     $row = $result->fetch_assoc();
+    $trade_code=$row[code];$trade_buy_price=$row[buy_one_price];$trade_sell_price=$row[sell_one_price];
+    $trade_stat_date=$row[stat_date];$trade_time_hour=$row[stat_time_hour];$trade_time_min=$row[stat_time_min];
     $row[min15_k]=round($row[min15_k],2);$row[min15_d]=round($row[min15_d],2);$row[min15_j]=round($row[min15_j],2);
     $row[min30_k]=round($row[min30_k],2);$row[min30_d]=round($row[min30_d],2);$row[min30_j]=round($row[min30_j],2);
     $row[min60_k]=round($row[min60_k],2);$row[min60_d]=round($row[min60_d],2);$row[min60_j]=round($row[min60_j],2);
     $row[kdjday_k]=round($row[kdjday_k],2);$row[kdjday_d]=round($row[kdjday_d],2);$row[kdjday_j]=round($row[kdjday_j],2);
-//15min  
+//15min
+    $sql = "select number,number_bate from trade_bate where code=$trade_code;";    
+    $result=mysqli_query($conn,$sql);
+    $row=mysqli_fetch_row($result); 
+    $number1=$row[0];$number_bate1=$row[1];$number2=$row[2];$number_bate2=$row[3];
+    $number3=$row[4];$number_bate3=$row[5];$number4=$row[6];$number_bate4=$row[7];
   if(($row[min15_k] >= 80 and $row[min15_k] < 85 and ($row[min60_k] >= 40 or $row[min60_d] >= 40)) or ($row[min15_d]>=75 and $row[min15_d]<80 and ($row[min60_k] >= 50 or $row[min60_d] >= 50)))
     {
-    $sql = "select count(*) from trade_history where code=$code and stat_date='$stat_date' and stat_time_hour='$time_hour' and stat_time_min='$time_min' and trade_type=1;";    
-    $result = $conn->query($sql);
-    $row=$result->fetch_assoc();     
+    $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=1;";    
+    $result=mysqli_query($conn,$sql);
+    $row=mysqli_fetch_row($result);    
     if($row[0]==0){
-    $sql = "insert into trade_history (id,code,stat_time_hour,stat_time_min,status,number,trade_type) values ('','$code','$stat_time_hour','$stat_time_min','$status','$number','$trade_type');";                                                                  
+    $number=$number1+$number1*$number_bate1;  
+    $sql = "insert into trade_history (code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','1','$trade_buy_price','$trade_sell_price');";                                                                  
     $result = $conn->query($sql); 
        }
     } 
 
 //30min  
    if (($row[min30_k] >=75 and $row[min30_k] <80) or ($row[min30_d] >=75 and $row[min30_d] <80)){
-    $sql = "select count(*) from trade_history where code=$code and stat_date='$stat_date' and stat_time_hour='$stat_time_hour' and stat_time_min='$stat_time_min' and trade_type=1;";    
+    $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=2;";    
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
     if($row[0]==0){
-    $sql = "insert into trade_history (id,code,stat_time_hour,stat_time_min,status,number,trade_type) values ('','$code','$stat_time_hour','$stat_time_min','$status','$number','$trade_type');";                                                                  
+    $number=$number2+$number2*$number_bate2;  
+    $sql = "insert into trade_history (code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','2','$trade_buy_price','$trade_sell_price');";                                                                  
     $result = $conn->query($sql); 
        }
     } 
    
  //60分钟          
    if (($row[min60_k] >=75 and $row[min60_k]<80) or ($row[min60_d] >=75 and $row[min60_d] <80)) {
-    $sql = "select count(*) from trade_history where code=$code and stat_date='$stat_date' and stat_time_hour='$stat_time_hour' and stat_time_min='$stat_time_min' and trade_type=1;";    
+    $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=3;";    
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
     if($row[0]==0){
-    $sql = "insert into trade_history (id,code,stat_time_hour,stat_time_min,status,number,trade_type) values ('','$code','$stat_time_hour','$stat_time_min','$status','$number','$trade_type');";                                                                  
+    $number=$number3+$number3*$number_bate3;  
+    $sql = "insert into trade_history (code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','3','$trade_buy_price','$trade_sell_price');";                                                                  
     $result = $conn->query($sql); 
        }
     }
    
   //日线
     if (($row[kdjday_k] >=75 and $row[kdjday_k]<80) or ($row[kdjday_d] >=75 and $row[kdjday_d] <80)) {
-    $sql = "select count(*) from trade_history where code=$code and stat_date='$stat_date' and stat_time_hour='$stat_time_hour' and stat_time_min='$stat_time_min' and trade_type=1;";    
+    $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=4;";    
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
     if($row[0]==0){
-    $sql = "insert into trade_history (id,code,stat_time_hour,stat_time_min,status,number,trade_type) values ('','$code','$stat_time_hour','$stat_time_min','$status','$number','$trade_type');";                                                                  
+    $number=$number4+$number4*$number_bate4;  
+    $sql = "insert into trade_history (code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','4','$trade_buy_price','$trade_sell_price');";                                                                  
     $result = $conn->query($sql); 
        }
     }  
    
   //buy,分钟
     if ($row[min15_k] <20 or $row[min15_d] <20 ){
-    $sql = "select count(*) from trade_history where code=$code and stat_date='$stat_date' and stat_time_hour='$stat_time_hour' and stat_time_min='$stat_time_min' and trade_type=1;";    
+    $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=5;";    
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
     if($row[0]==0){
-    $sql = "insert into trade_history (id,code,stat_time_hour,stat_time_min,status,number,trade_type) values ('','$code','$stat_time_hour','$stat_time_min','$status','$number','$trade_type');";                                                                  
+    $sql = "insert into trade_history (code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','5','$trade_buy_price','$trade_sell_price');";                                                                  
     $result = $conn->query($sql); 
        }
     }  
     if ($row[min30_k] <20 or $row[min30_d] <20 ){
-    $sql = "select count(*) from trade_history where code=$code and stat_date='$stat_date' and stat_time_hour='$stat_time_hour' and stat_time_min='$stat_time_min' and trade_type=1;";    
+    $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=6;";    
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
     if($row[0]==0){
-    $sql = "insert into trade_history (id,code,stat_time_hour,stat_time_min,status,number,trade_type) values ('','$code','$stat_time_hour','$stat_time_min','$status','$number','$trade_type');";                                                                  
+    $sql = "insert into trade_history (code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','6','$trade_buy_price','$trade_sell_price');";                                                                  
     $result = $conn->query($sql); 
        }
     }   
     if ($row[min60_k] <20 or $row[min60_d] <20 ){
-    $sql = "select count(*) from trade_history where code=$code and stat_date='$stat_date' and stat_time_hour='$stat_time_hour' and stat_time_min='$stat_time_min' and trade_type=1;";    
+    $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=7;";    
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
     if($row[0]==0){
-    $sql = "insert into trade_history (id,code,stat_time_hour,stat_time_min,status,number,trade_type) values ('','$code','$stat_time_hour','$stat_time_min','$status','$number','$trade_type');";                                                                  
+    $sql = "insert into trade_history (code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','7','$trade_buy_price','$trade_sell_price');";                                                                  
     $result = $conn->query($sql); 
        }
     }
     if ($row[kdjday_k] <20 or $row[kdjday_d] <20 ){
-    $sql = "select count(*) from trade_history where code=$code and stat_date='$stat_date' and stat_time_hour='$stat_time_hour' and stat_time_min='$stat_time_min' and trade_type=1;";    
+    $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=8;";    
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
     if($row[0]==0){
-    $sql = "insert into trade_history (id,code,stat_time_hour,stat_time_min,status,number,trade_type) values ('','$code','$stat_time_hour','$stat_time_min','$status','$number','$trade_type');";                                                                  
+    $sql = "insert into trade_history (code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','8','$trade_buy_price','$trade_sell_price');";                                                                  
     $result = $conn->query($sql); 
        }
     }
