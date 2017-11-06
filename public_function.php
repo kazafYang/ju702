@@ -443,6 +443,7 @@ kdjfifteen(); #begin:kdj
 kdjthirty();
 kdjsixty(); 
 kdjday();
+analyse();  
 cci();
 } 
 }
