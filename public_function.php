@@ -275,7 +275,6 @@ $sql="update $table_name set cci='$cci' order by id desc limit 1 ; ";
 }  
 
 function analyse () {
-global $stat_date,$time_hour,$time_min,$conn,$buy_one_price,$sell_one_price;
 $code=array("point_number","point_number_sz","point_number_sz100","point_number_zxb","point_number_hs","point_number_zq","point_number_jg","point_number_yh");                                                                                                                                                                                              
 $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);                                                                                    
 foreach ($code as $value)                                                                                                                                                     
