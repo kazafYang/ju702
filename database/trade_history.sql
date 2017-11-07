@@ -1,5 +1,5 @@
 CREATE TABLE IF not EXISTS `trade_history` (
-  `id` int(11) not NULL ,
+  id int(8) auto_increment primary key,
   `code` int(8) DEFAULT "0",
   `stat_date` date DEFAULT NULL,
   `stat_time_hour` int(2) DEFAULT NULL,
