@@ -1,12 +1,13 @@
 dim Url,new_price,update_time
-
 Url="http://test.ju70.com/getdate.php" 
-
+do
 call machining_price
 
 msgbox new_price
 
 msgbox update_time
+  
+Loop Until ac=1
 
 function machining_price
 Html = getHTTPPage(Url)  
