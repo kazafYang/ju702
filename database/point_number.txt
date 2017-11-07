@@ -1,1 +1,27 @@
-
+CREATE TABLE IF not EXISTS `point_number` (
+  `id` int(11) not NULL ,
+  `code` int(8) DEFAULT "1",
+  `stat_date` date DEFAULT NULL,
+  `stat_time_hour` int(2) DEFAULT NULL,
+  `stat_time_min` int(2) DEFAULT NULL,
+  `begin_point` double DEFAULT NULL,
+  `min15_point_max` double DEFAULT NULL,
+  `min15_point_min` double DEFAULT NULL,
+  `min15_k` double DEFAULT NULL,
+  `min15_d` double DEFAULT NULL,
+  `min15_j` double DEFAULT NULL,
+  `min30_k` double DEFAULT NULL,
+  `min30_d` double DEFAULT NULL,
+  `min30_j` double DEFAULT NULL,
+  `min60_k` double DEFAULT NULL,
+  `min60_d` double DEFAULT NULL,
+  `min60_j` double DEFAULT NULL,
+  `kdjday_k` double DEFAULT NULL,
+  `kdjday_d` double DEFAULT NULL,
+  `kdjday_j` double DEFAULT NULL,
+  `now_price` double DEFAULT NULL,
+  `buy_one_price` double DEFAULT NULL,
+  `sell_one_price` double DEFAULT NULL,
+  `cci` double DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
