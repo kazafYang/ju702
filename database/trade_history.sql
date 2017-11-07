@@ -1,0 +1,8 @@
+CREATE TABLE IF not EXISTS `trade_history` (
+  `id` int(11) not NULL ,
+  `code` int(8) DEFAULT "0",
+  `stat_date` date DEFAULT NULL,
+  `stat_time_hour` int(2) DEFAULT NULL,
+  `stat_time_min` int(2) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
