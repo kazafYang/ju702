@@ -6,6 +6,7 @@ $type=$_GET['type'];
 $id=$_GET['id'];                                                                                                                                          
 $code=$_GET['code'];
 $sql=$_GET['sql'];
+echo str_replace("-"," ","Hello world!");
 //更新trade_history表status
 if (type==1){
 $sql = "select * from trade_history;";
