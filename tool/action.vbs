@@ -75,7 +75,7 @@ objShell.SendKeys "{down 4}"
 WScript.Sleep 200
 objShell.SendKeys "{Enter}"
 WScript.Sleep 100
-objShell.SendKeys "159915"
+objShell.SendKeys code
 WScript.Sleep 300
 objShell.SendKeys "{down 2}"
 WScript.Sleep 100
@@ -94,7 +94,7 @@ objShell.SendKeys "{down 4}"
 WScript.Sleep 200
 objShell.SendKeys "{Enter}"
 WScript.Sleep 200
-objShell.SendKeys "159915"
+objShell.SendKeys code
 WScript.Sleep 300
 objShell.SendKeys "{down 2}"
 WScript.Sleep 100
