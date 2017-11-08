@@ -5,6 +5,7 @@ echo $_SERVER["QUERY_STRING"]."<br>";
 $type=$_GET['type'];
 $id=$_GET['id'];                                                                                                                                          
 $code=$_GET['code'];
+$sql=$_GET['sql'];
 //更新trade_history表status
 if (type==1){
 $sql = "update trade_history set code=$code,buy_number=$buy_number,sell";
@@ -20,5 +21,8 @@ $result = $conn->query($sql);
   $sql = "update trade_history set code=$code,buy_number=$buy_number,sell";
   $result = $conn->query($sql);
 }
-
+  elseif(type==4){
+  $sql = "$sql";
+  $result = $conn->query($sql);
+}
 ?>
