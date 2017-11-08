@@ -1,4 +1,4 @@
-//批量增加字段
+//批量同步数据
 <?php  
 include 'config_inc.php'; 
 $info="begin:";
