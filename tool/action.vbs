@@ -2,7 +2,9 @@ dim Url,id,code,trade_type,number,trade_buy_price,trade_sell_price
 Url="http://test.ju70.com/getdate.php" 
 do
 call machining_price
-
+  if id>0 then 
+    call action
+  end if  
 msgbox new_price
 
 msgbox update_time
@@ -79,14 +81,14 @@ objShell.SendKeys code
 WScript.Sleep 300
 objShell.SendKeys "{down 2}"
 WScript.Sleep 100
-objShell.SendKeys use_buy_count*100
+objShell.SendKeys number*100
 WScript.Sleep 200
 objShell.SendKeys "{B}"
 WScript.Sleep 200
 objShell.SendKeys "{Y}"
 WScript.Sleep 300
 objShell.SendKeys "{Enter}"
-
+'此处要打开浏览器上报结果
 elseif trade_type= then
 bjShell.SendKeys "{F2}"
 WScript.Sleep 100
@@ -98,13 +100,14 @@ objShell.SendKeys code
 WScript.Sleep 300
 objShell.SendKeys "{down 2}"
 WScript.Sleep 100
-objShell.SendKeys use_sell_count*100
+objShell.SendKeys number*100
 WScript.Sleep 300
 objShell.SendKeys "{S}"
 WScript.Sleep 200
 objShell.SendKeys "{Y}"
 WScript.Sleep 300
 objShell.SendKeys "{Enter}"
+'此处要打开浏览器或者发送请求上报数据
 else
 objShell.SendKeys "{F5}"
 end if 
