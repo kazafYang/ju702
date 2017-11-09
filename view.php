@@ -15,7 +15,8 @@ foreach ($code as $value)
     $row[min30_k]=round($row[min30_k],2);$row[min30_d]=round($row[min30_d],2);$row[min30_j]=round($row[min30_j],2);
     $row[min60_k]=round($row[min60_k],2);$row[min60_d]=round($row[min60_d],2);$row[min60_j]=round($row[min60_j],2);
     $row[kdjday_k]=round($row[kdjday_k],2);$row[kdjday_d]=round($row[kdjday_d],2);$row[kdjday_j]=round($row[kdjday_j],2);
-//15min  
+    $row[cci]=round($row[cci],2);
+  //15min  
   if(($row[min15_k] >= 80 and $row[min15_k] < 85 and ($row[min60_k] >= 50 or $row[min60_d] >= 50)) or ($row[min15_d]>=75 and $row[min15_d]<80 and ($row[min60_k] >= 50 or $row[min60_d] >= 50)))
     { 
    $sellinfo=$sellinfo.$row[code]."--15min:K/D值已经达到:". $row[min15_k]."/".$row[min15_d]."小幅抛筹》》》";
