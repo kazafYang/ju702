@@ -297,12 +297,14 @@
       $trade_day_k=round($row[kdjday_k],2);$trade_day_d=round($row[kdjday_d],2);$row[kdjday_j]=round($row[kdjday_j],2);
      //15min
 
-     /* $sql = "select number,number_bate from trade_bate where code=$trade_code order by trade_type asc ;";    
+      $sql = "select bite from trade_bate  order by id asc ;";    
       $result=mysqli_query($conn,$sql);
-      $row=mysqli_fetch_row($result); 
-      $number1=$row[0];$number_bate1=$row[1];$number2=$row[2];$number_bate2=$row[3];
-      $number3=$row[4];$number_bate3=$row[5];$number4=$row[6];$number_bate4=$row[7];
-      $number5=$row[8];$number_bate5=$row[9];$number6=$row[10];$number_bate6=$row[11];
+      $row=mysqli_fetch_row($result);
+        printf ("%s : %s",$row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],$row[7]);
+      $type1=$row[0];$type2=$row[1];$type3=$row[2];$type4=$row[3];
+      $type5=$row[4];$type6=$row[5];$type7=$row[6];$type8=$row[7]; 
+      echo $type1.$type2.$type3.$type4.$type5.$type6.$type7.$type8."~~~~~~~~~~~~~~~~~~~bite comming~~~~~~~~~~~~~~";
+     /* $number5=$row[8];$number_bate5=$row[9];$number6=$row[10];$number_bate6=$row[11];
       $number7=$row[12];$number_bate7=$row[13];$number8=$row[14];$number_bate8=$row[15]; */
     // echo $number1."-".$number1."-".$number1."-".$number1."-".$number1."-".$number1."-".$number1."-".$number1."-".;
     if(($trade_min15_k >= 80  and ($trade_min60_k >= 40 or $trade_min60_d >= 40)) or ($trade_min15_d>=75  and ($trade_min60_k >= 40 or $trade_min60_d >= 40)))
@@ -354,7 +356,7 @@
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       $trade_id=$row[0]+1;
-         $number=11/$trade_buy_price;
+      $number=11/$trade_buy_price;
       $number=round($number);   
       $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','3','$trade_buy_price','$trade_sell_price');";                                                                  
       $result = $conn->query($sql); 
