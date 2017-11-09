@@ -24,6 +24,9 @@ $result = $conn->query($sql);
 //验证实际插入sql可能存在问题，还是需要组合才行
   elseif($type==4){
   $sql = "$sql_update";
-  $result = $conn->query($sql);
+  if ($conn->query($sql) === TRUE) 
+   {
+   echo "200";
+     }   
 }
 ?>
