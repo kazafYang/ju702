@@ -4,19 +4,21 @@ do
 call machining_price
   if id >0 then 
     call action
-  end if    
+  end if  
 Loop Until ac=1
 
 function machining_price
 Html = getHTTPPage(Url)  
-MyArray = Split(Html, ",", -1, 1) 
+MyArray = Split(Html, ",", -1, 1)
+      
   id=MyArray(0) '+Second(now)
-  msgbox id
+  if id<>0 then
   code=MyArray(1)
   trade_type=MyArray(2)
   number=MyArray(3)
   trade_buy_price=MyArray(4)
   trade_sell_price=MyArray(5)
+  end if
 End Function
 
 function getHTTPPage(Url)  
