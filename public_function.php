@@ -310,15 +310,16 @@ $trade_code=array("point_number","point_number_sz","point_number_sz100","point_n
     {
     echo "panduan:".$trade_min15_k."~~~~~~~comming~~~~~~~~~~~~~\n";
     $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=1;";    
-    echo $sql."~~~~~~~~~~~~~~~~~~~~~~~~~~~@@@@@@@@@@@@@@@@@@@@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
     $result=mysqli_query($conn,$sql);
     $row=mysqli_fetch_row($result);
-    echo $row[0]."~~~~~~~~~~~~~~~~~~~~~~~~~~~@@@@@@@@@@@@@@@@@@@@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
     if($row[0]==0){
-        echo $row[0]."~~~~~~~~~~~~~~~~~~~~~~~~~~~@@@@@@@comming panduan 0 number@@@@@~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";  
     //$number=$number1+$number1*$number_bate1; 
+    $sql = "select count(*) from trade_history;";    
+    $result=mysqli_query($conn,$sql);
+    $row=mysqli_fetch_row($result);
+    $trade_id=$row[0]+1;  
     $number="1550";  
-    $sql = "insert into trade_history (code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','1','$trade_buy_price','$trade_sell_price');";                                                                  
+    $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','1','$trade_buy_price','$trade_sell_price');";                                                                  
     echo "insert into sql:".$sql;
       $result = $conn->query($sql); 
        }
@@ -330,8 +331,12 @@ $trade_code=array("point_number","point_number_sz","point_number_sz100","point_n
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
     if($row[0]==0){
-   // $number=$number2+$number2*$number_bate2;  
-    $sql = "insert into trade_history (code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','2','$trade_buy_price','$trade_sell_price');";                                                                  
+   // $number=$number2+$number2*$number_bate2; 
+    $sql = "select count(*) from trade_history;";    
+    $result=mysqli_query($conn,$sql);
+    $row=mysqli_fetch_row($result);
+    $trade_id=$row[0]+1;    
+    $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','2','$trade_buy_price','$trade_sell_price');";                                                                  
     $result = $conn->query($sql); 
        }
     } 
@@ -342,8 +347,12 @@ $trade_code=array("point_number","point_number_sz","point_number_sz100","point_n
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
     if($row[0]==0){
-    //$number=$number3+$number3*$number_bate3;  
-    $sql = "insert into trade_history (code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','3','$trade_buy_price','$trade_sell_price');";                                                                  
+    //$number=$number3+$number3*$number_bate3;
+    $sql = "select count(*) from trade_history;";    
+    $result=mysqli_query($conn,$sql);
+    $row=mysqli_fetch_row($result);
+    $trade_id=$row[0]+1;    
+    $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','3','$trade_buy_price','$trade_sell_price');";                                                                  
     $result = $conn->query($sql); 
        }
     }
@@ -354,8 +363,11 @@ $trade_code=array("point_number","point_number_sz","point_number_sz100","point_n
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
     if($row[0]==0){
-   // $number=$number4+$number4*$number_bate4;  
-    $sql = "insert into trade_history (code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','4','$trade_buy_price','$trade_sell_price');";                                                                  
+   // $number=$number4+$number4*$number_bate4;
+    $result=mysqli_query($conn,$sql);
+    $row=mysqli_fetch_row($result);
+    $trade_id=$row[0]+1;    
+    $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','4','$trade_buy_price','$trade_sell_price');";                                                                  
     $result = $conn->query($sql); 
        }
     }  
@@ -367,8 +379,11 @@ $trade_code=array("point_number","point_number_sz","point_number_sz100","point_n
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
     if($row[0]==0){
-   // $number=$number5+$number5*$number_bate5;  
-    $sql = "insert into trade_history (code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','5','$trade_buy_price','$trade_sell_price');";                                                                  
+   // $number=$number5+$number5*$number_bate5;
+    $result=mysqli_query($conn,$sql);
+    $row=mysqli_fetch_row($result);
+    $trade_id=$row[0]+1;    
+    $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','5','$trade_buy_price','$trade_sell_price');";                                                                  
     $result = $conn->query($sql); 
        }
     }  
@@ -377,8 +392,11 @@ $trade_code=array("point_number","point_number_sz","point_number_sz100","point_n
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
     if($row[0]==0){
-   // $number=$number6+$number6*$number_bate6;  
-    $sql = "insert into trade_history (code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','6','$trade_buy_price','$trade_sell_price');";                                                                  
+   // $number=$number6+$number6*$number_bate6; 
+    $result=mysqli_query($conn,$sql);
+    $row=mysqli_fetch_row($result);
+    $trade_id=$row[0]+1;    
+    $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','6','$trade_buy_price','$trade_sell_price');";                                                                  
     $result = $conn->query($sql); 
        }
     }   
@@ -388,7 +406,10 @@ $trade_code=array("point_number","point_number_sz","point_number_sz100","point_n
     $row=$result->fetch_assoc();     
     if($row[0]==0){
    // $number=$number7+$number7*$number_bate7;  
-    $sql = "insert into trade_history (code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','7','$trade_buy_price','$trade_sell_price');";                                                                  
+    $result=mysqli_query($conn,$sql);
+    $row=mysqli_fetch_row($result);
+    $trade_id=$row[0]+1;    
+    $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','7','$trade_buy_price','$trade_sell_price');";                                                                  
     $result = $conn->query($sql); 
        }
     }
@@ -397,8 +418,11 @@ $trade_code=array("point_number","point_number_sz","point_number_sz100","point_n
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
     if($row[0]==0){
-   // $number=$number8+$number8*$number_bate8;  
-    $sql = "insert into trade_history (code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','8','$trade_buy_price','$trade_sell_price');";                                                                  
+   // $number=$number8+$number8*$number_bate8; 
+    $result=mysqli_query($conn,$sql);
+    $row=mysqli_fetch_row($result);
+    $trade_id=$row[0]+1;    
+    $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','8','$trade_buy_price','$trade_sell_price');";                                                                  
     $result = $conn->query($sql); 
        }
     }
