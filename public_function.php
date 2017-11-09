@@ -313,12 +313,12 @@ $trade_code=array("point_number","point_number_sz","point_number_sz100","point_n
     $result=mysqli_query($conn,$sql);
     $row=mysqli_fetch_row($result);
     if($row[0]==0){
-    //$number=$number1+$number1*$number_bate1; 
     $sql = "select count(*) from trade_history;";    
     $result=mysqli_query($conn,$sql);
     $row=mysqli_fetch_row($result);
     $trade_id=$row[0]+1;  
-    $number="1550";  
+    $number=11/$trade_buy_price;
+    $number=round($number);  
     $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','1','$trade_buy_price','$trade_sell_price');";                                                                  
     echo "insert into sql:".$sql;
       $result = $conn->query($sql); 
