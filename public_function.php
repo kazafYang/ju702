@@ -306,7 +306,7 @@ $trade_code=array("point_number","point_number_sz","point_number_sz100","point_n
     $number5=$row[8];$number_bate5=$row[9];$number6=$row[10];$number_bate6=$row[11];
     $number7=$row[12];$number_bate7=$row[13];$number8=$row[14];$number_bate8=$row[15]; */
   // echo $number1."-".$number1."-".$number1."-".$number1."-".$number1."-".$number1."-".$number1."-".$number1."-".;
-  if(($trade_min15_k >= 80 and $trade_min15_k < 99 and ($trade_min60_k >= 40 or $trade_min60_d >= 40)) or ($trade_min15_d>=75 and $trade_min15_d<80 and ($trade_min60_k >= 50 or $trade_min60_d >= 50)))
+  if(($trade_min15_k >= 80  and ($trade_min60_k >= 40 or $trade_min60_d >= 40)) or ($trade_min15_d>=75  and ($trade_min60_k >= 40 or $trade_min60_d >= 40)))
     {
     echo "panduan:".$trade_min15_k."~~~~~~~comming~~~~~~~~~~~~~\n";
     $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=1;";    
@@ -325,7 +325,7 @@ $trade_code=array("point_number","point_number_sz","point_number_sz100","point_n
     } 
 
 //30min  
-   if (($trade_min30_k >=75 and $trade_min30_k <80) or ($trade_min30_d >=75 and $trade_min30_d <80)){
+   if ($trade_min30_k >=80  or $trade_min30_d >=75){
     $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=2;";    
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
@@ -337,7 +337,7 @@ $trade_code=array("point_number","point_number_sz","point_number_sz100","point_n
     } 
    
  //60分钟          
-   if (($trade_min60_k >=75 and $trade_min60_k<80) or ($trade_min60_d >=75 and $trade_min60_d <80)) {
+   if ($trade_min60_k >=80 or $trade_min60_d >=75) {
     $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=3;";    
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
@@ -349,7 +349,7 @@ $trade_code=array("point_number","point_number_sz","point_number_sz100","point_n
     }
    
   //日线
-    if (($trade_day_k >=75 and $trade_day_k<80) or ($trade_day_d >=75 and $trade_day_d <80)) {
+    if ($trade_day_k >=80 or $trade_day_d >=75) {
     $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=4;";    
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
@@ -362,7 +362,7 @@ $trade_code=array("point_number","point_number_sz","point_number_sz100","point_n
    
   //buy,分钟
     echo $trade_min15_k."-------".$trade_min15_d."~~~~~~~~~~~~~~";
-    if ($trade_min15_k <20 or $trade_min15_d <20 ){
+    if ($trade_min15_k <=15 or $trade_min15_d <20 ){
     $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=5;";    
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
@@ -372,7 +372,7 @@ $trade_code=array("point_number","point_number_sz","point_number_sz100","point_n
     $result = $conn->query($sql); 
        }
     }  
-    if ($trade_min30_k <20 or $trade_min30_d <20 ){
+    if ($trade_min30_k <=15 or $trade_min30_d <20 ){
     $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=6;";    
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
@@ -382,7 +382,7 @@ $trade_code=array("point_number","point_number_sz","point_number_sz100","point_n
     $result = $conn->query($sql); 
        }
     }   
-    if ($trade_min60_k <20 or $trade_min60_d <20 ){
+    if ($trade_min60_k <=15 or $trade_min60_d <20 ){
     $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=7;";    
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
@@ -392,7 +392,7 @@ $trade_code=array("point_number","point_number_sz","point_number_sz100","point_n
     $result = $conn->query($sql); 
        }
     }
-    if ($trade_day_k <20 or $trade_day_d <20 ){
+    if ($trade_day_k <=15 or $trade_day_d <20 ){
     $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=8;";    
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();     
