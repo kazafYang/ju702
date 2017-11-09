@@ -296,14 +296,18 @@
       $trade_min60_k=round($row[min60_k],2);$trade_min60_d=round($row[min60_d],2);$row[min60_j]=round($row[min60_j],2);
       $trade_day_k=round($row[kdjday_k],2);$trade_day_d=round($row[kdjday_d],2);$row[kdjday_j]=round($row[kdjday_j],2);
      //15min
-
-      $sql = "select bite from trade_bate  order by id asc ;";    
+      $str="";
+      $sql = "select bite as a from trade_bate  order by id asc ;";    
       $result=mysqli_query($conn,$sql);
-      $row=mysqli_fetch_row($result);
-        printf ("%s : %s",$row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],$row[7]);
+          while ($row=mysqli_fetch_row($result))
+    {
+        $a = sprintf("%s : %s",$row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],$row[7]);
+        $str=$str.$a;    
+    }
+
       $type1=$row[0];$type2=$row[1];$type3=$row[2];$type4=$row[3];
       $type5=$row[4];$type6=$row[5];$type7=$row[6];$type8=$row[7]; 
-      echo $type1.$type2.$type3.$type4.$type5.$type6.$type7.$type8."~~~~~~~~~~~~~~~~~~~bite comming~~~~~~~~~~~~~~";
+      echo $type1.$type2.$type3.$type4.$type5.$type6.$type7.$type8."~~~~~~~~~~~~~~~~~~~bite comming~~~~~~~~~~~~~~".$str;
      /* $number5=$row[8];$number_bate5=$row[9];$number6=$row[10];$number_bate6=$row[11];
       $number7=$row[12];$number_bate7=$row[13];$number8=$row[14];$number_bate8=$row[15]; */
     // echo $number1."-".$number1."-".$number1."-".$number1."-".$number1."-".$number1."-".$number1."-".$number1."-".;
