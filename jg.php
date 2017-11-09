@@ -38,7 +38,7 @@ machining_price();
     sleep_time();     
     }elseif ($time_hour>="15") {
       echo "3point!\n";
-    exit(0);    
+      exit(0);    
     }
     
 /*    if ($time_hour==9 and $time_min==30) {
