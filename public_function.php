@@ -301,13 +301,13 @@
       $result=mysqli_query($conn,$sql);
           while ($row=mysqli_fetch_row($result))
     {
-        $a = sprintf("%s : %s",$row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],$row[7]);
+        $a = sprintf("%s,%s",$row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],$row[7]);
         $str=$str.$a;    
     }
-
-      $type1=$row[0];$type2=$row[1];$type3=$row[2];$type4=$row[3];
-      $type5=$row[4];$type6=$row[5];$type7=$row[6];$type8=$row[7]; 
-      echo $type1.$type2.$type3.$type4.$type5.$type6.$type7.$type8."~~~~~~~~~~~~~~~~~~~bite comming~~~~~~~~~~~~~~".$str;
+        $pieces = explode(",", $str);
+      $type1=$pieces[0];$type2=$pieces[1];$type3=$pieces[2];$type4=$pieces[3];
+      $type5=$pieces[4];$type6=$pieces[5];$type7=$pieces[6];$type8=$pieces[7]; 
+      echo $type1.$type2.$type3.$type4.$type5.$type6.$type7.$type8."~~~~~~~~~~~~~~~~~~~";
      /* $number5=$row[8];$number_bate5=$row[9];$number6=$row[10];$number_bate6=$row[11];
       $number7=$row[12];$number_bate7=$row[13];$number8=$row[14];$number_bate8=$row[15]; */
     // echo $number1."-".$number1."-".$number1."-".$number1."-".$number1."-".$number1."-".$number1."-".$number1."-".;
@@ -321,7 +321,7 @@
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       $trade_id=$row[0]+1;  
-      $number=11/$trade_buy_price;
+      $number=11/$trade_buy_price*$type1;
       $number=round($number);  
       $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','1','$trade_buy_price','$trade_sell_price');";                                                                  
       echo "insert into sql:".$sql;
@@ -342,7 +342,7 @@
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       $trade_id=$row[0]+1;
-      $number=11/$trade_buy_price;
+      $number=11/$trade_buy_price*$type2;
       $number=round($number); 
       $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','2','$trade_buy_price','$trade_sell_price');";                                                                  
       $result = $conn->query($sql); 
@@ -360,7 +360,7 @@
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       $trade_id=$row[0]+1;
-      $number=11/$trade_buy_price;
+      $number=11/$trade_buy_price*$type3;
       $number=round($number);   
       $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','3','$trade_buy_price','$trade_sell_price');";                                                                  
       $result = $conn->query($sql); 
@@ -376,7 +376,7 @@
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       $trade_id=$row[0]+1; 
-            $number=11/$trade_buy_price;
+            $number=11/$trade_buy_price*$type4;
       $number=round($number);
       $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','4','$trade_buy_price','$trade_sell_price');";                                                                  
       $result = $conn->query($sql); 
@@ -393,7 +393,7 @@
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       $trade_id=$row[0]+1;
-            $number=11/$trade_buy_price;
+            $number=11/$trade_buy_price*$type5;
       $number=round($number);
       $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','5','$trade_buy_price','$trade_sell_price');";                                                                  
       $result = $conn->query($sql); 
@@ -408,7 +408,7 @@
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       $trade_id=$row[0]+1;
-            $number=11/$trade_buy_price;
+            $number=11/$trade_buy_price*$type6;
       $number=round($number);
       $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','6','$trade_buy_price','$trade_sell_price');";                                                                  
       $result = $conn->query($sql); 
@@ -423,7 +423,7 @@
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       $trade_id=$row[0]+1;  
-            $number=11/$trade_buy_price;
+            $number=11/$trade_buy_price*$type7;
       $number=round($number);
       $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','7','$trade_buy_price','$trade_sell_price');";                                                                  
       $result = $conn->query($sql); 
@@ -438,7 +438,7 @@
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       $trade_id=$row[0]+1; 
-            $number=11/$trade_buy_price;
+            $number=11/$trade_buy_price*$type8;
       $number=round($number);
       $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','8','$trade_buy_price','$trade_sell_price');";                                                                  
       $result = $conn->query($sql); 
