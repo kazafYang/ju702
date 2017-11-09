@@ -7,5 +7,5 @@ $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_
     //echo $sql."\n";
     $result = $conn->query($sql);                                                                                                                                             
     $row = $result->fetch_assoc();                                                                                                                                            
-    echo $row[id].",".$row[code].",".$row[trade_type].",".$row[number].$row[trade_buy_price].",".$row[trade_sell_price];
+    echo $row[id].",".$row[code].",".$row[trade_type].",".$row[number].",".$row[trade_buy_price].",".$row[trade_sell_price];
 ?> 
