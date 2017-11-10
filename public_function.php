@@ -336,8 +336,6 @@
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);   
       if($row[0]==0){
-      echo "__________".$row[0]."/n";   
-     // $number=$number2+$number2*$number_bate2; 
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
@@ -355,7 +353,6 @@
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);  
       if($row[0]==0){
-      //$number=$number3+$number3*$number_bate3;
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
@@ -373,6 +370,7 @@
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);   
       if($row[0]==0){
+      $sql = "select count(*) from trade_history;";      
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       $trade_id=$row[0]+1; 
@@ -386,17 +384,19 @@
     //buy,分钟
       if ($trade_min15_k <=15 or $trade_min15_d <20 ){
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=5;";    
-      $result=mysqli_query($conn,$sql);
+      echo "commingxxxxxxxxxxxxx".$sql;
+        $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
+            echo "commingxxxxxxxxxxxxx".$row[0];    
       if($row[0]==0){
-     // $number=$number5+$number5*$number_bate5;
+      $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       $trade_id=$row[0]+1;
-            $number=11/$trade_buy_price*$type5;
+      $number=11/$trade_buy_price*$type5;
       $number=round($number);
       $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','5','$trade_buy_price','$trade_sell_price');";                                                                  
-      $result = $conn->query($sql); 
+        $result = $conn->query($sql); 
          }
       }  
       if ($trade_min30_k <=15 or $trade_min30_d <20 ){
@@ -404,7 +404,7 @@
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);   
       if($row[0]==0){
-     // $number=$number6+$number6*$number_bate6; 
+      $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       $trade_id=$row[0]+1;
@@ -419,7 +419,7 @@
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);    
       if($row[0]==0){
-     // $number=$number7+$number7*$number_bate7;  
+      $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       $trade_id=$row[0]+1;  
@@ -434,7 +434,7 @@
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);  
       if($row[0]==0){
-     // $number=$number8+$number8*$number_bate8; 
+      $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       $trade_id=$row[0]+1; 
