@@ -277,15 +277,6 @@
   function analyse () {
     echo "comming analyse"."\n";
   global $table_name,$code,$conn; 
-  $trade_code=array("point_number","point_number_sz","point_number_sz100","point_number_zxb","point_number_hs","point_number_zq","point_number_jg","point_number_yh");                                                                                                                                                                                              
-  //$conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);                                                                                    
-  //foreach ($trade_code as $value)                                                                                                                                                     
-  //{    
-  /*    $sql = "select id,stat_time_min from $table_name order by id desc limit 1;";    
-      $result = $conn->query($sql);
-      $row=$result->fetch_assoc();
-      $row[id]=$row[id]+1;                      //先查询出数据数量  */
-
       $sql = "SELECT code,stat_date,stat_time_hour,stat_time_min,min15_k,min15_d,min15_j,min30_k,min30_d,min30_j,min60_k,min60_d,min60_j,kdjday_k,kdjday_d,kdjday_j,cci,buy_one_price,sell_one_price FROM $table_name order by id desc limit 1";                                                                  
       $result = $conn->query($sql);                                                                                                                                             
       $row = $result->fetch_assoc();
@@ -308,9 +299,18 @@
       $type1=$pieces[0];$type2=$pieces[1];$type3=$pieces[2];$type4=$pieces[3];
       $type5=$pieces[4];$type6=$pieces[5];$type7=$pieces[6];$type8=$pieces[7]; 
       echo $type1.$type2.$type3.$type4.$type5.$type6.$type7.$type8."~~~~~~~~~~~~~~~~~~~";
-     /* $number5=$row[8];$number_bate5=$row[9];$number6=$row[10];$number_bate6=$row[11];
-      $number7=$row[12];$number_bate7=$row[13];$number8=$row[14];$number_bate8=$row[15]; */
-    // echo $number1."-".$number1."-".$number1."-".$number1."-".$number1."-".$number1."-".$number1."-".$number1."-".;
+      mysqli_free_result($result);  //释放结果集
+      //拿取hive_number表数据条数获得插入的下一个id
+      $sql = "select count(*) from hive_number;";    
+      $result=mysqli_query($conn,$sql);
+      $row=mysqli_fetch_row($result);
+      $hive_number_id=$row[0]+1;
+      mysqli_free_result($result);  //释放结果集
+      $sql = "select total_money,useable_money,total_number,useable_sell_number,cost_price from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
+      $result = $conn->query($sql);                                                                                                                                             
+      $row = $result->fetch_assoc();
+      $total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[useable_sell_number];$cost_price=$row[cost_price];
+      $sql = "insert into hive_number values ('$hive_number_id','$trade_code','$total_money','$useable_money','$total_number','$seable_sell_number','$cost_price','$trade_stat_date');";                                                                  
     if(($trade_min15_k >= 80  and ($trade_min60_k >= 40 or $trade_min60_d >= 40)) or ($trade_min15_d>=75  and ($trade_min60_k >= 40 or $trade_min60_d >= 40)))
       {
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=1;";    
