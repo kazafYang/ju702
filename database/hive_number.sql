@@ -6,4 +6,6 @@ CREATE TABLE IF not EXISTS `hive_number` (
   double DEFAULT "0",
   total_number int(8) DEFAULT "0",
   useable_sell_number int(8) DEFAULT "0",
+  cost_price double DEFAULT "0",
+  stat_date date DEFAULT NULL,
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
