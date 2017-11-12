@@ -350,7 +350,7 @@
       $useable_sell_number=$useable_sell_number-$number;
       $total_number=$total_number-$number;  
       $useable_money=$useable_money+($number*$trade_sell_price)  
-      $sql = "update hive_number set useable_sell_number='$useable_sell_number',total_number='$total_number' where code='$trade_code' and stat_date='$trade_stat_date' order by id desc limit 1;";                                                                  
+      $sql = "update hive_number set useable_sell_number='$useable_sell_number',total_number='$total_number' where code='$trade_code' and stat_date='$trade_stat_date';";                                                                  
       $conn->query($sql);
       $sql = "update hive_number set useable_money='$useable_money' where stat_date='$trade_stat_date';";                                                                  
       $conn->query($sql);  
