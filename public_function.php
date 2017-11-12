@@ -315,15 +315,22 @@
       $sql = "select total_money,useable_money,total_number,useable_sell_number,cost_price from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
       $result = $conn->query($sql);                                                                                                                                             
       $row = $result->fetch_assoc();
-      $total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[useable_sell_number];$cost_price=$row[cost_price];
+      $total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[total_number];$cost_price=$row[cost_price];
       mysqli_free_result($result);  //释放结果集 
-      $sql = "insert into hive_number values ('$hive_number_id','$trade_code','$total_money','$useable_money','$total_number','$total_number','$cost_price','$trade_stat_date');";                                                                  
+      $sql = "insert into hive_number values ('$hive_number_id','$trade_code','$total_money','$useable_money','$total_number','$useable_sell_number','$cost_price','$trade_stat_date');";                                                                  
       $conn->query($sql);   
+      } else{
+        //拿取hive_number的基础属性
+      $sql = "select total_money,useable_money,total_number,useable_sell_number,cost_price from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
+      $result = $conn->query($sql);                                                                                                                                             
+      $row = $result->fetch_assoc();
+      $total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[useable_sell_number];$cost_price=$row[cost_price];
+      mysqli_free_result($result);  //释放结果集
       }
       mysqli_free_result($result);  //释放结果集
       //sell判断
- //判断当前code是否具备卖出资格，后续可以在这里加上开关等限制性的行为；
-    if($total_number>1){   
+ //判断当前code是否具备卖出资格，后续可以在这里加上开关等限制性的行为；昨日的总数量，就是今日的可卖数量；
+    if($useable_sell_number>1){   
       if(($trade_min15_k >= 80  and ($trade_min60_k >= 40 or $trade_min60_d >= 40)) or ($trade_min15_d>=75  and ($trade_min60_k >= 40 or $trade_min60_d >= 40)))
       {
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=1;";    
@@ -335,10 +342,18 @@
       $row=mysqli_fetch_row($result);
       $trade_id=$row[0]+1;  
       $number=11/$trade_buy_price*$type1;
-      $number=round($number);  
+      $number=round($number);
+      //插入交易历史  
       $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','1','$trade_buy_price','$trade_sell_price');";                                                                  
-      echo "insert into sql:".$sql;
-        $result = $conn->query($sql); 
+      $conn->query($sql); 
+      //更新hive_number表数据
+      $useable_sell_number=$useable_sell_number-$number;
+      $total_number=$total_number-$number;  
+      $useable_money=$useable_money+($number*$trade_sell_price)  
+      $sql = "update hive_number set useable_sell_number='$useable_sell_number',total_number='$total_number' where code='$trade_code' and stat_date='$trade_stat_date' order by id desc limit 1;";                                                                  
+      $conn->query($sql);
+      $sql = "update hive_number set useable_money='$useable_money' where stat_date='$trade_stat_date';";                                                                  
+      $conn->query($sql);  
          }
       } 
 
@@ -357,6 +372,14 @@
            $number=round($number); 
            $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','2','$trade_buy_price','$trade_sell_price');";                                                                  
            $result = $conn->query($sql); 
+                 //更新hive_number表数据
+      $useable_sell_number=$useable_sell_number-$number;
+      $total_number=$total_number-$number;  
+      $useable_money=$useable_money+($number*$trade_sell_price)  
+      $sql = "update hive_number set useable_sell_number='$useable_sell_number',total_number='$total_number' where code='$trade_code' and stat_date='$trade_stat_date' order by id desc limit 1;";                                                                  
+      $conn->query($sql);
+      $sql = "update hive_number set useable_money='$useable_money' where stat_date='$trade_stat_date';";                                                                  
+      $conn->query($sql);  
          }
       } 
 
@@ -373,34 +396,50 @@
       $number=11/$trade_buy_price*$type3;
       $number=round($number);   
       $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','3','$trade_buy_price','$trade_sell_price');";                                                                  
-      $result = $conn->query($sql); 
+      $result = $conn->query($sql);
+            //更新hive_number表数据
+      $useable_sell_number=$useable_sell_number-$number;
+      $total_number=$total_number-$number;  
+      $useable_money=$useable_money+($number*$trade_sell_price)  
+      $sql = "update hive_number set useable_sell_number='$useable_sell_number',total_number='$total_number' where code='$trade_code' and stat_date='$trade_stat_date' order by id desc limit 1;";                                                                  
+      $conn->query($sql);
+      $sql = "update hive_number set useable_money='$useable_money' where stat_date='$trade_stat_date';";                                                                  
+      $conn->query($sql);  
          }
       }
 
     //日线
-      if ($trade_day_k >=80 or $trade_day_d >=75) {
+if ($trade_day_k >=80 or $trade_day_d >=75) {
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=4;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);   
-      if($row[0]==0){
+   if($row[0]==0){
       $sql = "select count(*) from trade_history;";      
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       $trade_id=$row[0]+1; 
-            $number=11/$trade_buy_price*$type4;
+      $number=11/$trade_buy_price*$type4;
       $number=round($number);
       $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','4','$trade_buy_price','$trade_sell_price');";                                                                  
-      $result = $conn->query($sql); 
+      $result = $conn->query($sql);
+      //更新hive_number表数据
+      $useable_sell_number=$useable_sell_number-$number;
+      $total_number=$total_number-$number;  
+      $useable_money=$useable_money+($number*$trade_sell_price)  
+      $sql = "update hive_number set useable_sell_number='$useable_sell_number',total_number='$total_number' where code='$trade_code' and stat_date='$trade_stat_date' order by id desc limit 1;";                                                                  
+      $conn->query($sql);
+      $sql = "update hive_number set useable_money='$useable_money' where stat_date='$trade_stat_date';";                                                                  
+      $conn->query($sql);  
          }
       }  
     }
-    //buy,分钟
+    //buy,买入开关限制，当总
+  if($useable_money>1000){    
       if ($trade_min15_k <=15 or $trade_min15_d <20 ){
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=5;";    
       echo "commingxxxxxxxxxxxxx".$sql;
         $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
-            echo "commingxxxxxxxxxxxxx".$row[0];    
       if($row[0]==0){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
@@ -457,7 +496,7 @@
       $result = $conn->query($sql); 
          }
       }
-  //}                
+  }                
   }
 
   function nine_count () {
