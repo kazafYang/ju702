@@ -282,10 +282,10 @@
       $row = $result->fetch_assoc();
       $trade_code=$row[code];$trade_buy_price=$row[buy_one_price];$trade_sell_price=$row[sell_one_price];
       $trade_stat_date=$row[stat_date];$trade_time_hour=$row[stat_time_hour];$trade_time_min=$row[stat_time_min];
-      $trade_min15_k=round($row[min15_k],2);$trade_min15_d=round($row[min15_d],2);$row[min15_j]=round($row[min15_j],2);
-      $trade_min30_k=round($row[min30_k],2);$trade_min30_d=round($row[min30_d],2);$row[min30_j]=round($row[min30_j],2);
-      $trade_min60_k=round($row[min60_k],2);$trade_min60_d=round($row[min60_d],2);$row[min60_j]=round($row[min60_j],2);
-      $trade_day_k=round($row[kdjday_k],2);$trade_day_d=round($row[kdjday_d],2);$row[kdjday_j]=round($row[kdjday_j],2);
+      $trade_min15_k=round($row[min15_k],2);$trade_min15_d=round($row[min15_d],2);$trade_min15_j=round($row[min15_j],2);
+      $trade_min30_k=round($row[min30_k],2);$trade_min30_d=round($row[min30_d],2);$trade_min30_j=round($row[min30_j],2);
+      $trade_min60_k=round($row[min60_k],2);$trade_min60_d=round($row[min60_d],2);$trade_min60_j=round($row[min60_j],2);
+      $trade_day_k=round($row[kdjday_k],2);$trade_day_d=round($row[kdjday_d],2);$trade_day_j=round($row[kdjday_j],2);
      //15min
       $str="";
       $sql = "select bite as a from trade_bate  order by id asc ;";    
@@ -333,6 +333,7 @@
     if($useable_sell_number>1){   
       if(($trade_min15_k >= 80  and ($trade_min60_k >= 40 or $trade_min60_d >= 40)) or ($trade_min15_d>=75  and ($trade_min60_k >= 40 or $trade_min60_d >= 40)))
       {
+     //死叉暂时先不用 if($trade_min15_k >= 80 and $trade_min15_d >= 75 and $trade_min15_j < $trade_min15_k and $trade_min15_j < $trade_min15_d){  
       //提前计算数量，避免导致超出数量限制的问题；
       $number=11/$trade_buy_price*$type1;
       $number=round($number);  
