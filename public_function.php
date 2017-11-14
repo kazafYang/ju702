@@ -460,7 +460,7 @@ if ($trade_day_k >=80 or $trade_day_d >=75) {
       $conn->query($sql);  
          }
       }  
-      if ($trade_min30_k <=15 or $trade_min30_d <20 and ($trade_day_k<70 and $trade_day_d<70) ){
+      if ($trade_min30_k <=15 or $trade_min30_d <20 and ($trade_day_k<70 or $trade_day_d<70) ){
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=6;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);   
