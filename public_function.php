@@ -317,6 +317,12 @@
       $row = $result->fetch_assoc();
       $total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[total_number];$cost_price=$row[cost_price];
       mysqli_free_result($result);  //释放结果集 
+      //计算最近2日的平均买入成本  
+      $cost_stat_date=date("Y-m-d",strtotime("-2 day"));  
+      $sql = "select avg(trade_sell_price) from trade_history where code='$trade_code' and trade_type>=5 and stat_date>='$cost_stat_date';";    
+      $result=mysqli_query($conn,$sql);
+      $row=mysqli_fetch_row($result);
+      $cost_price=$row[0];  
       $sql = "insert into hive_number values ('$hive_number_id','$trade_code','$total_money','$useable_money','$total_number','$useable_sell_number','$cost_price','$trade_stat_date');";                                                                  
       $conn->query($sql);   
       } else{
