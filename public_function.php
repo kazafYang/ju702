@@ -322,7 +322,8 @@
       $sql = "select avg(trade_sell_price) from trade_history where code='$trade_code' and trade_type>=5 and stat_date>='$cost_stat_date';";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
-      $cost_price=$row[0];  
+      $cost_price=round($row[0],3);
+      mysqli_free_result($result);  //释放结果集   
       $sql = "insert into hive_number values ('$hive_number_id','$trade_code','$total_money','$useable_money','$total_number','$useable_sell_number','$cost_price','$trade_stat_date');";                                                                  
       $conn->query($sql);   
       } else{
