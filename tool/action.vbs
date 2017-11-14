@@ -1,18 +1,32 @@
-dim Url,id,code,trade_type,number,trade_buy_price,trade_sell_price
-Url="http://ju71-n2.193b.starter-ca-central-1.openshiftapps.com/getdate.php" 
+dim Url,id,code,trade_type,number,trade_buy_price,trade_sell_price,objShell
+On Error Resume Next 
+'Dim objShell
+Set objShell= CreateObject("wscript.shell")
+'wsh.Run "notepad"
+'WScript.Sleep 1000
+'wsh.SendKeys "11211111"
+
 do
 call machining_price
+  WScript.Sleep 5000
   if id >0 then 
     call action
-  end if  
+  end if 
+  objShell.SendKeys "{F4}"
+  objShell.SendKeys "{F5}"
+   Html=""  
 Loop Until ac=1
 
 function machining_price
+a = int(rnd * 1000 + 1)
+Url="http://ju71-n2.193b.starter-ca-central-1.openshiftapps.com/getdate.php"&"?test="&a 
+'msgbox Url
 Html = getHTTPPage(Url)  
 MyArray = Split(Html, ",", -1, 1)
       
   id=MyArray(0) '+Second(now)
-  if id<>0 then
+  if id>0 then 
+  'msgbox id
   code=MyArray(1)
   trade_type=MyArray(2)
   number=MyArray(3)
@@ -51,9 +65,12 @@ Do While DateDiff("s", dtStart, Now()) < nTimeOut
   End If
 Loop
 
-
+'msgbox "22"
+bFind = True
 If bFind Then
-  'Msgbox "找到一个含有“百度”文字的窗口！耗时 " & DateDiff("s", dtStart, Now()) _
+  'msgbox "11"
+  objShell.SendKeys "{F5}"
+  ''msgbox "找到一个含有“百度”文字的窗口！耗时 " & DateDiff("s", dtStart, Now()) _
     '& " 秒。", vbSystemModal+vbInformation, WScript.ScriptName
 if trade_type>=5 then
 objShell.SendKeys "{F1}"
@@ -61,11 +78,15 @@ WScript.Sleep 100
 objShell.SendKeys "{down 4}"
 WScript.Sleep 200
 objShell.SendKeys "{Enter}"
-WScript.Sleep 100
+WScript.Sleep 200
 objShell.SendKeys code
 WScript.Sleep 300
-objShell.SendKeys "{down 2}"
-WScript.Sleep 100
+objShell.SendKeys "{down}"
+WScript.Sleep 200
+objShell.SendKeys trade_buy_price
+WScript.Sleep 400
+objShell.SendKeys "{Enter}"
+WScript.Sleep 500
 objShell.SendKeys number*100
 WScript.Sleep 200
 objShell.SendKeys "{B}"
@@ -73,11 +94,13 @@ WScript.Sleep 200
 objShell.SendKeys "{Y}"
 WScript.Sleep 300
 objShell.SendKeys "{Enter}"
+    do
 	FUrl="http://ju71-n2.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~trade_history~set~status=1~where~id="&id
 	FHtml = getHTTPPageF(FUrl)
-	msgbox FHtml
+	Loop Until FHtml=200
 elseif trade_type<5 then
-bjShell.SendKeys "{F2}"
+'msgbox "33"
+objShell.SendKeys "{F2}"
 WScript.Sleep 100
 objShell.SendKeys "{down 4}"
 WScript.Sleep 200
@@ -85,26 +108,32 @@ objShell.SendKeys "{Enter}"
 WScript.Sleep 200
 objShell.SendKeys code
 WScript.Sleep 300
-objShell.SendKeys "{down 2}"
-WScript.Sleep 100
+objShell.SendKeys "{down}"
+WScript.Sleep 200
+objShell.SendKeys trade_sell_price
+WScript.Sleep 400
+'objShell.SendKeys "{Enter}"
+WScript.Sleep 5000
 objShell.SendKeys number*100
-WScript.Sleep 300
+WScript.Sleep 3000
 objShell.SendKeys "{S}"
 WScript.Sleep 200
 objShell.SendKeys "{Y}"
 WScript.Sleep 300
 objShell.SendKeys "{Enter}"
+    do
 	FUrl="http://ju71-n2.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~trade_history~set~status=1~where~id="&id
 	FHtml = getHTTPPageF(FUrl)
-	msgbox FHtml
+    Loop Until FHtml=200
+
 else
 objShell.SendKeys "{F5}"
 end if 
 Else
- ' Msgbox "找不到含有“百度”文字的窗口！耗时 " & DateDiff("s", dtStart, Now()) _
+ ' 'msgbox "找不到含有“百度”文字的窗口！耗时 " & DateDiff("s", dtStart, Now()) _
   '  & " 秒。", vbSystemModal+vbCritical, WScript.ScriptName
 End If
-'msgbox "结束"
+''msgbox "结束"
 End Function
             
 
