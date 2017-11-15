@@ -358,7 +358,7 @@
       //更新hive_number表数据
       $useable_sell_number=$useable_sell_number-$number;
       $total_number=$total_number-$number;  
-      $useable_money=$useable_money+($number*$trade_sell_price);
+      $useable_money=$useable_money+($number*$trade_sell_price*100);
       $sql = "update hive_number set useable_sell_number='$useable_sell_number',total_number='$total_number' where code='$trade_code' and stat_date='$trade_stat_date';";                                                                  
       $conn->query($sql);
       $sql = "update hive_number set useable_money='$useable_money' where stat_date='$trade_stat_date';";                                                                  
@@ -384,7 +384,7 @@
                  //更新hive_number表数据
       $useable_sell_number=$useable_sell_number-$number;
       $total_number=$total_number-$number;  
-      $useable_money=$useable_money+($number*$trade_sell_price);  
+      $useable_money=$useable_money+($number*$trade_sell_price*100);  
       $sql = "update hive_number set useable_sell_number='$useable_sell_number',total_number='$total_number' where code='$trade_code' and stat_date='$trade_stat_date' order by id desc limit 1;";                                                                  
       $conn->query($sql);
       $sql = "update hive_number set useable_money='$useable_money' where stat_date='$trade_stat_date';";                                                                  
@@ -409,7 +409,7 @@
             //更新hive_number表数据
       $useable_sell_number=$useable_sell_number-$number;
       $total_number=$total_number-$number;  
-      $useable_money=$useable_money+($number*$trade_sell_price);  
+      $useable_money=$useable_money+($number*$trade_sell_price*100);  
       $sql = "update hive_number set useable_sell_number='$useable_sell_number',total_number='$total_number' where code='$trade_code' and stat_date='$trade_stat_date' order by id desc limit 1;";                                                                  
       $conn->query($sql);
       $sql = "update hive_number set useable_money='$useable_money' where stat_date='$trade_stat_date';";                                                                  
@@ -434,7 +434,7 @@ if ($trade_day_k >=80 or $trade_day_d >=75) {
       //更新hive_number表数据
       $useable_sell_number=$useable_sell_number-$number;
       $total_number=$total_number-$number;  
-      $useable_money=$useable_money+($number*$trade_sell_price);  
+      $useable_money=$useable_money+($number*$trade_sell_price*100);  
       $sql = "update hive_number set useable_sell_number='$useable_sell_number',total_number='$total_number' where code='$trade_code' and stat_date='$trade_stat_date' order by id desc limit 1;";                                                                  
       $conn->query($sql);
       $sql = "update hive_number set useable_money='$useable_money' where stat_date='$trade_stat_date';";                                                                  
@@ -460,7 +460,7 @@ if ($trade_day_k >=80 or $trade_day_d >=75) {
       $conn->query($sql);
       //更新hive_number表数据
       $total_number=$total_number+$number;  
-      $useable_money=$useable_money-($number*$trade_buy_price);  
+      $useable_money=$useable_money-($number*$trade_buy_price*100);  
       $sql = "update hive_number set total_number='$total_number' where code='$trade_code' and stat_date='$trade_stat_date' order by id desc limit 1;";                                                                  
       $conn->query($sql);
       $sql = "update hive_number set useable_money='$useable_money' where stat_date='$trade_stat_date';";                                                                  
@@ -482,7 +482,7 @@ if ($trade_day_k >=80 or $trade_day_d >=75) {
       $conn->query($sql);
             //更新hive_number表数据
       $total_number=$total_number+$number;  
-      $useable_money=$useable_money-($number*$trade_buy_price);  
+      $useable_money=$useable_money-($number*$trade_buy_price*100);  
       $sql = "update hive_number set total_number='$total_number' where code='$trade_code' and stat_date='$trade_stat_date' order by id desc limit 1;";                                                                  
       $conn->query($sql);
       $sql = "update hive_number set useable_money='$useable_money' where stat_date='$trade_stat_date';";                                                                  
@@ -504,7 +504,7 @@ if ($trade_day_k >=80 or $trade_day_d >=75) {
       $conn->query($sql);
             //更新hive_number表数据
       $total_number=$total_number+$number;  
-      $useable_money=$useable_money-($number*$trade_buy_price);  
+      $useable_money=$useable_money-($number*$trade_buy_price*100);  
       $sql = "update hive_number set total_number='$total_number' where code='$trade_code' and stat_date='$trade_stat_date' order by id desc limit 1;";                                                                  
       $conn->query($sql);
       $sql = "update hive_number set useable_money='$useable_money' where stat_date='$trade_stat_date';";                                                                  
@@ -526,7 +526,7 @@ if ($trade_day_k >=80 or $trade_day_d >=75) {
       $conn->query($sql);
       //更新hive_number表数据
       $total_number=$total_number+$number;  
-      $useable_money=$useable_money-($number*$trade_buy_price);  
+      $useable_money=$useable_money-($number*$trade_buy_price*100);  
       $sql = "update hive_number set total_number='$total_number' where code='$trade_code' and stat_date='$trade_stat_date' order by id desc limit 1;";                                                                  
       $conn->query($sql);
       $sql = "update hive_number set useable_money='$useable_money' where stat_date='$trade_stat_date';";                                                                  
