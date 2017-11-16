@@ -1,4 +1,4 @@
-dim Url,id,code,trade_type,number,trade_buy_price,trade_sell_price,objShell
+dim Url,FUrl,id,code,trade_type,number,trade_buy_price,trade_sell_price,objShell
 On Error Resume Next 
 'Dim objShell
 Set objShell= CreateObject("wscript.shell")
@@ -14,11 +14,11 @@ call machining_price
   end if 
   objShell.SendKeys "{F4}"
   objShell.SendKeys "{F5}"
-   Html=""  
+  Html=""  
 Loop Until ac=1
 
 function machining_price
-a = int(rnd * 1000 + 1)
+a = int(rnd * 100000 + 1)
 Url="http://ju71-n2.193b.starter-ca-central-1.openshiftapps.com/getdate.php"&"?test="&a 
 'msgbox Url
 Html = getHTTPPage(Url)  
@@ -88,11 +88,11 @@ WScript.Sleep 400
 objShell.SendKeys "{Enter}"
 WScript.Sleep 500
 objShell.SendKeys number*100
-WScript.Sleep 200
+WScript.Sleep 2000
 objShell.SendKeys "{B}"
-WScript.Sleep 200
+WScript.Sleep 2000
 objShell.SendKeys "{Y}"
-WScript.Sleep 300
+WScript.Sleep 3000
 objShell.SendKeys "{Enter}"
     do
 	FUrl="http://ju71-n2.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~trade_history~set~status=1~where~id="&id
