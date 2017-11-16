@@ -324,7 +324,7 @@
       $row=mysqli_fetch_row($result);
       $cost_price=round($row[0],3);
       mysqli_free_result($result);  //释放结果集   
-      $sql = "insert into hive_number values ('$hive_number_id','$trade_code','$total_money','$useable_money','$total_number','$useable_sell_number','$total_sell_number','$cost_price','$trade_stat_date');";                                                                  
+      $sql = "insert into hive_number values ('$hive_number_id','$trade_code','$switch','$total_money','$useable_money','$total_number','$useable_sell_number','$total_sell_number','$cost_price','$trade_stat_date');";                                                                  
       $conn->query($sql);   
       } else{
         //拿取hive_number的基础属性
