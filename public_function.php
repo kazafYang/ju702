@@ -474,25 +474,25 @@ if ($trade_day_k >=80 or $trade_day_d >=75) {
   mysqli_free_result($result);  //释放结果集  
   if($useable_money>1000 /* and $trade_buy_price<$cost_price */ and $switch=1){
      //获取当日已经交易的买入数量  
-      $sql = "select sum(number) from trade_history where trade_type=1 and code='$trade_code' and stat_date='$trade_stat_date' and status=1";    
+      $sql = "select sum(number) from trade_history where trade_type=5 and code='$trade_code' and stat_date='$trade_stat_date' and status=1";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);  
       $min15_buy_number=$row[0]; 
       $sell_min15_number=$total_money*15/100; 
       mysqli_free_result($result);  //释放结果集
-      $sql = "select sum(number) from trade_history where trade_type=1 and code='$trade_code' and stat_date='$trade_stat_date' and status=1";    
+      $sql = "select sum(number) from trade_history where trade_type=6 and code='$trade_code' and stat_date='$trade_stat_date' and status=1";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);  
       $min30_buy_number=$row[0]; 
       $sell_min30_number=$total_sell_number*15/100; 
       mysqli_free_result($result);  //释放结果集
-      $sql = "select sum(number) from trade_history where trade_type=1 and code='$trade_code' and stat_date='$trade_stat_date' and status=1";    
+      $sql = "select sum(number) from trade_history where trade_type=7 and code='$trade_code' and stat_date='$trade_stat_date' and status=1";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);  
       $min60_buy_number=$row[0]; 
       $sell_min60_number=$total_sell_number*30/100; 
       mysqli_free_result($result);  //释放结果集
-      $sql = "select sum(number) from trade_history where trade_type=1 and code='$trade_code' and stat_date='$trade_stat_date' and status=1";    
+      $sql = "select sum(number) from trade_history where trade_type=8 and code='$trade_code' and stat_date='$trade_stat_date' and status=1";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);  
       $minday_buy_number=$row[0]; 
