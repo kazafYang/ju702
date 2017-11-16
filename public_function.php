@@ -276,7 +276,8 @@
 
   function analyse () {
     echo "comming analyse"."\n";
-    global $table_name,$code,$conn; 
+    global $table_name,$code,$conn;
+      //获取分时kdj数据
       $sql = "SELECT code,stat_date,stat_time_hour,stat_time_min,min15_k,min15_d,min15_j,min30_k,min30_d,min30_j,min60_k,min60_d,min60_j,kdjday_k,kdjday_d,kdjday_j,cci,buy_one_price,sell_one_price FROM $table_name order by id desc limit 1";                                                                  
       $result = $conn->query($sql);                                                                                                                                             
       $row = $result->fetch_assoc();
@@ -286,7 +287,7 @@
       $trade_min30_k=round($row[min30_k],2);$trade_min30_d=round($row[min30_d],2);$trade_min30_j=round($row[min30_j],2);
       $trade_min60_k=round($row[min60_k],2);$trade_min60_d=round($row[min60_d],2);$trade_min60_j=round($row[min60_j],2);
       $trade_day_k=round($row[kdjday_k],2);$trade_day_d=round($row[kdjday_d],2);$trade_day_j=round($row[kdjday_j],2);
-     //15min
+     //获取bite倍数信息，给各个阶段加倍
       $str="";
       $sql = "select bite as a from trade_bate  order by id asc ;";    
       $result=mysqli_query($conn,$sql);
