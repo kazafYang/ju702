@@ -377,7 +377,7 @@
      if ($trade_min30_k >=80  or $trade_min30_d >=75){
          $number=11/$trade_buy_price*$type2;
         $number=round($number);
-             //获取当日已经交易的卖出数量  
+      //获取当日已经交易的卖出数量  
       $sql = "select sum(number) from trade_history where trade_type=2 and code='$trade_code' and stat_date='$trade_stat_date' and status=1";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);  
@@ -470,12 +470,39 @@ if ($trade_day_k >=80 or $trade_day_d >=75) {
          }
       }  
     }
-    //buy,买入开关限制，当总
-  if($useable_money>1000 /* and $trade_buy_price<$cost_price */ and $switch=1){    
+    //buy,买入开关限制，限制可用金额不足的情况，和标的开关关闭的情况，关闭 switch=0；
+  mysqli_free_result($result);  //释放结果集  
+  if($useable_money>1000 /* and $trade_buy_price<$cost_price */ and $switch=1){
+     //获取当日已经交易的买入数量  
+      $sql = "select sum(number) from trade_history where trade_type=1 and code='$trade_code' and stat_date='$trade_stat_date' and status=1";    
+      $result=mysqli_query($conn,$sql);
+      $row=mysqli_fetch_row($result);  
+      $min15_buy_number=$row[0]; 
+      $sell_min15_number=$total_money*15/100; 
+      mysqli_free_result($result);  //释放结果集
+      $sql = "select sum(number) from trade_history where trade_type=1 and code='$trade_code' and stat_date='$trade_stat_date' and status=1";    
+      $result=mysqli_query($conn,$sql);
+      $row=mysqli_fetch_row($result);  
+      $min30_buy_number=$row[0]; 
+      $sell_min30_number=$total_sell_number*15/100; 
+      mysqli_free_result($result);  //释放结果集
+      $sql = "select sum(number) from trade_history where trade_type=1 and code='$trade_code' and stat_date='$trade_stat_date' and status=1";    
+      $result=mysqli_query($conn,$sql);
+      $row=mysqli_fetch_row($result);  
+      $min60_buy_number=$row[0]; 
+      $sell_min60_number=$total_sell_number*30/100; 
+      mysqli_free_result($result);  //释放结果集
+      $sql = "select sum(number) from trade_history where trade_type=1 and code='$trade_code' and stat_date='$trade_stat_date' and status=1";    
+      $result=mysqli_query($conn,$sql);
+      $row=mysqli_fetch_row($result);  
+      $minday_buy_number=$row[0]; 
+      $sell_minday_number=$total_sell_number*40/100; 
+      mysqli_free_result($result);  //释放结果集
+    
       if ($trade_min15_k <=15 or $trade_min15_d <20 and ($trade_min60_k<70 or $trade_min60_d<70 ) and ($trade_day_k<70 or $trade_day_d<70) ){
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=5;";    
       echo "commingxxxxxxxxxxxxx".$sql;
-        $result=mysqli_query($conn,$sql);
+      $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       if($row[0]==0){
       $sql = "select count(*) from trade_history;";    
