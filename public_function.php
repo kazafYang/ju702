@@ -312,10 +312,10 @@
       $hive_number_id=$row[0]+1;
       mysqli_free_result($result);  //释放结果集
       //拿取hive_number的基础属性
-      $sql = "select total_money,useable_money,total_number,useable_sell_number,cost_price from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
+      $sql = "select total_money,useable_money,total_number,useable_sell_number,total_sell_number,cost_price from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
       $result = $conn->query($sql);                                                                                                                                             
       $row = $result->fetch_assoc();
-      $total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[total_number];$cost_price=$row[cost_price];
+      $total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[total_number];$total_sell_number=$row[total_number];$cost_price=$row[cost_price];
       mysqli_free_result($result);  //释放结果集 
       //计算最近2日的平均买入成本  
       $cost_stat_date=date("Y-m-d",strtotime("-2 day"));  
@@ -324,14 +324,14 @@
       $row=mysqli_fetch_row($result);
       $cost_price=round($row[0],3);
       mysqli_free_result($result);  //释放结果集   
-      $sql = "insert into hive_number values ('$hive_number_id','$trade_code','$total_money','$useable_money','$total_number','$useable_sell_number','$cost_price','$trade_stat_date');";                                                                  
+      $sql = "insert into hive_number values ('$hive_number_id','$trade_code','$total_money','$useable_money','$total_number','$useable_sell_number','$total_sell_number','$cost_price','$trade_stat_date');";                                                                  
       $conn->query($sql);   
       } else{
         //拿取hive_number的基础属性
-      $sql = "select total_money,useable_money,total_number,useable_sell_number,cost_price from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
+      $sql = "select total_money,useable_money,total_number,useable_sell_number,total_sell_number,cost_price from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
       $result = $conn->query($sql);                                                                                                                                             
       $row = $result->fetch_assoc();
-      $total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[useable_sell_number];$cost_price=$row[cost_price];
+      $total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[useable_sell_number];$total_sell_number=$row[$total_sell_number];$cost_price=$row[cost_price];
       mysqli_free_result($result);  //释放结果集
       }
       mysqli_free_result($result);  //释放结果集
@@ -343,11 +343,18 @@
      //死叉暂时先不用 if($trade_min15_k >= 80 and $trade_min15_d >= 75 and $trade_min15_j < $trade_min15_k and $trade_min15_j < $trade_min15_d){  
       //提前计算数量，避免导致超出数量限制的问题；
       $number=11/$trade_buy_price*$type1;
-      $number=round($number);  
+      $number=round($number); 
+      //获取当日已经交易的卖出数量  
+      $sql = "select sum(number) from trade_history where trade_type=1 and code='$trade_code' and stat_date='$trade_stat_date' and status=1";    
+      $result=mysqli_query($conn,$sql);
+      $row=mysqli_fetch_row($result);  
+      $min15_sell_number=$row[0]; 
+      $useable_min15_number=$total_sell_number*15/100;
+        
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=1;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
-      if($row[0]==0 and $useable_sell_number>=$number){
+      if($row[0]==0 and $min15_sell_number<=$useable_min15_number and $useable_sell_number>=$number){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
@@ -369,12 +376,19 @@
   //30min  
      if ($trade_min30_k >=80  or $trade_min30_d >=75){
          $number=11/$trade_buy_price*$type2;
-        $number=round($number);   
+        $number=round($number);
+             //获取当日已经交易的卖出数量  
+      $sql = "select sum(number) from trade_history where trade_type=2 and code='$trade_code' and stat_date='$trade_stat_date' and status=1";    
+      $result=mysqli_query($conn,$sql);
+      $row=mysqli_fetch_row($result);  
+      $min30_sell_number=$row[0]; 
+      $useable_min30_number=$total_sell_number*15/100;
+       
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=2;";    
       echo $sql."~~~~~~30~~~~~~~/n";
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);   
-      if($row[0]==0 and $useable_sell_number>=$number){
+      if($row[0]==0 and $min30_sell_number<=$useable_min30_number and $useable_sell_number>=$number){
            $sql = "select count(*) from trade_history;";    
            $result=mysqli_query($conn,$sql);
            $row=mysqli_fetch_row($result);
@@ -396,10 +410,17 @@
      if ($trade_min60_k >=80 or $trade_min60_d >=75) {
       $number=11/$trade_buy_price*$type3;
       $number=round($number);
+      //获取当日已经交易的卖出数量  
+      $sql = "select sum(number) from trade_history where trade_type=3 and code='$trade_code' and stat_date='$trade_stat_date' and status=1";    
+      $result=mysqli_query($conn,$sql);
+      $row=mysqli_fetch_row($result);  
+      $min60_sell_number=$row[0]; 
+      $useable_min60_number=$total_sell_number*30/100; 
+       
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=3;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);  
-      if($row[0]==0 and $useable_sell_number>=$number){
+      if($row[0]==0 and $min60_sell_number<=$useable_min60_number and $useable_sell_number>=$number){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
@@ -408,7 +429,7 @@
       $result = $conn->query($sql);
             //更新hive_number表数据
       $useable_sell_number=$useable_sell_number-$number;
-      $total_number=$total_number-$number;  
+      $total_number=$total_number-$number;       
       $useable_money=$useable_money+($number*$trade_sell_price*100);  
       $sql = "update hive_number set useable_sell_number='$useable_sell_number',total_number='$total_number' where code='$trade_code' and stat_date='$trade_stat_date' order by id desc limit 1;";                                                                  
       $conn->query($sql);
@@ -421,10 +442,17 @@
 if ($trade_day_k >=80 or $trade_day_d >=75) {
       $number=11/$trade_buy_price*$type4;
       $number=round($number);
+      //获取当日已经交易的卖出数量  
+      $sql = "select sum(number) from trade_history where trade_type=4 and code='$trade_code' and stat_date='$trade_stat_date' and status=1";    
+      $result=mysqli_query($conn,$sql);
+      $row=mysqli_fetch_row($result);  
+      $min60_sell_number=$row[0]; 
+      $useable_min60_number=$total_sell_number*40/100;     //百分之40比例留用
+  
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=4;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);   
-   if($row[0]==0 and $useable_sell_number>=$number){
+   if($row[0]==0 and $min60_sell_number<=$useable_min60_number and $useable_sell_number>=$number){
       $sql = "select count(*) from trade_history;";      
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
