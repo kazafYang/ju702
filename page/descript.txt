@@ -64,3 +64,10 @@ kdj策略：
 四、抓住机会
 1、抓住这次机会，将筹码成本降低下来，等待下一次的启动，然后解套；
 2、严格遵守操作纪律
+
+
+
+ Dim objHtmlDoc
+    Set objHtmlDoc = CreateObject("htmlfile")
+    MsgBox objHtmlDoc.parentWindow.clipboardData.GetData("text")
+    Set objHtmlDoc = Nothing
