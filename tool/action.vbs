@@ -8,11 +8,11 @@ Set objShell= CreateObject("wscript.shell")
 
 do
 call machining_price
-  WScript.Sleep 5000
   if id >0 then 
     call action
-  end if 
+  end if
   objShell.SendKeys "{F4}"
+WScript.Sleep 5000
   objShell.SendKeys "{F5}"
   Html=""  
 Loop Until ac=1
@@ -88,11 +88,11 @@ WScript.Sleep 400
 objShell.SendKeys "{Enter}"
 WScript.Sleep 500
 objShell.SendKeys number*100
-WScript.Sleep 2000
+WScript.Sleep 200
 objShell.SendKeys "{B}"
-WScript.Sleep 2000
+WScript.Sleep 200
 objShell.SendKeys "{Y}"
-WScript.Sleep 3000
+WScript.Sleep 300
 objShell.SendKeys "{Enter}"
     do
 	FUrl="http://ju71-n2.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~trade_history~set~status=1~where~id="&id
@@ -113,7 +113,7 @@ WScript.Sleep 200
 objShell.SendKeys trade_sell_price
 WScript.Sleep 400
 'objShell.SendKeys "{Enter}"
-WScript.Sleep 5000
+WScript.Sleep 500
 objShell.SendKeys number*100
 WScript.Sleep 3000
 objShell.SendKeys "{S}"
@@ -136,10 +136,6 @@ End If
 ''msgbox "结束"
 End Function
             
-
-
-
-
 function getHTTPPageF(FUrl)  
   dim Http  
   set Http=createobject("MSXML2.ServerXMLHTTP")  
