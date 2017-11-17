@@ -692,10 +692,17 @@ if ( $trade_day_k >=80 or $trade_day_d >=75) {
       $row = $result->fetch_assoc();
       $loser_price=$row[trade_sell_price]-0.005; //在卖出最低价的基础上低于5个点位
       $loser_price_id=$row[id];  
-      //发出回转交易买入信号，向交易库插入交易数据信息   
+      //发出回转交易买入信号，向交易库插入交易数据信息，回转交易买入也需要一个trade_type；   
       if ($trade_buy_price<$loser_price){
+      $sql = "select count(*) from trade_history;";    
+      $result=mysqli_query($conn,$sql);
+      $row=mysqli_fetch_row($result);
+      $trade_id=$row[0]+1;    
       $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','1','$trade_buy_price','$trade_sell_price');";                                                                  
-      $conn->query($sql);   
+      $conn->query($sql);
+      //交易指令发出后，需要将原来的回转交易记录status的值设置为2，这样就避免了重复发出指令；  
+      $sql = "update trade_history set status=2 where id=$trade_id;";                                                                  
+      $conn->query($sql);  
       }   
     }
   }                
