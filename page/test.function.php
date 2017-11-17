@@ -492,13 +492,14 @@
   }    
   if(($trade_day_k>20 and $trade_day_k<80) or ($trade_day_d>20 and $trade_day_d<80) and $switch=1){
     //回转交易策略的位置,记录回转交易的标志是数据库字段 huizhuan_status
-    if(($trade_min15_k >= 80  or $trade_min15_d >= 75) and $useable_sell_number>1 ){
+	//15分钟回转使用死叉交易卖出
+    if($trade_min15_k>=75 and $trade_min15_d >= 75 and $trade_min15_j < $trade_min15_k and $trade_min15_j < $trade_min15_d and $useable_sell_number>1 ){
         $number=11/$trade_buy_price*$type4;
         $number=round($number); 
         $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=4;";    
         $result=mysqli_query($conn,$sql);
         $row=mysqli_fetch_row($result);
-         if($row[0]==0 and $useable_sell_number>=$number){
+         if($row[0]<3 and $useable_sell_number>=$number){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
@@ -522,7 +523,7 @@
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=4;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
-         if($row[0]==0 and  $useable_sell_number>=$number){
+         if($row[0]<3 and  $useable_sell_number>=$number){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
@@ -546,7 +547,7 @@
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=4;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
-         if($row[0]==0  and $useable_sell_number>=$number){
+         if($row[0]<3  and $useable_sell_number>=$number){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
@@ -567,10 +568,10 @@
          
        //回转买入，当前价低于最低卖出价5个点，即可等量/分批加码回收筹码；增加trade_type，标志回转交易，然后沿用status标志，这样比较好；如果这样的话不能判断出数据是否已经被处理了，所以我还需要一个步骤就是将已经对比的status的值=2;
        //判断已经交易完成的，然后处理结束后将status变更为2  
-      $sql = "select id,trade_sell_price from trade_history where trade_sell_price=(select min(trade_sell_price) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and trade_type=4 and status=1) limit 1;";    
+      $sql = "select id,trade_sell_price from trade_history where trade_sell_price=(select max(trade_sell_price) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=4 and status=1) limit 1;";    
       $result = $conn->query($sql); 
       $row = $result->fetch_assoc();
-      $loser_price=$row[trade_sell_price]-0.005; //在卖出最低价的基础上低于5个点位
+      $loser_price=$row[trade_sell_price]-0.005; //在卖出最高价的基础上低于5个点位
       $loser_price_id=$row[id];  
       //发出回转交易买入信号，向交易库插入交易数据信息，回转交易买入也需要一个trade_type；   
      if ($trade_buy_price<$loser_price and $useable_money>1000){
@@ -583,7 +584,7 @@
       $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','8','$trade_buy_price','$trade_sell_price');";                                                                  
       $conn->query($sql);
       //交易指令发出后，需要将原来的回转交易记录status的值设置为2，这样就避免了重复发出指令；  
-      $sql = "update trade_history set status=2 where id=$trade_id;";                                                                  
+      $sql = "update trade_history set status=2 where id=$loser_price_id;";                                                                  
       $conn->query($sql);  
 	  //更新hive_number表数据
          $total_number=$total_number+$number;  
