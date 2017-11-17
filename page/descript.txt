@@ -68,6 +68,17 @@ kdj策略：
 
 
  Dim objHtmlDoc
+    WScript.Sleep 5000
+    Set objShell= CreateObject("wscript.shell")
+    objShell.SendKeys "{down 4}"
+    objShell.sendkeys "^C"
+
     Set objHtmlDoc = CreateObject("htmlfile")
-    MsgBox objHtmlDoc.parentWindow.clipboardData.GetData("text")
+    a=objHtmlDoc.parentWindow.clipboardData.GetData("text")
+MyArray = Split(a, " ", -1, 1)
+    MyString =Replace(a, ",", ","),
+msgbox MyString
+msgbox MyArray(0)
+msgbox MyArray(1)
     Set objHtmlDoc = Nothing
+
