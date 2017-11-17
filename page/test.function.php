@@ -594,6 +594,9 @@ if ( $trade_day_k >=80 or $trade_day_d >=75) {
          }   
       }   
       */
+    if(($trade_day_k>20 and $trade_day_k<80) or ($trade_day_d>20 and $trade_day_d<80)){
+    //回转交易策略的位置
+    }
   }                
   }
 
