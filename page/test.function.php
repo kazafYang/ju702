@@ -685,13 +685,15 @@ if ( $trade_day_k >=80 or $trade_day_d >=75) {
       $conn->query($sql);
       $sql = "update hive_number set useable_money='$useable_money' where stat_date='$trade_stat_date';";                                                                  
       $conn->query($sql);
-      }//回转买入，当前价低于最低卖出价5个点，即可等量/分批加码回收筹码；增加trade_type，标志回转交易，然后沿用status标志，这样比较好；
-      $sql = "select min(trade_sell_price) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and trade_type>=9 and status=0;";    
-      $result=mysqli_query($conn,$sql);
-      $row=mysqli_fetch_row($result); 
-      $loser_price=$row[0]-0.005; //在卖出最低价的基础上低于5个点位
+      }//回转买入，当前价低于最低卖出价5个点，即可等量/分批加码回收筹码；增加trade_type，标志回转交易，然后沿用status标志，这样比较好；如果这样的话不能判断出数据是否已经被处理了，所以我还需要一个步骤就是将已经对比的status的值=2;
+       //判断已经交易完成的，然后处理结束后将status变更为2  
+      $sql = "select id,trade_sell_price from trade_history where trade_sell_price=(select min(trade_sell_price) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and trade_type>=9 and status=1) limit 1;";    
+      $result = $conn->query($sql);                                                                                                                                             
+      $row = $result->fetch_assoc();
+      $loser_price=$row[trade_sell_price]-0.005; //在卖出最低价的基础上低于5个点位
+      $loser_price_id=$row[id];  
+      //发出回转交易买入信号，向交易库插入交易数据信息   
       if ($trade_buy_price<$loser_price){
-      //发出回转交易买入信号，向交易库插入交易数据信息
       $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','1','$trade_buy_price','$trade_sell_price');";                                                                  
       $conn->query($sql);   
       }   
