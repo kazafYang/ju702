@@ -279,7 +279,7 @@
     global $table_name,$code,$conn;
       //获取分时kdj数据
       $sql = "SELECT code,stat_date,stat_time_hour,stat_time_min,min15_k,min15_d,min15_j,min30_k,min30_d,min30_j,min60_k,min60_d,min60_j,kdjday_k,kdjday_d,kdjday_j,cci,buy_one_price,sell_one_price FROM $table_name order by id desc limit 1";                                                                  
-      $result = $conn->query($sql);                                                                                                                                             
+      $result = $conn->query($sql);
       $row = $result->fetch_assoc();
       $trade_code=$row[code];$trade_buy_price=$row[buy_one_price];$trade_sell_price=$row[sell_one_price];
       $trade_stat_date=$row[stat_date];$trade_time_hour=$row[stat_time_hour];$trade_time_min=$row[stat_time_min];
@@ -313,24 +313,24 @@
       $hive_number_id=$row[0]+1;
       mysqli_free_result($result);  //释放结果集
       //拿取hive_number的基础属性
-      $sql = "select switch,total_money,useable_money,total_number,useable_sell_number,total_sell_number,cost_price from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
-      $result = $conn->query($sql);                                                                                                                                             
+      $sql = "select switched,total_money,useable_money,total_number,useable_sell_number,total_sell_number,cost_price from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
+      $result = $conn->query($sql);
       $row = $result->fetch_assoc();
-      $switch_code=$row[switch];$total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[total_number];$total_sell_number=$row[total_number];$cost_price=$row[cost_price];
+      $switched=$row[switched];$total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[total_number];$total_sell_number=$row[total_number];$cost_price=$row[cost_price];
       mysqli_free_result($result);  //释放结果集 
-      //计算最近2日的平均买入成本  
+      //计算最近2日的平均买入成本   switch
       $cost_stat_date=date("Y-m-d",strtotime("-2 day"));  
       $sql = "select avg(trade_sell_price) from trade_history where code='$trade_code' and trade_type>=5 and stat_date>='$cost_stat_date';";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       $cost_price=round($row[0],3);
       mysqli_free_result($result);  //释放结果集   
-      $sql = "insert into hive_number values ('$hive_number_id','$trade_code','$switch','$total_money','$useable_money','$total_number','$useable_sell_number','$total_sell_number','$cost_price','$trade_stat_date');";                                                                  
+      $sql = "insert into hive_number values ('$hive_number_id','$trade_code','$switched','$total_money','$useable_money','$total_number','$useable_sell_number','$total_sell_number','$cost_price','$trade_stat_date');";                                                                  
       $conn->query($sql);   
       } else{
         //拿取hive_number的基础属性
       $sql = "select total_money,useable_money,total_number,useable_sell_number,total_sell_number,cost_price from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
-      $result = $conn->query($sql);                                                                                                                                             
+      $result = $conn->query($sql);
       $row = $result->fetch_assoc();
       $total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[useable_sell_number];$total_sell_number=$row[$total_sell_number];$cost_price=$row[cost_price];
       mysqli_free_result($result);  //释放结果集
@@ -338,7 +338,7 @@
       mysqli_free_result($result);  //释放结果集
       //sell判断
  //判断当前code是否具备卖出资格，后续可以在这里加上开关等限制性的行为；昨日的总数量，就是今日的可卖数量；
-    if($useable_sell_number>1 and $switch_code=1){ 
+    if($useable_sell_number>1 and $switched=1){ 
       //超买情况下的15分钟超买了
       if($trade_min15_k >= 80 or $trade_min15_d>=75  and ($trade_day_k >= 80 or $trade_day_d >= 80))
       {
@@ -421,7 +421,7 @@
     
     //buy,买入开关限制，限制可用金额不足的情况，和标的开关关闭的情况，关闭 switch=0；
   mysqli_free_result($result);  //释放结果集  
-  if($useable_money>1000 and $switch_code=1){
+  if($useable_money>1000 and $switched=1){
     if ($trade_min15_k <=15 or $trade_min15_d <20 and ($trade_day_k < 20 or $trade_day_d < 20)){
         $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=5;";    
         echo "commingxxxxxxxxxxxxx".$sql;
@@ -490,9 +490,9 @@
          }
       }
   }    
-  if(($trade_day_k>20 and $trade_day_k<80) or ($trade_day_d>20 and $trade_day_d<80) and $switch_code=1){
+  if(($trade_day_k>20 and $trade_day_k<80) or ($trade_day_d>20 and $trade_day_d<80) and $switched=1){
     //回转交易策略的位置,记录回转交易的标志是数据库字段 huizhuan_status
-	//15分钟回转使用死叉交易卖出 $switch
+	//15分钟回转使用死叉交易卖出 switch
     if($trade_min15_k>=75 and $trade_min15_d >= 75 and $trade_min15_j < $trade_min15_k and $trade_min15_j < $trade_min15_d and $useable_sell_number>1 ){
         $number=11/$trade_buy_price*$type4;
         $number=round($number); 
