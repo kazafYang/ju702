@@ -637,7 +637,8 @@
       $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','9','$loser_price','$trade_sell_price');";    
       echo $sql."comming -min5-avg-buy-sql~~~~~~~~~"."\n";                                                                  
       $conn->query($sql);
-      }  	  
+      }
+      }
   }
 
   function nine_count () {
