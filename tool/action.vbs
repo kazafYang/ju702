@@ -17,6 +17,28 @@ WScript.Sleep 5000
   Html=""  
 Loop Until ac=1
 
+function countnumber
+Dim objHtmlDoc
+    WScript.Sleep 5000
+    Set objShell= CreateObject("wscript.shell")
+objShell.SendKeys "{down 4}"
+    objShell.sendkeys "^C"
+
+    Set objHtmlDoc = CreateObject("htmlfile")
+    a=objHtmlDoc.parentWindow.clipboardData.GetData("text")
+    'MyArray = Split(a, " ", -1, 1)
+    msgbox a
+    MyString =Replace(a, "	", ",")
+	MyArray = Split(MyString, ",", -1, 1)
+	b=UBound(MyArray)
+	msgbox b
+msgbox MyString
+msgbox MyArray(17)
+msgbox MyArray(34)
+msgbox MyArray(51)
+    Set objHtmlDoc = Nothing
+end function
+
 function machining_price
 a = int(rnd * 100000 + 1)
 Url="http://ju71-n2.193b.starter-ca-central-1.openshiftapps.com/getdate.php"&"?test="&a 
