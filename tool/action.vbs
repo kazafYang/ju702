@@ -161,7 +161,7 @@ End If
 ''msgbox "结束"
 End Function
             
-function getHTTPPageF(FUrl)  
+function getHTTPPageF(FUrl) 
   dim Http  
   set Http=createobject("MSXML2.ServerXMLHTTP")  
   Http.open "GET",FUrl,false  
