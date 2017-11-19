@@ -623,10 +623,28 @@
       $row=mysqli_fetch_row($result); 
       $second_min10_avgprice=$row[0];
       mysqli_free_result($result);  //释放结果集
-      if(($first_min5_avgprice>$first_min10_avgprice) and ($second_min5_avgprice<$second_min10_avgprice) and $trade_day_k<75 and $switched=1){
+      //金叉吸入筹码	  
+      if(($first_min5_avgprice>$first_min10_avgprice) and ($second_min5_avgprice<$second_min10_avgprice) and $trade_day_k<55 and $switched=1){
       $number=11/$trade_buy_price*$type9;
       $number=round($number); 
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=9;";    
+      $result=mysqli_query($conn,$sql);
+      $row=mysqli_fetch_row($result);
+      if($row[0]==0  and $useable_money>1000){
+      $sql = "select count(*) from trade_history;";    
+      $result=mysqli_query($conn,$sql);
+      $row=mysqli_fetch_row($result);
+      $trade_id=$row[0]+1;  	      
+      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','9','$trade_buy_price','$trade_sell_price');";    
+      echo $sql."comming -min5-avg-buy-sql~~~~~~~~~"."\n";                                                                  
+      $conn->query($sql);
+      }
+      } //金叉结束
+        //死叉抛出筹码	  
+      if(($first_min5_avgprice<$first_min10_avgprice) and ($second_min5_avgprice>$second_min10_avgprice) and $trade_day_k>65 and $switched=1){
+      $number=11/$trade_sell_price*$type9;
+      $number=round($number); 
+      $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=10;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       if($row[0]==0  and $useable_sell_number>=$number){
@@ -634,11 +652,11 @@
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       $trade_id=$row[0]+1;  	      
-      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','9','$loser_price','$trade_sell_price');";    
+      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','10','$trade_buy_price','$trade_sell_price');";    
       echo $sql."comming -min5-avg-buy-sql~~~~~~~~~"."\n";                                                                  
       $conn->query($sql);
       }
-      }
+      } //死叉结束	  
   }
 
   function nine_count () {
