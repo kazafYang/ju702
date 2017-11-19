@@ -293,12 +293,12 @@
       $result=mysqli_query($conn,$sql);
           while ($row=mysqli_fetch_row($result))
     {
-        $a = sprintf("%s,%s",$row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],$row[7]);
+        $a = sprintf("%s,%s",$row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],$row[7],$row[8],$row[9]);
         $str=$str.$a;    
     }
         $pieces = explode(",", $str);
-      $type1=$pieces[0];$type2=$pieces[1];$type3=$pieces[2];$type4=$pieces[3];
-      $type5=$pieces[4];$type6=$pieces[5];$type7=$pieces[6];$type8=$pieces[7]; 
+      $type1=$pieces[0];$type2=$pieces[1];$type3=$pieces[2];$type4=$pieces[3];$type5=$pieces[4];
+      $type6=$pieces[5];$type7=$pieces[6];$type8=$pieces[7];$type9=$pieces[8];$type10=$pieces[9]; 
       echo $type1.$type2.$type3.$type4.$type5.$type6.$type7.$type8."~~~~~~~~~~~~~~~~~~~";
       mysqli_free_result($result);  //释放结果集
       //判断当日数据是否已经存在
@@ -642,7 +642,7 @@
       } //金叉结束
         //死叉抛出筹码	  
       if(($first_min5_avgprice<$first_min10_avgprice) and ($second_min5_avgprice>$second_min10_avgprice) and $trade_day_k>65 and $switched=1){
-      $number=11/$trade_sell_price*$type9;
+      $number=11/$trade_sell_price*$type10;
       $number=round($number); 
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=10;";    
       $result=mysqli_query($conn,$sql);
