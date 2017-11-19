@@ -18,8 +18,11 @@ $result = $conn->query($sql);
 }
   //同步主从数据库trade库交易数据，让数据保持一致
   elseif($type==3){
-  $sql = "select * from trade_history;";
+  $sql = "$sql_update";
   $result = $conn->query($sql);
+  while ($row = mysqli_fetch_row($result)) {
+        print_r($row);
+    } 
 }
 //验证实际插入sql可能存在问题，还是需要组合才行
   elseif($type==4){
