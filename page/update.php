@@ -20,9 +20,15 @@ $result = $conn->query($sql);
   elseif($type==3){
   $sql = "$sql_update";
   $result = $conn->query($sql);
-  while ($row = mysqli_fetch_row($result)) {
-        print_r($row);
-    } 
+  $row=mysqli_fetch_row($result);  
+ // $fieldcount=mysqli_num_fields($result);
+ // echo  $fieldcount;
+  $str="";  
+  foreach ($row as $value) {
+//  echo "$value <br>";
+   $str=$str.$value.","; 
+}
+    echo $str;
 }
 //验证实际插入sql可能存在问题，还是需要组合才行
   elseif($type==4){
