@@ -1,10 +1,6 @@
 dim Url,FUrl,id,code,trade_type,number,trade_buy_price,trade_sell_price,objShell
 On Error Resume Next 
-'Dim objShell
 Set objShell= CreateObject("wscript.shell")
-'wsh.Run "notepad"
-'WScript.Sleep 1000
-'wsh.SendKeys "11211111"
 
 do
 call machining_price
@@ -23,16 +19,12 @@ Dim objHtmlDoc
     Set objShell= CreateObject("wscript.shell")
 objShell.SendKeys "{down 4}"
     objShell.sendkeys "^C"
-
     Set objHtmlDoc = CreateObject("htmlfile")
     a=objHtmlDoc.parentWindow.clipboardData.GetData("text")
-    'MyArray = Split(a, " ", -1, 1)
-    msgbox a
     MyString =Replace(a, "	", ",")
 	MyArray = Split(MyString, ",", -1, 1)
 	b=UBound(MyArray)
-	msgbox b
-msgbox MyString
+	msgbox MyString
 msgbox MyArray(17)
 msgbox MyArray(34)
 msgbox MyArray(51)
