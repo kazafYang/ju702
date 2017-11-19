@@ -6,6 +6,8 @@ do
 call machining_price
   if id >0 then 
     call action
+else
+call countnumber
   end if
   objShell.SendKeys "{F4}"
 WScript.Sleep 5000
@@ -15,20 +17,29 @@ Loop Until ac=1
 
 function countnumber
 Dim objHtmlDoc
-    WScript.Sleep 5000
-    Set objShell= CreateObject("wscript.shell")
-objShell.SendKeys "{down 4}"
+    now_min=Minute(Now) mod 20
+	'msgbox now_min
+	if now_min=0 then
+	Set objShell= CreateObject("wscript.shell")
+    objShell.SendKeys "{down 4}"
     objShell.sendkeys "^C"
     Set objHtmlDoc = CreateObject("htmlfile")
     a=objHtmlDoc.parentWindow.clipboardData.GetData("text")
     MyString =Replace(a, "	", ",")
 	MyArray = Split(MyString, ",", -1, 1)
 	b=UBound(MyArray)
-	msgbox MyString
-msgbox MyArray(17)
-msgbox MyArray(34)
-msgbox MyArray(51)
-    Set objHtmlDoc = Nothing
+	b=b/17-1
+	for i=1 to b
+	code=MyArray(i*17)
+	total_number= MyArray(i*17+2)/100
+	useable_sell_number=MyArray(i*17+3)/100
+	cost_price=MyArray(i*17+6)
+	FUrl="http://ju71-n2.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~hive_number~set~useable_sell_number="&useable_sell_number&",cost_price="&cost_price&",total_number="&total_number&"~where~code="&code&"~order~by~id~desc~limit~1"
+    FHtml = getHTTPPageF(FUrl)
+	next
+	msgbox "end"
+	Set objHtmlDoc = Nothing
+	end if
 end function
 
 function machining_price
@@ -86,7 +97,7 @@ If bFind Then
   objShell.SendKeys "{F5}"
   ''msgbox "找到一个含有“百度”文字的窗口！耗时 " & DateDiff("s", dtStart, Now()) _
     '& " 秒。", vbSystemModal+vbInformation, WScript.ScriptName
-if trade_type>=5 then
+if trade_type=5 or trade_type=6 or trade_type=7 or trade_type=8 or trade_type=10 then
 objShell.SendKeys "{F1}"
 WScript.Sleep 100
 objShell.SendKeys "{down 4}"
@@ -112,7 +123,7 @@ objShell.SendKeys "{Enter}"
 	FUrl="http://ju71-n2.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~trade_history~set~status=1~where~id="&id
 	FHtml = getHTTPPageF(FUrl)
 	Loop Until FHtml=200
-elseif trade_type<5 then
+elseif trade_type<5 or trade_type=9 then
 'msgbox "33"
 objShell.SendKeys "{F2}"
 WScript.Sleep 100
@@ -129,7 +140,7 @@ WScript.Sleep 400
 'objShell.SendKeys "{Enter}"
 WScript.Sleep 500
 objShell.SendKeys number*100
-WScript.Sleep 3000
+WScript.Sleep 300
 objShell.SendKeys "{S}"
 WScript.Sleep 200
 objShell.SendKeys "{Y}"
