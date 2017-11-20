@@ -13,17 +13,19 @@ foreach ($code as $value){
      $url='http://ju71-n2.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=3&sql=select~count(*)~from~'.$value; 
      $html = file_get_contents($url); 
      $str = $html; 
-     $newstr = substr($str,0,strlen($str)-2); 
-     echo "目标数据条数".$newstr."\n";
+     $mubiao_number= substr($str,0,strlen($str)-2); 
+     echo "目标数据条数".$mubiao_number."\n";
    //对比数据差异，开始执行同步
-     if($newstr>$trade_id){
+     if($mubiao_number>$trade_id){
      echo "开始同步数据\n";   
-     for($i=$trade_id;$i<=$newstr;$i++){
+     for($i=$trade_id;$i<=$mubiao_number;$i++){
         $url='http://ju71-n2.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=3&sql=select~*~from~'.$value.'~where~id='.$i; 
+       echo $i;
         $html = file_get_contents($url); 
         $str = $html; 
         $newstr = substr($str,0,strlen($str)-2); 
-        $sql = "insert into $value values ($newstr);";    
+        $sql = "insert into $value values ($newstr);"; 
+        echo   $sql;
         $result=mysqli_query($conn,$sql);      
      }      
      } 
