@@ -97,7 +97,7 @@ If bFind Then
   objShell.SendKeys "{F5}"
   ''msgbox "找到一个含有“百度”文字的窗口！耗时 " & DateDiff("s", dtStart, Now()) _
     '& " 秒。", vbSystemModal+vbInformation, WScript.ScriptName
-if trade_type=5 or trade_type=6 or trade_type=7 or trade_type=8 or trade_type=10 then
+if trade_type=5 or trade_type=6 or trade_type=7 or trade_type=8 or trade_type=9 then
 objShell.SendKeys "{F1}"
 WScript.Sleep 100
 objShell.SendKeys "{down 4}"
@@ -123,7 +123,7 @@ objShell.SendKeys "{Enter}"
 	FUrl="http://ju71-n2.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~trade_history~set~status=1~where~id="&id
 	FHtml = getHTTPPageF(FUrl)
 	Loop Until FHtml=200
-elseif trade_type<5 or trade_type=9 then
+elseif trade_type<5 or trade_type=10 then
 'msgbox "33"
 objShell.SendKeys "{F2}"
 WScript.Sleep 100
