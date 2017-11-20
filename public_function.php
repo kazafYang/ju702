@@ -337,7 +337,7 @@
       }
       //sell判断
  //判断当前code是否具备卖出资格，后续可以在这里加上开关等限制性的行为；昨日的总数量，就是今日的可卖数量；$switched=1是开关打开状态
-    if($useable_sell_number>1 and $switched=1){ 
+    if($useable_sell_number>1 and $switched==1){ 
       //超买情况下的15分钟超买了
       echo "comming switch-sell"."\n";	    
       if(($trade_min15_k >= 80 or $trade_min15_d>=75)  and ($trade_day_k >= 80 or $trade_day_d >= 80))
@@ -421,7 +421,7 @@
     }
     
     //buy,买入开关限制，限制可用金额不足的情况，和标的开关关闭的情况，关闭 switch=0；
-  if($useable_money>1000 and $switched=1){
+  if($useable_money>1000 and $switched==1){
 	echo "comming switch-buy"."\n";  
     if (($trade_min15_k <=15 or $trade_min15_d <=20) and ($trade_day_k <= 20 or $trade_day_d <= 20)){
 	echo "comming -buy"."\n";  
@@ -492,7 +492,7 @@
          }
       }
   }    
-  if(($trade_day_k>20 and $trade_day_k<80) or ($trade_day_d>20 and $trade_day_d<80) and $switched=1){
+  if(($trade_day_k>20 and $trade_day_k<80) or ($trade_day_d>20 and $trade_day_d<80) and $switched==1){
     //回转交易策略的位置,记录回转交易的标志是数据库字段 huizhuan_status
 	//15分钟回转使用死叉交易卖出 switch
 	echo "comming switch-rel~~~~~~~~~"."\n";
@@ -624,7 +624,7 @@
       $second_min10_avgprice=$row[0];
       mysqli_free_result($result);  //释放结果集
       //金叉吸入筹码	  
-      if(($first_min5_avgprice>$first_min10_avgprice) and ($second_min5_avgprice<$second_min10_avgprice) and $trade_day_k<55 and $switched=1){
+      if(($first_min5_avgprice>$first_min10_avgprice) and ($second_min5_avgprice<$second_min10_avgprice) and $trade_day_k<55 and $switched==1){
       $number=11/$trade_buy_price*$type9;
       $number=round($number); 
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=9;";    
@@ -641,7 +641,7 @@
       }
       } //金叉结束
         //死叉抛出筹码	  
-      if(($first_min5_avgprice<$first_min10_avgprice) and ($second_min5_avgprice>$second_min10_avgprice) and $trade_day_k>65 and $switched=1){
+      if(($first_min5_avgprice<$first_min10_avgprice) and ($second_min5_avgprice>$second_min10_avgprice) and $trade_day_k>65 and $switched==1){
       $number=11/$trade_sell_price*$type10;
       $number=round($number); 
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=10;";    
