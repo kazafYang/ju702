@@ -37,7 +37,6 @@ Dim objHtmlDoc
 	FUrl="http://ju71-n2.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~hive_number~set~useable_sell_number="&useable_sell_number&",cost_price="&cost_price&",total_number="&total_number&"~where~code="&code&"~order~by~id~desc~limit~1"
     FHtml = getHTTPPageF(FUrl)
 	next
-	msgbox "end"
 	Set objHtmlDoc = Nothing
 	end if
 end function
