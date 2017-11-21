@@ -337,10 +337,10 @@
       }
       //sell判断
  //判断当前code是否具备卖出资格，后续可以在这里加上开关等限制性的行为；昨日的总数量，就是今日的可卖数量；$switched=1是开关打开状态
-    if($useable_sell_number>1 and $switched==1){ 
-      //超买情况下的15分钟超买了
+    if($useable_sell_number>1 and $switched==1 and ($trade_day_k >= 80 or $trade_day_d >= 80)){ 
+      //超买情况下的15分钟卖出指标
       echo "comming switch-sell"."\n";	    
-      if(($trade_min15_k >= 80 or $trade_min15_d>=75)  and ($trade_day_k >= 80 or $trade_day_d >= 80))
+      if($trade_min15_k >= 80 or $trade_min15_d>=75)
       {
 	   echo "comming -sell"."\n";	 
       //提前计算数量，避免导致超出数量限制的问题；
@@ -369,7 +369,7 @@
       } 
 
   //30min  
-     if (($trade_min30_k >=80  or $trade_min30_d >=75) and ($trade_day_k >= 80 or $trade_day_d >= 80)){
+     if ($trade_min30_k >=80  or $trade_min30_d >=75){
          $number=$useable_sell_number*$type2/100;
         $number=round($number);
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=2;";    
@@ -395,7 +395,7 @@
       } 
 
    //60分钟          
-     if (($trade_min60_k >=80 or $trade_min60_d >=75) and ($trade_day_k >= 80 or $trade_day_d >= 80)) {
+     if ($trade_min60_k >=80 or $trade_min60_d >=75) {
       $number=$useable_sell_number*$type3/100;
       $number=round($number);
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=3;";    
@@ -418,12 +418,12 @@
       $conn->query($sql);  
          }
       }
-    }
+    } //日线超买完成
     
     //buy,买入开关限制，限制可用金额不足的情况，和标的开关关闭的情况，关闭 switch=0；
-  if($useable_money>1000 and $switched==1){
+  if($useable_money>1000 and $switched==1 and ($trade_day_k <= 20 or $trade_day_d <= 20)){
 	echo "comming switch-buy"."\n";  
-    if (($trade_min15_k <=15 or $trade_min15_d <=20) and ($trade_day_k <= 20 or $trade_day_d <= 20)){
+    if ($trade_min15_k <=15 or $trade_min15_d <=20){
 	echo "comming -buy"."\n";  
         $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=5;";    
         echo "commingxxxxxxxxxxxxx".$sql;
@@ -447,7 +447,7 @@
             $conn->query($sql);  
          }
       }  
-    if (($trade_min30_k <=15 or $trade_min30_d <=20) and ($trade_day_k <= 20 or $trade_day_d <= 20)){
+    if ($trade_min30_k <=15 or $trade_min30_d <=20){
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=6;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);   
@@ -469,7 +469,7 @@
       $conn->query($sql);   
          }
       }   
-    if (($trade_min60_k <=15 or $trade_min60_d <=20) and ($trade_day_k <= 20 or $trade_day_d <= 20)){
+    if ($trade_min60_k <=15 or $trade_min60_d <=20){
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=7;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);    
@@ -491,7 +491,7 @@
       $conn->query($sql);   
          }
       }
-  }    
+  }    //日线超卖完成
   if(($trade_day_k>20 and $trade_day_k<80) or ($trade_day_d>20 and $trade_day_d<80) and $switched==1){
     //回转交易策略的位置,记录回转交易的标志是数据库字段 huizhuan_status
 	//15分钟回转使用死叉交易卖出 switch
@@ -521,7 +521,7 @@
       $conn->query($sql);
       }
   }    //回转15分钟超买条件
-       if($trade_min15_k>=85 or $trade_min15_d >= 75){
+       if($trade_min15_k>=80 or $trade_min15_d >= 75){
 	echo "comming -rel-sell~~~~~~~~~"."\n";
         $number=11/$trade_buy_price*$type11;
         $number=round($number); 
@@ -598,7 +598,7 @@
        //回转买入，当前价低于最低卖出价5个点，即可等量/分批加码回收筹码；增加trade_type，标志回转交易，然后沿用status标志，这样比较好；如果这样的话不能判断出数据是否已经被处理了，所以我还需要一个步骤就是将已经对比的status的值=2;
        //判断已经交易完成的，然后处理结束后将status变更为2  
 	//回转15分钟买入  
-       if ($trade_min15_k <=20 or $trade_min15_d <=20){
+      if ($trade_min15_k <=20 or $trade_min15_d <=20){
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=12;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);    
@@ -651,6 +651,7 @@
            $conn->query($sql);  
       }   
     } //回转交易结束
+      //金叉开始	  
       $sql = "select avg(now_price) from (select now_price from $table_name order by id desc limit 0,5) as a;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result); 
@@ -705,7 +706,7 @@
       $conn->query($sql);
       }
       } //死叉结束	  
-  }
+  }//回转结束
 
   function nine_count () {
   global $time_hour,$time_min,$time_second,$begin_point,$table_name,$time_out_begin,$conn,$buy_one_price,$sell_one_price;
