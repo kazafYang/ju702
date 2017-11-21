@@ -620,7 +620,7 @@
       $conn->query($sql);   
          }
       }
-      $sql = "select id,trade_sell_price from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=4 and status=1 limit 1;";    
+      $sql = "select id,trade_sell_price from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type in(4,10,11) and status=1 limit 1;";    
       $result = $conn->query($sql); 
       $row = $result->fetch_assoc();
       $loser_price=$row[trade_sell_price]-0.005; //在卖出最高价的基础上低于5个点位
@@ -650,7 +650,7 @@
            $sql = "update hive_number set useable_money='$useable_money' where stat_date='$trade_stat_date';";                                                                  
            $conn->query($sql);  
       }   
-    } //回转交易结束
+    } 
       //金叉开始	  
       $sql = "select avg(now_price) from (select now_price from $table_name order by id desc limit 0,5) as a;";    
       $result=mysqli_query($conn,$sql);
