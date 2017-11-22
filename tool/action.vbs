@@ -10,14 +10,14 @@ else
 call countnumber
   end if
   objShell.SendKeys "{F4}"
-WScript.Sleep 5000
+  WScript.Sleep 5000
   objShell.SendKeys "{F5}"
   Html=""  
 Loop Until ac=1
 
 function countnumber
 Dim objHtmlDoc
-    now_min=Minute(Now) mod 20
+    now_min=Minute(Now) mod 5
 	'msgbox now_min
 	if now_min=0 then
 	Set objShell= CreateObject("wscript.shell")
