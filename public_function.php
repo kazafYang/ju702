@@ -289,6 +289,7 @@
       $trade_day_k=round($row[kdjday_k],2);$trade_day_d=round($row[kdjday_d],2);$trade_day_j=round($row[kdjday_j],2);
      //获取bite倍数信息，给各个阶段加倍
       $str="";
+      $switched=0; 	  
       $sql = "select bite as a from trade_bate  order by id asc ;";    
       $result=mysqli_query($conn,$sql);
           while ($row=mysqli_fetch_row($result))
