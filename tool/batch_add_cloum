@@ -6,11 +6,9 @@ $code=array("point_number","point_number_sz","point_number_sz100","point_number_
 $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);  
 foreach ($code as $value)                                                                                                                                                     
 {
-    $sql = "alter table $value add now_price int default 0;";                                                                  
+    $sql = "alter table $value drop column cci;";                                                                  
     $result = $conn->query($sql);    
-    $sql = "alter table $value add buy_one_price int default 0;";                                                                  
-    $result = $conn->query($sql);  
-    $sql = "alter table $value add sell_one_price int default 0;";                                                                  
+    $sql = "alter table $value add cci double default 0 after sell_one_price;";                                                                  
     $result = $conn->query($sql);  
      
 }
