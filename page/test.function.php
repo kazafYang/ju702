@@ -337,9 +337,9 @@
        $switched=$row[switched];$total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[useable_sell_number];$total_sell_number=$row[$total_sell_number];$cost_price=$row[cost_price];
       mysqli_free_result($result);  //释放结果集
       }
-  echo "开始判断";	  
+  echo $switched."开始判断\n";	  
   if($switched==1){
-  echo "判断开关开启了";	  
+  echo $switched."判断开关开启了\n";	  
       //sell判断
  //判断当前code是否具备卖出资格，后续可以在这里加上开关等限制性的行为；昨日的总数量，就是今日的可卖数量；$switched=1是开关打开状态
     if($useable_sell_number>1 and ($trade_day_k >= 80 or $trade_day_d >= 80)){ 
@@ -711,7 +711,8 @@
       $conn->query($sql);
       }
       } //死叉结束	
-}//开关结束	  
+}//开关结束
+	   echo $switched."判断开关结束了\n";
   }//回转结束
 
   function nine_count () {
