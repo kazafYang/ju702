@@ -609,6 +609,28 @@ function analyse () {
       $conn->query($sql);   
          }
       }
+      if($trade_day_k>$trade_day_d and $begin_point>$first_min5_avgprice){
+      	$sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=18;";    
+      $result=mysqli_query($conn,$sql);
+      $row=mysqli_fetch_row($result);    
+        if($row[0]==0){
+      $sql = "select count(*) from trade_history;";    
+      $result=mysqli_query($conn,$sql);
+      $row=mysqli_fetch_row($result);
+      $trade_id=$row[0]+1;  
+      $number=11/$trade_buy_price*$type7;
+      $number=round($number);
+      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','18','$trade_buy_price','$trade_sell_price');";                                                                  
+      $conn->query($sql);
+            //更新hive_number表数据
+      $total_number=$total_number+$number;  
+      $useable_money=$useable_money-($number*$trade_buy_price*100);  
+      $sql = "update hive_number set total_number='$total_number' where code='$trade_code' and stat_date='$trade_stat_date' order by id desc limit 1;";                                                                  
+      $conn->query($sql);
+      $sql = "update hive_number set useable_money='$useable_money' where stat_date='$trade_stat_date';";                                                                  
+      $conn->query($sql);   
+         }      
+      }	  	  
   }    //日线超卖完成
   if(($trade_day_k>40 and $trade_day_k<70) or ($trade_day_d>35 and $trade_day_d<65)){
     //回转交易策略的位置,记录回转交易的标志是数据库字段 huizhuan_status
@@ -867,7 +889,7 @@ function analyse () {
       echo $sql."comming -min5-avg-buy-sql~~~~~~~~~"."\n";                                                                  
       $conn->query($sql);
       }
-      } //死叉结束	      
+      } //死叉结束	 
 }//开关结束
 	   echo $switched."判断开关结束了\n";
   }//方法结束
