@@ -763,10 +763,29 @@ function analyse () {
       $conn->query($sql);   
          }
       }
-      $sql = "select id,trade_sell_price from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type in(4,10,11) and status=1 limit 1;";    
+      $sql = "select id,trade_sell_price,trade_type from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type in(5,6,7,8,9) and status=1 limit 1;";    
       $result = $conn->query($sql); 
       $row = $result->fetch_assoc();
-      $loser_price=$row[trade_sell_price]-0.005; //在卖出最高价的基础上低于5个点位
+      switch ($row[trade_type])
+      {
+       case 5:
+             $loser_price=$row[trade_sell_price]-0.015; //在卖出最高价的基础上低于5个点位
+       break;
+       case 6:
+             $loser_price=$row[trade_sell_price]-0.005; //在卖出最高价的基础上低于5个点位
+       break;
+       case 7:
+             $loser_price=$row[trade_sell_price]-0.020; //在卖出最高价的基础上低于5个点位
+       break;
+       case 8:
+             $loser_price=$row[trade_sell_price]-0.030; //在卖出最高价的基础上低于5个点位
+       break;
+       case 9:
+             $loser_price=$row[trade_sell_price]-0.040; //在卖出最高价的基础上低于5个点位
+       break;
+       default:
+       echo "No number between 1 and 3";
+       }  
       $loser_price_id=$row[id];  
       echo $loser_price_id."loser_price".$loser_price."~~~~~".$row[trade_sell_price]."\n";
       //发出回转交易买入信号，向交易库插入交易数据信息，回转交易买入也需要一个trade_type；  
