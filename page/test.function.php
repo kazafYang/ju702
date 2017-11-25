@@ -585,7 +585,7 @@
       $conn->query($sql);   
          }
       }
-	  //日线超卖
+	  //120日线超卖
       if ($trade_min120_k <=15 or $trade_min120_d <=20){
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=7;";    
       $result=mysqli_query($conn,$sql);
@@ -769,27 +769,27 @@
       }   
     } 
       //金叉开始	  
-      $sql = "select avg(now_price) from (select now_price from $table_name order by id desc limit 0,5) as a;";    
+      $sql = "select avg(now_price) from (select now_price from $table_name order by id desc limit 0,80) as a;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result); 
       $first_min5_avgprice=$row[0];
       mysqli_free_result($result);  //释放结果集
-      $sql = "select avg(now_price) from (select now_price from $table_name order by id desc limit 0,10) as a;";    
+      $sql = "select avg(now_price) from (select now_price from $table_name order by id desc limit 0,160) as a;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result); 
       $first_min10_avgprice=$row[0];
       mysqli_free_result($result);  //释放结果集 	  
-      $sql = "select avg(now_price) from (select now_price from $table_name order by id desc limit 1,5) as a;";    
+      $sql = "select avg(now_price) from (select now_price from $table_name order by id desc limit 1,80) as a;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result); 
       $second_min5_avgprice=$row[0];
       mysqli_free_result($result);  //释放结果集
-      $sql = "select avg(now_price) from (select now_price from $table_name order by id desc limit 1,10) as a;";    
+      $sql = "select avg(now_price) from (select now_price from $table_name order by id desc limit 1,160) as a;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result); 
       $second_min10_avgprice=$row[0];
       mysqli_free_result($result);  //释放结果集
-      //金叉吸入筹码	  
+      //5日线非分钟线金叉吸入筹码	  
       if(($first_min5_avgprice>$first_min10_avgprice) and ($second_min5_avgprice<$second_min10_avgprice) and $trade_day_k<55){
       $number=11/$trade_buy_price*$type9;
       $number=round($number); 
@@ -806,7 +806,7 @@
       $conn->query($sql);
       }
       } //金叉结束
-        //死叉抛出筹码	  
+        //5日线非分钟线死叉抛出筹码	  
       if(($first_min5_avgprice<$first_min10_avgprice) and ($second_min5_avgprice>$second_min10_avgprice) and $trade_day_k>65){
       $number=11/$trade_sell_price*$type10;
       $number=round($number); 
@@ -822,7 +822,7 @@
       echo $sql."comming -min5-avg-buy-sql~~~~~~~~~"."\n";                                                                  
       $conn->query($sql);
       }
-      } //死叉结束	
+      } //死叉结束	      
 }//开关结束
 	   echo $switched."判断开关结束了\n";
   }//回转结束
