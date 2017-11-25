@@ -377,12 +377,12 @@ function analyse () {
       $result=mysqli_query($conn,$sql);
           while ($row=mysqli_fetch_row($result))
     {
-        $a = sprintf("%s,%s",$row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],$row[7],$row[8],$row[9],$row[10],$row[11]);
+        $a = sprintf("%s,%s",$row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],$row[7],$row[8],$row[9],$row[10],$row[11],$row[12],$row[13],$row[14],$row[15],$row[16],$row[17],$row[18]);
         $str=$str.$a;    
     }
         $pieces = explode(",", $str);
-      $type1=$pieces[0];$type2=$pieces[1];$type3=$pieces[2];$type4=$pieces[3];$type5=$pieces[4];$type6=$pieces[5];
-      $type7=$pieces[6];$type8=$pieces[7];$type9=$pieces[8];$type10=$pieces[9];$type11=$pieces[10];$type12=$pieces[11];
+      $type1=$pieces[0];$type2=$pieces[1];$type3=$pieces[2];$type4=$pieces[3];$type5=$pieces[4];$type6=$pieces[5];$type7=$pieces[6];$type8=$pieces[7];$type9=$pieces[8];$type10=$pieces[9];$type11=$pieces[10];
+      $type21=$pieces[11];$type22=$pieces[12];$type23=$pieces[13];$type24=$pieces[14];$type25=$pieces[15];$type26=$pieces[16];$type27=$pieces[17];$type28=$pieces[18];
       echo $type1.$type2.$type3.$type4.$type5.$type6.$type7.$type8."~~~~~~~~~~~~~~~~~~~";
       mysqli_free_result($result);  //释放结果集
       //判断当日数据是否已经存在
@@ -511,7 +511,7 @@ function analyse () {
 	    //120分钟          
      if($trade_min120_k<$trade_min120_d and $trade_second_min120_k>$trade_second_min120_d)	 
      {
-      $number=$useable_sell_number*$type3/100;
+      $number=$useable_sell_number*$type4/100;
       $number=round($number);
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=4;";    
       $result=mysqli_query($conn,$sql);
@@ -550,7 +550,7 @@ function analyse () {
          $result=mysqli_query($conn,$sql);
          $row=mysqli_fetch_row($result);
          $trade_id=$row[0]+1;
-         $number=11/$trade_buy_price*$type5;
+         $number=11/$trade_buy_price*$type21;
          $number=round($number);
          $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','21','$trade_buy_price','$trade_sell_price');";                                                                  
          $conn->query($sql);
@@ -572,7 +572,7 @@ function analyse () {
         $result=mysqli_query($conn,$sql);
         $row=mysqli_fetch_row($result);
         $trade_id=$row[0]+1;
-            $number=11/$trade_buy_price*$type6;
+            $number=11/$trade_buy_price*$type22;
         $number=round($number);
         $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','22','$trade_buy_price','$trade_sell_price');";                                                                  
       $conn->query($sql);
@@ -594,7 +594,7 @@ function analyse () {
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       $trade_id=$row[0]+1;  
-      $number=11/$trade_buy_price*$type7;
+      $number=11/$trade_buy_price*$type23;
       $number=round($number);
       $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','23','$trade_buy_price','$trade_sell_price');";                                                                  
       $conn->query($sql);
@@ -617,7 +617,7 @@ function analyse () {
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       $trade_id=$row[0]+1;  
-      $number=11/$trade_buy_price*$type7;
+      $number=11/$trade_buy_price*$type24;
       $number=round($number);
       $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','24','$trade_buy_price','$trade_sell_price');";                                                                  
       $conn->query($sql);
@@ -637,7 +637,7 @@ function analyse () {
 	echo "comming switch-rel~~~~~~~~~"."\n";
     if($trade_min15_k>=75 or $trade_min15_d >= 75 and $trade_min15_j < $trade_min15_k and $trade_min15_j < $trade_min15_d and $useable_sell_number>1 ){
 	echo "comming -rel-sell~~~~~~~~~"."\n";
-        $number=11/$trade_buy_price*$type4;
+        $number=11/$trade_buy_price*$type5;
         $number=round($number); 
         $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=5;";    
         $result=mysqli_query($conn,$sql);
@@ -663,7 +663,7 @@ function analyse () {
 	  //回转15分钟超买条件
        if($trade_min15_k>=80 or $trade_min15_d >= 75){
 	echo "comming -rel-sell~~~~~~~~~"."\n";
-        $number=11/$trade_buy_price*$type11;
+        $number=11/$trade_buy_price*$type6;
         $number=round($number); 
         $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=6;";    
         $result=mysqli_query($conn,$sql);
@@ -687,7 +687,7 @@ function analyse () {
       }
   }	  
      if($trade_min30_k >= 80  or $trade_min30_d >= 75){
-       $number=11/$trade_buy_price*$type4;
+       $number=11/$trade_buy_price*$type7;
       $number=round($number); 
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=7;";    
       $result=mysqli_query($conn,$sql);
@@ -711,7 +711,7 @@ function analyse () {
       }
 	  }
     if($trade_min60_k >= 80  or $trade_min60_d >= 75){
-      $number=11/$trade_buy_price*$type4;
+      $number=11/$trade_buy_price*$type8;
       $number=round($number); 
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=8;";    
       $result=mysqli_query($conn,$sql);
@@ -735,7 +735,7 @@ function analyse () {
       }
 	  }
       if($trade_min120_k >= 80  or $trade_min120_d >= 75){
-      $number=11/$trade_buy_price*$type4;
+      $number=11/$trade_buy_price*$type9;
       $number=round($number); 
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=9;";    
       $result=mysqli_query($conn,$sql);
@@ -771,7 +771,7 @@ function analyse () {
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       $trade_id=$row[0]+1;  
-      $number=11/$trade_buy_price*$type12;
+      $number=11/$trade_buy_price*$type25;
       $number=round($number);
       $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','25','$trade_buy_price','$trade_sell_price');";                                                                  
       $conn->query($sql);
@@ -813,7 +813,7 @@ function analyse () {
 	echo $loser_price."comming switch-rel-buy~~~~~~~~~".$trade_buy_price."\n"; 
      if ($loser_price>0 and $useable_money>1000){
 	echo $loser_price."comming switch-rel-buy~~~~~~~111111111~~"."\n";       
-      $number=11/$loser_price*$type8;
+      $number=11/$loser_price*$type26;
       $number=round($number); 
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
@@ -838,7 +838,7 @@ function analyse () {
      
       //5日线非分钟线金叉吸入筹码	  
       if(($first_min5_avgprice>$first_min10_avgprice) and ($second_min5_avgprice<$second_min10_avgprice) and $trade_day_k<55){
-      $number=11/$trade_buy_price*$type9;
+      $number=11/$trade_buy_price*$type27;
       $number=round($number); 
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=27;";    
       $result=mysqli_query($conn,$sql);
@@ -880,7 +880,7 @@ function analyse () {
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       $trade_id=$row[0]+1;  
-      $number=11/$trade_buy_price*$type7;
+      $number=11/$trade_buy_price*$type28;
       $number=round($number);
       $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','28','$trade_buy_price','$trade_sell_price');";                                                                  
       $conn->query($sql);
@@ -903,7 +903,7 @@ function analyse () {
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       $trade_id=$row[0]+1;  
-      $number=11/$trade_buy_price*$type7;
+      $number=11/$trade_buy_price*$type11;
       $number=round($number);
       $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','11','$trade_buy_price','$trade_sell_price');";                                                                  
       $conn->query($sql);
