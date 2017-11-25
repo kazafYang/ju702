@@ -66,7 +66,7 @@
   }
 
   function kdjthirty () {
-  global $begin_point,$conn,$table_name;
+  global $begin_point,$conn,$table_name,$time_hour,$time_min;
   machining_price();
   $sql="select max(min15_point_max) from (select * from $table_name order by id desc limit 18) as a;";
   $result=mysqli_query($conn,$sql);
@@ -183,7 +183,7 @@
   }
 //kdj 120min
    function two_hour () {
-  global $begin_point,$conn,$table_name,$stat_date;
+  global $begin_point,$conn,$table_name,$stat_date,$time_hour,$time_min;
   machining_price();
   $sql="select max(min15_point_max) from (select * from $table_name order by id desc limit 72) as a;";
   $result=mysqli_query($conn,$sql);
@@ -287,7 +287,6 @@
   $result=mysqli_query($conn,$sql);
   $row=mysqli_fetch_row($result);
   $date_point_min=$row[0];
-
 
   $sql="select now_price from $table_name order by id desc limit 1,$i;";
   $result=mysqli_query($conn,$sql);
