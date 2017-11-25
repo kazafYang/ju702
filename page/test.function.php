@@ -488,9 +488,30 @@
       $conn->query($sql);  
          }
       }
-    if(($trade_min60_k<$trade_min60_d) and ($trade_min60_k>$trade_min60_d)){
-    
-    }	    
+	    //120分钟          
+     if ($trade_min120_k >=80 or $trade_min120_d >=75) {
+      $number=$useable_sell_number*$type3/100;
+      $number=round($number);
+      $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=3;";    
+      $result=mysqli_query($conn,$sql);
+      $row=mysqli_fetch_row($result);  
+      if($row[0]==0 and $useable_sell_number>=$number and ($number*$trade_sell_price*100>=1000)){
+      $sql = "select count(*) from trade_history;";    
+      $result=mysqli_query($conn,$sql);
+      $row=mysqli_fetch_row($result);
+      $trade_id=$row[0]+1;  
+      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','3','$trade_buy_price','$trade_sell_price');";                                                                  
+      $result = $conn->query($sql);
+            //更新hive_number表数据
+      $useable_sell_number=$useable_sell_number-$number;
+      $total_number=$total_number-$number;       
+      $useable_money=$useable_money+($number*$trade_sell_price*100);  
+      $sql = "update hive_number set useable_sell_number='$useable_sell_number',total_number='$total_number' where code='$trade_code' and stat_date='$trade_stat_date' order by id desc limit 1;";                                                                  
+      $conn->query($sql);
+      $sql = "update hive_number set useable_money='$useable_money' where stat_date='$trade_stat_date';";                                                                  
+      $conn->query($sql);  
+         }
+      }    
     } //日线超买完成
     
     //buy,买入开关限制，限制可用金额不足的情况，和标的开关关闭的情况，关闭 switch=0；
@@ -543,6 +564,29 @@
          }
       }   
     if ($trade_min60_k <=15 or $trade_min60_d <=20){
+      $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=7;";    
+      $result=mysqli_query($conn,$sql);
+      $row=mysqli_fetch_row($result);    
+        if($row[0]==0){
+      $sql = "select count(*) from trade_history;";    
+      $result=mysqli_query($conn,$sql);
+      $row=mysqli_fetch_row($result);
+      $trade_id=$row[0]+1;  
+      $number=11/$trade_buy_price*$type7;
+      $number=round($number);
+      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','7','$trade_buy_price','$trade_sell_price');";                                                                  
+      $conn->query($sql);
+            //更新hive_number表数据
+      $total_number=$total_number+$number;  
+      $useable_money=$useable_money-($number*$trade_buy_price*100);  
+      $sql = "update hive_number set total_number='$total_number' where code='$trade_code' and stat_date='$trade_stat_date' order by id desc limit 1;";                                                                  
+      $conn->query($sql);
+      $sql = "update hive_number set useable_money='$useable_money' where stat_date='$trade_stat_date';";                                                                  
+      $conn->query($sql);   
+         }
+      }
+	  //日线超卖
+      if ($trade_min120_k <=15 or $trade_min120_d <=20){
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=7;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);    
@@ -830,6 +874,7 @@
   kdjfifteen(); #begin:kdj
   kdjthirty();
   kdjsixty(); 
+  two_hour()	  
   kdjday();
   analyse();  
   cci();
