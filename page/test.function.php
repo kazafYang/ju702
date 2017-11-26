@@ -784,9 +784,11 @@ function analyse () {
       $conn->query($sql);   
          }
       }
-      $sql = "select id,trade_sell_price,trade_type from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type in(5,6,7,8,9) and status=1 limit 1;";    
+      $sql = "select id,number,trade_sell_price,trade_type from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type in(5,6,7,8,9) and status=1 limit 1;";    
       $result = $conn->query($sql); 
       $row = $result->fetch_assoc();
+      $number=$row[number];
+      $number=round($number); 	  
       switch ($row[trade_type])
       {
        case 5:
@@ -813,8 +815,6 @@ function analyse () {
 	echo $loser_price."comming switch-rel-buy~~~~~~~~~".$trade_buy_price."\n"; 
      if ($loser_price>0 and $useable_money>1000){
 	echo $loser_price."comming switch-rel-buy~~~~~~~111111111~~"."\n";       
-      $number=11/$loser_price*$type26;
-      $number=round($number); 
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
