@@ -637,8 +637,8 @@ function analyse () {
 	echo "comming switch-rel~~~~~~~~~"."\n";
     if($trade_min15_k>=75 or $trade_min15_d >= 75 and $trade_min15_j < $trade_min15_k and $trade_min15_j < $trade_min15_d and $useable_sell_number>1 ){
 	echo "comming -rel-sell~~~~~~~~~"."\n";
-        $number=11/$trade_buy_price*$type5;
-        $number=round($number); 
+      $number=$useable_sell_number*$type5/100;
+      $number=round($number); 
         $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=5;";    
         $result=mysqli_query($conn,$sql);
         $row=mysqli_fetch_row($result);
@@ -663,8 +663,8 @@ function analyse () {
 	  //回转15分钟超买条件
        if($trade_min15_k>=80 or $trade_min15_d >= 75){
 	echo "comming -rel-sell~~~~~~~~~"."\n";
-        $number=11/$trade_buy_price*$type6;
-        $number=round($number); 
+      $number=$useable_sell_number*$type6/100;
+      $number=round($number); 
         $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=6;";    
         $result=mysqli_query($conn,$sql);
         $row=mysqli_fetch_row($result);
@@ -687,7 +687,7 @@ function analyse () {
       }
   }	  
      if($trade_min30_k >= 80  or $trade_min30_d >= 75){
-       $number=11/$trade_buy_price*$type7;
+      $number=$useable_sell_number*$type7/100;
       $number=round($number); 
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=7;";    
       $result=mysqli_query($conn,$sql);
@@ -711,7 +711,7 @@ function analyse () {
       }
 	  }
     if($trade_min60_k >= 80  or $trade_min60_d >= 75){
-      $number=11/$trade_buy_price*$type8;
+      $number=$useable_sell_number*$type8/100;
       $number=round($number); 
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=8;";    
       $result=mysqli_query($conn,$sql);
@@ -735,7 +735,7 @@ function analyse () {
       }
 	  }
       if($trade_min120_k >= 80  or $trade_min120_d >= 75){
-      $number=11/$trade_buy_price*$type9;
+      $number=$useable_sell_number*$type9/100;
       $number=round($number); 
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=9;";    
       $result=mysqli_query($conn,$sql);
