@@ -968,7 +968,7 @@ function analyse () {
   kdjfifteen(); #begin:kdj
   kdjthirty();
   kdjsixty(); 
-  two_hour()	  
+  two_hour();	  
   kdjday();
   analyse();  
   cci();
