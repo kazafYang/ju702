@@ -642,7 +642,7 @@ function analyse () {
         $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=5;";    
         $result=mysqli_query($conn,$sql);
         $row=mysqli_fetch_row($result);
-      if($row[0]<=3 and $useable_sell_number>=$number){
+      if($row[0]==0 and $useable_sell_number>=$number){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
@@ -790,19 +790,19 @@ function analyse () {
       switch ($row[trade_type])
       {
        case 5:
-             $loser_price=$row[trade_sell_price]-0.015; //在卖出最高价的基础上低于5个点位
+             $loser_price=$row[trade_sell_price]-0.01; //在卖出最高价的基础上低于5个点位
        break;
        case 6:
              $loser_price=$row[trade_sell_price]-0.005; //在卖出最高价的基础上低于5个点位
        break;
        case 7:
-             $loser_price=$row[trade_sell_price]-0.020; //在卖出最高价的基础上低于5个点位
+             $loser_price=$row[trade_sell_price]-0.015; //在卖出最高价的基础上低于5个点位
        break;
        case 8:
-             $loser_price=$row[trade_sell_price]-0.030; //在卖出最高价的基础上低于5个点位
+             $loser_price=$row[trade_sell_price]-0.02; //在卖出最高价的基础上低于5个点位
        break;
        case 9:
-             $loser_price=$row[trade_sell_price]-0.040; //在卖出最高价的基础上低于5个点位
+             $loser_price=$row[trade_sell_price]-0.03; //在卖出最高价的基础上低于5个点位
        break;
        default:
        echo "No number between 1 and 3";
@@ -837,7 +837,7 @@ function analyse () {
       //金叉开始	  
      
       //5日线非分钟线金叉吸入筹码	  
-      if(($first_min5_avgprice>$first_min10_avgprice) and ($second_min5_avgprice<$second_min10_avgprice) and $trade_day_k<55){
+      if(($first_min5_avgprice>$first_min10_avgprice) and ($second_min5_avgprice<$second_min10_avgprice) and $trade_day_k<50){
       $number=11/$trade_buy_price*$type27;
       $number=round($number); 
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=27;";    
@@ -854,7 +854,7 @@ function analyse () {
       }
       } //金叉结束
         //5日线非分钟线死叉抛出筹码	  
-      if(($first_min5_avgprice<$first_min10_avgprice) and ($second_min5_avgprice>$second_min10_avgprice) and $trade_day_k>65){
+      if(($first_min5_avgprice<$first_min10_avgprice) and ($second_min5_avgprice>$second_min10_avgprice) and $trade_day_k>60){
       $number=11/$trade_sell_price*$type10;
       $number=round($number); 
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=10;";    
