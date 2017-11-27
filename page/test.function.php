@@ -40,13 +40,10 @@
   $row=mysqli_fetch_row($result);
   $min15_point_min=$row[0];
   echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~".$min15_point_min;
-  $sql="select min15_k from $table_name order by id  desc  limit 1,1;"; 
+  $sql="select min15_k,min15_d from $table_name order by id  desc  limit 1,1;"; 
   $result = $conn->query($sql);  
   $row=$result->fetch_assoc();
   $min15_k=$row[min15_k];   
-  $sql="select min15_d from $table_name order by id  desc  limit 1,1;";
-  $result = $conn->query($sql);  
-  $row=$result->fetch_assoc();
   $min15_d=$row[min15_d];
   echo "begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~min15_k:$min15_k~min15_d:$min15_d\n";                      
   $rsv=($begin_point-$min15_point_min)/($min15_point_max-$min15_point_min)*100;
@@ -78,23 +75,17 @@
   $min15_point_min=$row[0];
 
   if (($time_hour==9 and $time_min==30) or ($time_hour==10 and $time_min==0) or ($time_hour==10 and $time_min==30) or ($time_hour==11 and $time_min==0) or ($time_hour==13 and $time_min==0) or ($time_hour==13 and $time_min==30) or ($time_hour==14 and $time_min==0)) {
-  $sql="select min30_k from $table_name order by id  desc  limit 1,1;";
+  $sql="select min30_k,min30_d from $table_name order by id  desc  limit 1,1;";
   $result = $conn->query($sql);  
   $row=$result->fetch_assoc();
   $min30_k=$row[min30_k]; 
-  $sql="select min30_d from $table_name order by id  desc  limit 1,1;";
-  $result = $conn->query($sql);  
-  $row=$result->fetch_assoc();
   $min30_d=$row[min30_d];
   }
   else {
-  $sql="select min30_k from $table_name order by id  desc  limit 2,1;";
+  $sql="select min30_k,min30_d from $table_name order by id  desc  limit 2,1;";
   $result = $conn->query($sql);  
   $row=$result->fetch_assoc();
   $min30_k=$row[min30_k]; 
-  $sql="select min30_d from $table_name order by id  desc  limit 2,1;";
-  $result = $conn->query($sql);  
-  $row=$result->fetch_assoc();
   $min30_d=$row[min30_d];
   }  
   echo "begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~min30_k:$min30_k~min30_d:$min30_d\n";                       
@@ -127,43 +118,31 @@
   $min15_point_min=$row[0];
   echo "---------------".$time_hour;
   if (($time_hour==9 and $time_min==30) or ($time_hour==10 and $time_min==30) or ($time_hour==13 and $time_min==0) or ($time_hour==14 and $time_min==0)) {
-  $sql="select min60_k from $table_name order by id  desc  limit 1,1;";
+  $sql="select min60_k,min60_d from $table_name order by id  desc  limit 1,1;";
   $result = $conn->query($sql);
   $row=$result->fetch_assoc();
   $min60_k=$row[min60_k];
-  $sql="select min60_d from $table_name order by id  desc  limit 1,1;";
-  $result = $conn->query($sql);
-  $row=$result->fetch_assoc();
   $min60_d=$row[min60_d];
   }
   elseif (($time_hour==9 and $time_min==45) or ($time_hour==10 and $time_min==45) or ($time_hour==13 and $time_min==15) or ($time_hour==14 and $time_min==15)) {
-  $sql="select min60_k from $table_name order by id  desc  limit 2,1;";
+  $sql="select min60_k,min60_d from $table_name order by id  desc  limit 2,1;";
   $result = $conn->query($sql);
   $row=$result->fetch_assoc();
   $min60_k=$row[min60_k];
-  $sql="select min60_d from $table_name order by id  desc  limit 2,1;";
-  $result = $conn->query($sql);
-  $row=$result->fetch_assoc();
   $min60_d=$row[min60_d];
   }
   elseif(($time_hour==10 and $time_min==0) or ($time_hour==11 and $time_min==0) or ($time_hour==13 and $time_min==30) or ($time_hour==14 and $time_min==30)) {
-  $sql="select min60_k from $table_name order by id  desc  limit 3,1;";
+  $sql="select min60_k,min60_d from $table_name order by id  desc  limit 3,1;";
   $result = $conn->query($sql);
   $row=$result->fetch_assoc();
   $min60_k=$row[min60_k];
-  $sql="select min60_d from $table_name order by id  desc  limit 3,1;";
-  $result = $conn->query($sql);
-  $row=$result->fetch_assoc();
   $min60_d=$row[min60_d];
   }
   else{
-  $sql="select min60_k from $table_name order by id  desc  limit 4,1;";
+  $sql="select min60_k,min60_d from $table_name order by id  desc  limit 4,1;";
   $result = $conn->query($sql);
   $row=$result->fetch_assoc();
   $min60_k=$row[min60_k];
-  $sql="select min60_d from $table_name order by id  desc  limit 4,1;";
-  $result = $conn->query($sql);
-  $row=$result->fetch_assoc();
   $min60_d=$row[min60_d];
   }
   echo "begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~min60_k:$min60_k~min60_d:$min60_d\n";   
@@ -195,23 +174,17 @@
   $min15_point_min=$row[0];
 
   if ($time_hour<13) {
-  $sql="select min120_k from $table_name where stat_date<'$stat_date' order by id  desc  limit 0,1;";
+  $sql="select min120_k,min120_d from $table_name where stat_date<'$stat_date' order by id  desc  limit 0,1;";
   $result = $conn->query($sql);
   $row=$result->fetch_assoc();
   $min120_k=$row[min120_k];
-  $sql="select min120_d from $table_name where stat_date<'$stat_date' order by id  desc  limit 0,1;";
-  $result = $conn->query($sql);
-  $row=$result->fetch_assoc();
   $min120_d=$row[min120_d];
   }
   elseif ($time_hour>=13) {
-  $sql="select min120_k from $table_name where stat_time_hour='11' and stat_time_min='15' order by id  desc  limit 1;";
+  $sql="select min120_k,min120_d from $table_name where stat_time_hour='11' and stat_time_min='15' order by id  desc  limit 1;";
   $result = $conn->query($sql);
   $row=$result->fetch_assoc();
   $min120_k=$row[min120_k];
-  $sql="select min120_d from $table_name where stat_time_hour='11' and stat_time_min='15' order by id  desc  limit 1;";
-  $result = $conn->query($sql);
-  $row=$result->fetch_assoc();
   $min120_d=$row[min120_d];
   }
  
@@ -244,13 +217,10 @@
   $row=mysqli_fetch_row($result);
   $min15_point_min=$row[0];
 
-  $sql="select kdjday_k from $table_name where stat_date<'$stat_date' order by id desc limit 1;";
+  $sql="select kdjday_k,kdjday_d from $table_name where stat_date<'$stat_date' order by id desc limit 1;";
   $result = $conn->query($sql);  
   $row=$result->fetch_assoc();
   $kdjday_k=$row[kdjday_k]; 
-  $sql="select kdjday_d from $table_name where stat_date<'$stat_date' order by id desc limit 1;";
-  $result = $conn->query($sql);  
-  $row=$result->fetch_assoc();
   $kdjday_d=$row[kdjday_d];
 
   echo "begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~kdjday_k:$kdjday_k~kdjday_d:$kdjday_d\n";                       
