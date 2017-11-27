@@ -27,15 +27,7 @@ machining_price();
       echo "3point!\n";
       exit(0);    
     }
-    
- /*   if ($time_hour==9 and $time_min==30) {
-    $time_length=960-$time_second;
-    }elseif ($time_hour=="13" and $time_min=="0") {
-    $time_length=960-$time_second;  
-    }else{
-    $time_length=900-$time_second;    
-    }
- */      
+  
     $time_out_begin=($time_hour*3600)+($time_min*60)+900;    
     $sql = "select id,stat_time_min from $table_name order by id desc limit 1;";    
     $result = $conn->query($sql);
