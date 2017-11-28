@@ -40,13 +40,10 @@
   $row=mysqli_fetch_row($result);
   $min15_point_min=$row[0];
   echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~".$min15_point_min;
-  $sql="select min15_k from $table_name order by id  desc  limit 1,1;"; 
+  $sql="select min15_k,min15_d from $table_name order by id  desc  limit 1,1;"; 
   $result = $conn->query($sql);  
   $row=$result->fetch_assoc();
   $min15_k=$row[min15_k];   
-  $sql="select min15_d from $table_name order by id  desc  limit 1,1;";
-  $result = $conn->query($sql);  
-  $row=$result->fetch_assoc();
   $min15_d=$row[min15_d];
   echo "begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~min15_k:$min15_k~min15_d:$min15_d\n";                      
   $rsv=($begin_point-$min15_point_min)/($min15_point_max-$min15_point_min)*100;
@@ -78,23 +75,17 @@
   $min15_point_min=$row[0];
 
   if (($time_hour==9 and $time_min==30) or ($time_hour==10 and $time_min==0) or ($time_hour==10 and $time_min==30) or ($time_hour==11 and $time_min==0) or ($time_hour==13 and $time_min==0) or ($time_hour==13 and $time_min==30) or ($time_hour==14 and $time_min==0)) {
-  $sql="select min30_k from $table_name order by id  desc  limit 1,1;";
+  $sql="select min30_k,min30_d from $table_name order by id  desc  limit 1,1;";
   $result = $conn->query($sql);  
   $row=$result->fetch_assoc();
   $min30_k=$row[min30_k]; 
-  $sql="select min30_d from $table_name order by id  desc  limit 1,1;";
-  $result = $conn->query($sql);  
-  $row=$result->fetch_assoc();
   $min30_d=$row[min30_d];
   }
   else {
-  $sql="select min30_k from $table_name order by id  desc  limit 2,1;";
+  $sql="select min30_k,min30_d from $table_name order by id  desc  limit 2,1;";
   $result = $conn->query($sql);  
   $row=$result->fetch_assoc();
   $min30_k=$row[min30_k]; 
-  $sql="select min30_d from $table_name order by id  desc  limit 2,1;";
-  $result = $conn->query($sql);  
-  $row=$result->fetch_assoc();
   $min30_d=$row[min30_d];
   }  
   echo "begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~min30_k:$min30_k~min30_d:$min30_d\n";                       
@@ -127,43 +118,31 @@
   $min15_point_min=$row[0];
   echo "---------------".$time_hour;
   if (($time_hour==9 and $time_min==30) or ($time_hour==10 and $time_min==30) or ($time_hour==13 and $time_min==0) or ($time_hour==14 and $time_min==0)) {
-  $sql="select min60_k from $table_name order by id  desc  limit 1,1;";
+  $sql="select min60_k,min60_d from $table_name order by id  desc  limit 1,1;";
   $result = $conn->query($sql);
   $row=$result->fetch_assoc();
   $min60_k=$row[min60_k];
-  $sql="select min60_d from $table_name order by id  desc  limit 1,1;";
-  $result = $conn->query($sql);
-  $row=$result->fetch_assoc();
   $min60_d=$row[min60_d];
   }
   elseif (($time_hour==9 and $time_min==45) or ($time_hour==10 and $time_min==45) or ($time_hour==13 and $time_min==15) or ($time_hour==14 and $time_min==15)) {
-  $sql="select min60_k from $table_name order by id  desc  limit 2,1;";
+  $sql="select min60_k,min60_d from $table_name order by id  desc  limit 2,1;";
   $result = $conn->query($sql);
   $row=$result->fetch_assoc();
   $min60_k=$row[min60_k];
-  $sql="select min60_d from $table_name order by id  desc  limit 2,1;";
-  $result = $conn->query($sql);
-  $row=$result->fetch_assoc();
   $min60_d=$row[min60_d];
   }
   elseif(($time_hour==10 and $time_min==0) or ($time_hour==11 and $time_min==0) or ($time_hour==13 and $time_min==30) or ($time_hour==14 and $time_min==30)) {
-  $sql="select min60_k from $table_name order by id  desc  limit 3,1;";
+  $sql="select min60_k,min60_d from $table_name order by id  desc  limit 3,1;";
   $result = $conn->query($sql);
   $row=$result->fetch_assoc();
   $min60_k=$row[min60_k];
-  $sql="select min60_d from $table_name order by id  desc  limit 3,1;";
-  $result = $conn->query($sql);
-  $row=$result->fetch_assoc();
   $min60_d=$row[min60_d];
   }
   else{
-  $sql="select min60_k from $table_name order by id  desc  limit 4,1;";
+  $sql="select min60_k,min60_d from $table_name order by id  desc  limit 4,1;";
   $result = $conn->query($sql);
   $row=$result->fetch_assoc();
   $min60_k=$row[min60_k];
-  $sql="select min60_d from $table_name order by id  desc  limit 4,1;";
-  $result = $conn->query($sql);
-  $row=$result->fetch_assoc();
   $min60_d=$row[min60_d];
   }
   echo "begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~min60_k:$min60_k~min60_d:$min60_d\n";   
@@ -195,23 +174,17 @@
   $min15_point_min=$row[0];
 
   if ($time_hour<13) {
-  $sql="select min120_k from $table_name where stat_date<'$stat_date' order by id  desc  limit 0,1;";
+  $sql="select min120_k,min120_d from $table_name where stat_date<'$stat_date' order by id  desc  limit 0,1;";
   $result = $conn->query($sql);
   $row=$result->fetch_assoc();
   $min120_k=$row[min120_k];
-  $sql="select min120_d from $table_name where stat_date<'$stat_date' order by id  desc  limit 0,1;";
-  $result = $conn->query($sql);
-  $row=$result->fetch_assoc();
   $min120_d=$row[min120_d];
   }
   elseif ($time_hour>=13) {
-  $sql="select min120_k from $table_name where stat_time_hour='11' and stat_time_min='15' order by id  desc  limit 1;";
+  $sql="select min120_k,min120_d from $table_name where stat_time_hour='11' and stat_time_min='15' order by id  desc  limit 1;";
   $result = $conn->query($sql);
   $row=$result->fetch_assoc();
   $min120_k=$row[min120_k];
-  $sql="select min120_d from $table_name where stat_time_hour='11' and stat_time_min='15' order by id  desc  limit 1;";
-  $result = $conn->query($sql);
-  $row=$result->fetch_assoc();
   $min120_d=$row[min120_d];
   }
  
@@ -244,13 +217,10 @@
   $row=mysqli_fetch_row($result);
   $min15_point_min=$row[0];
 
-  $sql="select kdjday_k from $table_name where stat_date<'$stat_date' order by id desc limit 1;";
+  $sql="select kdjday_k,kdjday_d from $table_name where stat_date<'$stat_date' order by id desc limit 1;";
   $result = $conn->query($sql);  
   $row=$result->fetch_assoc();
   $kdjday_k=$row[kdjday_k]; 
-  $sql="select kdjday_d from $table_name where stat_date<'$stat_date' order by id desc limit 1;";
-  $result = $conn->query($sql);  
-  $row=$result->fetch_assoc();
   $kdjday_d=$row[kdjday_d];
 
   echo "begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~kdjday_k:$kdjday_k~kdjday_d:$kdjday_d\n";                       
@@ -692,7 +662,7 @@ function analyse () {
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=7;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
-         if($row[0]<=2 and  $useable_sell_number>=$number){
+         if($row[0]==0 and  $useable_sell_number>=$number){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
@@ -716,7 +686,7 @@ function analyse () {
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=8;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
-         if($row[0]<=3  and $useable_sell_number>=$number){
+         if($row[0]<=2  and $useable_sell_number>=$number){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
@@ -762,7 +732,7 @@ function analyse () {
        //回转买入，当前价低于最低卖出价5个点，即可等量/分批加码回收筹码；增加trade_type，标志回转交易，然后沿用status标志，这样比较好；如果这样的话不能判断出数据是否已经被处理了，所以我还需要一个步骤就是将已经对比的status的值=2;
        //判断已经交易完成的，然后处理结束后将status变更为2  
 	//回转15分钟买入  
-      if ($trade_min15_k <=20 and $trade_min15_d <=20){
+      if ($trade_min15_k <=20 or $trade_min15_d <=20){
       $number=11/$trade_buy_price*$type25;
       $number=round($number);
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=25;";    
@@ -792,19 +762,19 @@ function analyse () {
       switch ($row[trade_type])
       {
        case 5:
-             $loser_price=$row[trade_sell_price]-0.01; //在卖出最高价的基础上低于5个点位
+             $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*0.3/100); //在卖出最高价的基础上低于5个点位
        break;
        case 6:
-             $loser_price=$row[trade_sell_price]-0.005; //在卖出最高价的基础上低于5个点位
+             $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*0.15/100); //在卖出最高价的基础上低于5个点位
        break;
        case 7:
-             $loser_price=$row[trade_sell_price]-0.015; //在卖出最高价的基础上低于5个点位
+             $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*0.4/100); //在卖出最高价的基础上低于5个点位
        break;
        case 8:
-             $loser_price=$row[trade_sell_price]-0.02; //在卖出最高价的基础上低于5个点位
+             $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*0.5/100); //在卖出最高价的基础上低于5个点位
        break;
        case 9:
-             $loser_price=$row[trade_sell_price]-0.03; //在卖出最高价的基础上低于5个点位
+             $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*0.6/100); //在卖出最高价的基础上低于5个点位
        break;
        default:
        echo "No number between 1 and 3";
