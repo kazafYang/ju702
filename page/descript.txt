@@ -1,7 +1,7 @@
 用cp面板做一个报警装置，提示风险；以及每日成交量结算方式等，后期可以做；
 
 
-
+http://blog.csdn.net/hn3e21/article/details/6074847
 http://php.net/manual/zh/trader.installation.php
 http://php.net/manual/zh/trader.setup.php
 
