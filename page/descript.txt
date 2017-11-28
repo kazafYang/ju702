@@ -2,7 +2,8 @@
 
 
 
-
+http://php.net/manual/zh/trader.installation.php
+http://php.net/manual/zh/trader.setup.php
 
 
 
