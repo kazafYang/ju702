@@ -806,7 +806,7 @@ function analyse () {
     } //回转结束
       //金叉开始	  
      
-/*      //5日线非分钟线金叉吸入筹码	  
+      //5日线非分钟线金叉吸入筹码	  
       if(($first_min5_avgprice>$first_min10_avgprice) and ($second_min5_avgprice<$second_min10_avgprice) and $trade_day_k<50){
       $number=11/$trade_buy_price*$type27;
       $number=round($number); 
@@ -885,7 +885,7 @@ function analyse () {
       $sql = "update hive_number set useable_money='$useable_money' where stat_date='$trade_stat_date';";                                                                  
       $conn->query($sql);   
          }      
-      }		*/  
+      }		  
 }//开关结束
 	   echo $switched."判断开关结束了\n";
   }//方法结束
