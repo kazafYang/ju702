@@ -36,6 +36,9 @@ $result = $conn->query($sql);
   if ($conn->query($sql) === TRUE) 
    {
    echo "200";
-     }   
+     }
+    else {
+    echo "Error: " . $sql . $conn->error."\n";
+}
 }
 ?>
