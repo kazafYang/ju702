@@ -23,11 +23,11 @@ $result = $conn->query($sql);
   $row=mysqli_fetch_row($result);  
  // $fieldcount=mysqli_num_fields($result);
  // echo  $fieldcount;
-  $str="";  
+  $str="'";  
   foreach ($row as $value) {
-//  echo "$value <br>";
-   $str=$str.$value.","; 
+   $str=$str.$value."','"; 
 }
+    $str = substr($str,0,strlen($str)-2); 
     echo $str;
 }
 //验证实际插入sql可能存在问题，还是需要组合才行
