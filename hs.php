@@ -54,7 +54,7 @@ $sql = "select id,stat_time_min from $table_name order by id desc limit 1;";
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();
     echo "stat_time_min:$row[stat_time_min]\n";
-    if ($row[stat_time_min]<>$time_min){
+    if ($row[stat_time_min]<>$time_min and ($time_min==0 or $time_min=15 or $time_min==30 or $time_min==45)){
    echo "table:$table_name\n";
    $row[id]=$row[id]+1;   
    $sql = "insert into $table_name (id,stat_date,stat_time_hour,stat_time_min,begin_point) VALUES ('$row[id]','$stat_date','$time_hour','$time_min','$begin_point');";    
