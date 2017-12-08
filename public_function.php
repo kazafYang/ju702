@@ -601,7 +601,7 @@ function analyse () {
          }
       }  	  
   }    //日线超卖完成
-  if(($trade_day_k>=25 and $trade_day_k<85) or ($trade_day_d>30 and $trade_day_d<80)){
+  if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>20 and $trade_day_d<80)){
     //回转交易策略的位置,记录回转交易的标志是数据库字段 huizhuan_status
 	//15分钟回转使用死叉交易卖出 switch
 	echo "comming switch-rel~~~~~~~~~"."\n";
