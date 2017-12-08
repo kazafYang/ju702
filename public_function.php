@@ -395,14 +395,14 @@ function analyse () {
   echo $switched."判断开关开启了\n";	  
       //sell判断
  //判断当前code是否具备卖出资格，后续可以在这里加上开关等限制性的行为；昨日的总数量，就是今日的可卖数量；$switched=1是开关打开状态
-    if($useable_sell_number>1 and ($trade_day_k >= 80 or $trade_day_d >= 80)){ 
+    if($useable_sell_number>1 and ($trade_day_k >= 85 or $trade_day_d >= 80)){ 
       //超买情况下的15分钟卖出指标
       echo "comming switch-sell"."\n";
-      if($trade_min15_k<$trade_min15_d and $trade_second_min15_k>$trade_second_min15_d)	    
+      if($trade_min15_k>=85 or $trade_min15_d>=80)	    
       {
 	   echo "comming -sell"."\n";	 
       //提前计算数量，避免导致超出数量限制的问题；
-      $number=$useable_sell_number*$type1/100;
+      $number=11/$trade_sell_price*$type1;
       $number=round($number); 
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=1;";    
       $result=mysqli_query($conn,$sql);
@@ -427,9 +427,9 @@ function analyse () {
       } 
 
   //30min  
-     if($trade_min30_k<$trade_min30_d and $trade_second_min30_k>$trade_second_min30_d)	 
+     if($trade_min30_k>=85 or $trade_min30_d>=80)	 
      {
-         $number=$useable_sell_number*$type2/100;
+         $number=11/$trade_sell_price*$type2;
         $number=round($number);
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=2;";    
       echo $sql."~~~~~~30~~~~~~~/n";
@@ -454,9 +454,9 @@ function analyse () {
       } 
 
    //60分钟          
-     if($trade_min60_k<$trade_min60_d and $trade_second_min60_k>$trade_second_min60_d)
+     if($trade_min60_k>=85 or $trade_min60_d>=80)
      {
-      $number=$useable_sell_number*$type3/100;
+      $number=11/$trade_sell_price*$type3;
       $number=round($number);
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=3;";    
       $result=mysqli_query($conn,$sql);
@@ -479,9 +479,9 @@ function analyse () {
          }
       }
 	    //120分钟          
-     if($trade_min120_k<$trade_min120_d and $trade_second_min120_k>$trade_second_min120_d)	 
+     if($trade_min120_k>=85 or $trade_min120_d>=80)	 
      {
-      $number=$useable_sell_number*$type4/100;
+      $number=11/$trade_sell_price*$type4;
       $number=round($number);
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=4;";    
       $result=mysqli_query($conn,$sql);
@@ -506,7 +506,7 @@ function analyse () {
     } //日线超买完成
     
     //buy,买入开关限制，限制可用金额不足的情况，和标的开关关闭的情况，关闭 switch=0；
-  if($useable_money>1000  and ($trade_day_k <= 20 or $trade_day_d <= 20)){
+  if($useable_money>1000  and ($trade_day_k <= 20 and $trade_day_d <= 20)){
 	echo "comming switch-buy"."\n"; 
 	  //15分钟条件严格一点
     if ($trade_min15_k <=15 or $trade_min15_d <=20){
@@ -601,13 +601,13 @@ function analyse () {
          }
       }  	  
   }    //日线超卖完成
-  if(($trade_day_k>40 and $trade_day_k<70) or ($trade_day_d>35 and $trade_day_d<65)){
+  if(($trade_day_k>=25 and $trade_day_k<85) or ($trade_day_d>30 and $trade_day_d<80)){
     //回转交易策略的位置,记录回转交易的标志是数据库字段 huizhuan_status
 	//15分钟回转使用死叉交易卖出 switch
 	echo "comming switch-rel~~~~~~~~~"."\n";
     if($trade_min15_k>=75 or $trade_min15_d >= 75 and $trade_min15_j < $trade_min15_k and $trade_min15_j < $trade_min15_d and $useable_sell_number>1 ){
 	echo "comming -rel-sell~~~~~~~~~"."\n";
-      $number=$useable_sell_number*$type5/100;
+      $number=11/$trade_sell_price*$type5;
       $number=round($number); 
         $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=5;";    
         $result=mysqli_query($conn,$sql);
@@ -631,9 +631,9 @@ function analyse () {
       }
   }    
 	  //回转15分钟超买条件
-       if($trade_min15_k>=80 or $trade_min15_d >= 75){
+       if($trade_min15_k>=85 or $trade_min15_d >= 80){
 	echo "comming -rel-sell~~~~~~~~~"."\n";
-      $number=$useable_sell_number*$type6/100;
+      $number=11/$trade_sell_price*$type6;
       $number=round($number); 
         $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=6;";    
         $result=mysqli_query($conn,$sql);
@@ -656,8 +656,8 @@ function analyse () {
       $conn->query($sql);
       }
   }	  
-     if($trade_min30_k >= 80  or $trade_min30_d >= 75){
-      $number=$useable_sell_number*$type7/100;
+     if($trade_min30_k >= 85  or $trade_min30_d >= 80){
+      $number=11/$trade_sell_price*$type7;
       $number=round($number); 
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=7;";    
       $result=mysqli_query($conn,$sql);
@@ -680,8 +680,8 @@ function analyse () {
       $conn->query($sql);
       }
 	  }
-    if($trade_min60_k >= 80  or $trade_min60_d >= 75){
-      $number=$useable_sell_number*$type8/100;
+    if($trade_min60_k >= 85  or $trade_min60_d >= 80){
+      $number=11/$trade_sell_price*$type8;
       $number=round($number); 
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=8;";    
       $result=mysqli_query($conn,$sql);
@@ -704,8 +704,8 @@ function analyse () {
       $conn->query($sql);
       }
 	  }
-      if($trade_min120_k >= 80  or $trade_min120_d >= 75){
-      $number=$useable_sell_number*$type9/100;
+      if($trade_min120_k >= 85  or $trade_min120_d >= 80){
+      $number=11/$trade_sell_price*$type9;
       $number=round($number); 
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=9;";    
       $result=mysqli_query($conn,$sql);
@@ -732,7 +732,7 @@ function analyse () {
        //回转买入，当前价低于最低卖出价5个点，即可等量/分批加码回收筹码；增加trade_type，标志回转交易，然后沿用status标志，这样比较好；如果这样的话不能判断出数据是否已经被处理了，所以我还需要一个步骤就是将已经对比的status的值=2;
        //判断已经交易完成的，然后处理结束后将status变更为2  
 	//回转15分钟买入  
-      if ($trade_min15_k <=20 or $trade_min15_d <=20){
+      if ($trade_min15_k <=15 and $trade_min15_d <=20){
       $number=11/$trade_buy_price*$type25;
       $number=round($number);
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=25;";    
@@ -830,7 +830,7 @@ function analyse () {
       } //金叉结束
         //5日线非分钟线死叉抛出筹码	  
       if(($first_min5_avgprice<$first_min10_avgprice) and ($second_min5_avgprice>$second_min10_avgprice) and $trade_day_k>60){
-      $number=$useable_sell_number*$type10/100;
+      $number=11/$trade_sell_price*$type10;
       $number=round($number); 
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=10;";    
       $result=mysqli_query($conn,$sql);
@@ -870,7 +870,7 @@ function analyse () {
       }	
 	  //死叉+低于五日均线
      if($trade_day_k<$trade_day_d and $begin_point<$first_min5_avgprice and $trade_day_k>60){
-      $number=$useable_sell_number*$type11/100;
+      $number=11/$trade_buy_price*$type11;
       $number=round($number);      
       	$sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=11;";    
       $result=mysqli_query($conn,$sql);
