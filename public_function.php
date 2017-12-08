@@ -732,7 +732,7 @@ function analyse () {
        //回转买入，当前价低于最低卖出价5个点，即可等量/分批加码回收筹码；增加trade_type，标志回转交易，然后沿用status标志，这样比较好；如果这样的话不能判断出数据是否已经被处理了，所以我还需要一个步骤就是将已经对比的status的值=2;
        //判断已经交易完成的，然后处理结束后将status变更为2  
 	//回转15分钟买入  
-      if ($trade_min15_k <=15 and $trade_min15_d <=20 and ($trade_day_k<80 or $trade_day_d<85)){
+      if ($trade_min15_k <=15 or $trade_min15_d <=20 and ($trade_day_k<80 and $trade_day_d<75)){
       $number=11/$trade_buy_price*$type25;
       $number=round($number);
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=25;";    
@@ -788,7 +788,7 @@ function analyse () {
       echo $loser_price_id."loser_price".$loser_price."~~~~~".$row[trade_sell_price]."\n";
       //发出回转交易买入信号，向交易库插入交易数据信息，回转交易买入也需要一个trade_type；  
 	echo $loser_price."comming switch-rel-buy~~~~~~~~~".$trade_buy_price."\n"; 
-     if ($loser_price>0 and $useable_money>1000 and ($trade_day_k<80 or $trade_day_d<85)){
+     if ($loser_price>0 and $useable_money>1000 and ($trade_day_k<80 and $trade_day_d<75)){
 	echo $loser_price."comming switch-rel-buy~~~~~~~111111111~~"."\n";       
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
