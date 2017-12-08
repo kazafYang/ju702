@@ -367,10 +367,10 @@ function analyse () {
       $hive_number_id=$row[0]+1;
       mysqli_free_result($result);  //释放结果集
       //拿取hive_number的基础属性
-      $sql = "select switched,total_money,useable_money,total_number,useable_sell_number,total_sell_number,cost_price from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
+      $sql = "select switched,buy_switched,total_money,useable_money,total_number,useable_sell_number,total_sell_number,market_value,cost_price,make_money from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
       $result = $conn->query($sql);
       $row = $result->fetch_assoc();
-      $switched=$row[switched];$total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[total_number];$total_sell_number=$row[total_number];$cost_price=$row[cost_price];
+      $switched=$row[switched];$buy_switched=$row[buy_switched];$total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[total_number];$total_sell_number=$row[total_number];$cost_price=$row[cost_price];$make_money=$row[make_money];$market_value=$row[market_value];
       mysqli_free_result($result);  //释放结果集 
       //计算最近2日的平均买入成本   switch
       $cost_stat_date=date("Y-m-d",strtotime("-2 day"));  
@@ -379,12 +379,12 @@ function analyse () {
       $row=mysqli_fetch_row($result);
       $cost_price=round($row[0],3);
       mysqli_free_result($result);  //释放结果集   
-      $sql = "insert into hive_number values ('$hive_number_id','$trade_code','$switched','$total_money','$useable_money','$total_number','$useable_sell_number','$total_sell_number','$cost_price','$trade_stat_date');";                                                                  
+      $sql = "insert into hive_number values ('$hive_number_id','$trade_code','$switched','buy_switched','$total_money','$useable_money','$total_number','$useable_sell_number','$total_sell_number','$market_value','$cost_price','$make_money','$trade_stat_date');";                                                                  
       $conn->query($sql);   
       } 
 	  else{
         //拿取hive_number的基础属性
-      $sql = "select switched,total_money,useable_money,total_number,useable_sell_number,total_sell_number,cost_price from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
+      $sql = "select switched,buy_switched,total_money,useable_money,total_number,useable_sell_number,total_sell_number,cost_price from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
       $result = $conn->query($sql);
       $row = $result->fetch_assoc();
        $switched=$row[switched];$total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[useable_sell_number];$total_sell_number=$row[$total_sell_number];$cost_price=$row[cost_price];
@@ -506,7 +506,7 @@ function analyse () {
     } //日线超买完成
     
     //buy,买入开关限制，限制可用金额不足的情况，和标的开关关闭的情况，关闭 switch=0；
-  if($useable_money>1000  and ($trade_day_k <= 20 and $trade_day_d <= 20)){
+  if($useable_money>1000 and $buy_switched==1 and ($trade_day_k <= 20 and $trade_day_d <= 20)){
 	echo "comming switch-buy"."\n"; 
 	  //15分钟条件严格一点
     if ($trade_min15_k <=15 or $trade_min15_d <=20){
@@ -738,7 +738,7 @@ function analyse () {
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=25;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);    
-      if($row[0]==0 and $useable_money>=($number*100*$trade_buy_price)){
+      if($row[0]==0 and $buy_switched==1 and $useable_money>=($number*100*$trade_buy_price)){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
@@ -788,7 +788,7 @@ function analyse () {
       echo $loser_price_id."loser_price".$loser_price."~~~~~".$row[trade_sell_price]."\n";
       //发出回转交易买入信号，向交易库插入交易数据信息，回转交易买入也需要一个trade_type；  
 	echo $loser_price."comming switch-rel-buy~~~~~~~~~".$trade_buy_price."\n"; 
-     if ($loser_price>0 and $useable_money>1000 and ($trade_day_k<80 and $trade_day_d<75)){
+     if ($loser_price>0 and $buy_switched==1 and $useable_money>1000 and ($trade_day_k<80 and $trade_day_d<75)){
 	echo $loser_price."comming switch-rel-buy~~~~~~~111111111~~"."\n";       
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
@@ -818,7 +818,7 @@ function analyse () {
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=27;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
-      if($row[0]==0  and $useable_money>=($number*100*$trade_buy_price)){
+      if($row[0]==0 and $buy_switched==1 and $useable_money>=($number*100*$trade_buy_price)){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
@@ -852,7 +852,7 @@ function analyse () {
       	$sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=28;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);    
-        if($row[0]==0 and $useable_money>=($number*100*$trade_buy_price)){
+        if($row[0]==0 and $buy_switched==1 and $useable_money>=($number*100*$trade_buy_price)){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
