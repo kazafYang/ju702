@@ -612,7 +612,7 @@ function analyse () {
         $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=5;";    
         $result=mysqli_query($conn,$sql);
         $row=mysqli_fetch_row($result);
-      if($row[0]==0 and $useable_sell_number>=$number){
+      if($row[0]==0 and $useable_sell_number>=$number and ($number*$trade_sell_price*100>=1000)){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
@@ -638,7 +638,7 @@ function analyse () {
         $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=6;";    
         $result=mysqli_query($conn,$sql);
         $row=mysqli_fetch_row($result);
-      if($row[0]==0 and $useable_sell_number>=$number){
+      if($row[0]==0 and $useable_sell_number>=$number and ($number*$trade_sell_price*100>=1000)){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
@@ -662,7 +662,7 @@ function analyse () {
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=7;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
-         if($row[0]==0 and  $useable_sell_number>=$number){
+         if($row[0]==0 and  $useable_sell_number>=$number and ($number*$trade_sell_price*100>=1000)){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
@@ -686,7 +686,7 @@ function analyse () {
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=8;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
-         if($row[0]<=2  and $useable_sell_number>=$number){
+         if($row[0]<=2  and $useable_sell_number>=$number and ($number*$trade_sell_price*100>=1000)){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
@@ -710,7 +710,7 @@ function analyse () {
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=9;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
-         if($row[0]<=3  and $useable_sell_number>=$number){
+         if($row[0]<=3  and $useable_sell_number>=$number and ($number*$trade_sell_price*100>=1000)){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
