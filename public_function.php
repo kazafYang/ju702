@@ -579,7 +579,7 @@ function analyse () {
       }
 	  //120日线超卖
       if ($trade_min120_k <=15 or $trade_min120_d <=20){
-	            $number=11/$trade_buy_price*$type24;
+      $number=11/$trade_buy_price*$type24;
       $number=round($number);
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=24;";    
       $result=mysqli_query($conn,$sql);
