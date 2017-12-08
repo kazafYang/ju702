@@ -367,10 +367,10 @@ function analyse () {
       $hive_number_id=$row[0]+1;
       mysqli_free_result($result);  //释放结果集
       //拿取hive_number的基础属性
-      $sql = "select switched,buy_switched,total_money,useable_money,total_number,useable_sell_number,total_sell_number,market_value,cost_price,make_money from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
+      $sql = "select switched,sell_switched,buy_switched,total_money,useable_money,total_number,useable_sell_number,total_sell_number,market_value,cost_price,make_money from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
       $result = $conn->query($sql);
       $row = $result->fetch_assoc();
-      $switched=$row[switched];$buy_switched=$row[buy_switched];$total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[total_number];$total_sell_number=$row[total_number];$cost_price=$row[cost_price];$make_money=$row[make_money];$market_value=$row[market_value];
+      $switched=$row[switched];$sell_switched=$row[sell_switched];$buy_switched=$row[buy_switched];$total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[total_number];$total_sell_number=$row[total_number];$cost_price=$row[cost_price];$make_money=$row[make_money];$market_value=$row[market_value];
       mysqli_free_result($result);  //释放结果集 
       //计算最近2日的平均买入成本   switch
       $cost_stat_date=date("Y-m-d",strtotime("-2 day"));  
@@ -379,15 +379,15 @@ function analyse () {
       $row=mysqli_fetch_row($result);
       $cost_price=round($row[0],3);
       mysqli_free_result($result);  //释放结果集   
-      $sql = "insert into hive_number values ('$hive_number_id','$trade_code','$switched','buy_switched','$total_money','$useable_money','$total_number','$useable_sell_number','$total_sell_number','$market_value','$cost_price','$make_money','$trade_stat_date');";                                                                  
+      $sql = "insert into hive_number values ('$hive_number_id','$trade_code','$switched','$buy_switched','buy_switched','$total_money','$useable_money','$total_number','$useable_sell_number','$total_sell_number','$market_value','$cost_price','$make_money','$trade_stat_date');";                                                                  
       $conn->query($sql);   
       } 
 	  else{
         //拿取hive_number的基础属性
-      $sql = "select switched,buy_switched,total_money,useable_money,total_number,useable_sell_number,total_sell_number,cost_price from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
+      $sql = "select switched,sell_switched,buy_switched,total_money,useable_money,total_number,useable_sell_number,total_sell_number,cost_price from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
       $result = $conn->query($sql);
       $row = $result->fetch_assoc();
-       $switched=$row[switched];$total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[useable_sell_number];$total_sell_number=$row[$total_sell_number];$cost_price=$row[cost_price];
+       $switched=$row[switched];$sell_switched=$row[sell_switched];$buy_switched=$row[buy_switched];$total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[useable_sell_number];$total_sell_number=$row[$total_sell_number];$cost_price=$row[cost_price];
       mysqli_free_result($result);  //释放结果集
       }
   echo $switched."开始判断\n";	  
@@ -395,7 +395,7 @@ function analyse () {
   echo $switched."判断开关开启了\n";	  
       //sell判断
  //判断当前code是否具备卖出资格，后续可以在这里加上开关等限制性的行为；昨日的总数量，就是今日的可卖数量；$switched=1是开关打开状态
-    if($useable_sell_number>1 and ($trade_day_k >= 85 or $trade_day_d >= 80)){ 
+    if($useable_sell_number>1 and $sell_switched==1 and ($trade_day_k >= 85 or $trade_day_d >= 80)){ 
       //超买情况下的15分钟卖出指标
       echo "comming switch-sell"."\n";
       if($trade_min15_k>=85 or $trade_min15_d>=80)	    
@@ -605,14 +605,14 @@ function analyse () {
     //回转交易策略的位置,记录回转交易的标志是数据库字段 huizhuan_status
 	//15分钟回转使用死叉交易卖出 switch
 	echo "comming switch-rel~~~~~~~~~"."\n";
-    if($trade_min15_k>=75 or $trade_min15_d >= 75 and $trade_min15_j < $trade_min15_k and $trade_min15_j < $trade_min15_d and $useable_sell_number>1 ){
+    if($trade_min15_k>=75 or $trade_min15_d >= 75 and $trade_min15_j < $trade_min15_k and $trade_min15_j < $trade_min15_d and $useable_sell_number>1){
 	echo "comming -rel-sell~~~~~~~~~"."\n";
       $number=11/$trade_sell_price*$type5;
       $number=round($number); 
         $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=5;";    
         $result=mysqli_query($conn,$sql);
         $row=mysqli_fetch_row($result);
-      if($row[0]==0 and $useable_sell_number>=$number and ($number*$trade_sell_price*100>=1000)){
+      if($row[0]==0  and $sell_switched==1 and $useable_sell_number>=$number and ($number*$trade_sell_price*100>=1000)){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
@@ -638,7 +638,7 @@ function analyse () {
         $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=6;";    
         $result=mysqli_query($conn,$sql);
         $row=mysqli_fetch_row($result);
-      if($row[0]==0 and $useable_sell_number>=$number and ($number*$trade_sell_price*100>=1000)){
+      if($row[0]==0 and $sell_switched==1 and $useable_sell_number>=$number and ($number*$trade_sell_price*100>=1000)){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
@@ -662,7 +662,7 @@ function analyse () {
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=7;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
-         if($row[0]==0 and  $useable_sell_number>=$number and ($number*$trade_sell_price*100>=1000)){
+         if($row[0]==0 and $sell_switched==1 and  $useable_sell_number>=$number and ($number*$trade_sell_price*100>=1000)){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
@@ -686,7 +686,7 @@ function analyse () {
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=8;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
-         if($row[0]<=2  and $useable_sell_number>=$number and ($number*$trade_sell_price*100>=1000)){
+         if($row[0]==0 and $sell_switched==1 and $useable_sell_number>=$number and ($number*$trade_sell_price*100>=1000)){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
@@ -710,7 +710,7 @@ function analyse () {
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=9;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
-         if($row[0]<=3  and $useable_sell_number>=$number and ($number*$trade_sell_price*100>=1000)){
+         if($row[0]==0 and $sell_switched==1 and $useable_sell_number>=$number and ($number*$trade_sell_price*100>=1000)){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
@@ -835,7 +835,7 @@ function analyse () {
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=10;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
-      if($row[0]==0  and $useable_sell_number>=$number and ($number*$trade_sell_price*100>=1000)){
+      if($row[0]==0 and $sell_switched==1 and $useable_sell_number>=$number and ($number*$trade_sell_price*100>=1000)){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
@@ -875,7 +875,7 @@ function analyse () {
       	$sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=11;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);    
-        if($row[0]==0 and ($number*$trade_sell_price*100>=1000)){
+        if($row[0]==0  and $sell_switched==1 and ($number*$trade_sell_price*100>=1000) ){
       $sql = "select count(*) from trade_history;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
