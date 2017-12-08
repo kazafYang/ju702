@@ -763,18 +763,23 @@ function analyse () {
       {
        case 5:
              $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*0.3/100); //在卖出最高价的基础上低于5个点位
+	     $loser_price=round($loser_price,3);
        break;
        case 6:
              $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*0.15/100); //在卖出最高价的基础上低于5个点位
+             $loser_price=round($loser_price,3);
        break;
        case 7:
              $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*0.4/100); //在卖出最高价的基础上低于5个点位
+	     $loser_price=round($loser_price,3);	       
        break;
        case 8:
              $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*0.5/100); //在卖出最高价的基础上低于5个点位
+	     $loser_price=round($loser_price,3);	      
        break;
        case 9:
              $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*0.6/100); //在卖出最高价的基础上低于5个点位
+	     $loser_price=round($loser_price,3);	      
        break;
        default:
        echo "No number between 1 and 3";
