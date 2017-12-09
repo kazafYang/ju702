@@ -356,12 +356,13 @@ function analyse () {
       echo $type1.$type2.$type3.$type4.$type5.$type6.$type7.$type8."~~~~~~~~~~~~~~~~~~~";
       mysqli_free_result($result);  //释放结果集
       //判断当日数据是否已经存在
-      $sql = "select count(*) from hive_number where code='$trade_code' and stat_date='$trade_stat_date';";    
+      $sql = "select count(*) from hive_number where code='$trade_code' and stat_date='$trade_stat_date';";
+      echo $sql."数据是否存在sql\n";
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       if($row[0]==0){
       //拿取hive_number表数据条数获得插入的下一个id
-      $sql = "select count(*) from hive_number;";    
+      $sql = "select id from hive_number order by id desc limit 1;";    
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       $hive_number_id=$row[0]+1;
@@ -371,7 +372,8 @@ function analyse () {
       $result = $conn->query($sql);
       $row = $result->fetch_assoc();
       $switched=$row[switched];$sell_switched=$row[sell_switched];$buy_switched=$row[buy_switched];$total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[total_number];$total_sell_number=$row[total_number];$cost_price=$row[cost_price];$make_money=$row[make_money];$market_value=$row[market_value];
-      mysqli_free_result($result);  //释放结果集 
+      mysqli_free_result($result);  //释放结果集
+      echo $switched.$sell_switched.$buy_switched."开关\n"; 	      
       //计算最近2日的平均买入成本   switch
       $cost_stat_date=date("Y-m-d",strtotime("-2 day"));  
       $sql = "select avg(trade_sell_price) from trade_history where code='$trade_code' and trade_type>=5 and stat_date>='$cost_stat_date';";    
@@ -379,7 +381,8 @@ function analyse () {
       $row=mysqli_fetch_row($result);
       $cost_price=round($row[0],3);
       mysqli_free_result($result);  //释放结果集   
-      $sql = "insert into hive_number values ('$hive_number_id','$trade_code','$switched','$buy_switched','buy_switched','$total_money','$useable_money','$total_number','$useable_sell_number','$total_sell_number','$market_value','$cost_price','$make_money','$trade_stat_date');";                                                                  
+      $sql = "insert into hive_number values ('$hive_number_id','$trade_code','$switched','$sell_switched','$buy_switched','$total_money','$useable_money','$total_number','$useable_sell_number','$total_sell_number','$market_value','$cost_price','$make_money','$trade_stat_date');";                                                                  
+      echo $sql."插入hive_number\n";
       $conn->query($sql);   
       } 
 	  else{
