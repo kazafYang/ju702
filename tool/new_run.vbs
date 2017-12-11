@@ -5,7 +5,7 @@ Set objShell= CreateObject("wscript.shell")
 do
 call machining_price
   if id >0 then 
-  if trade_type>=20 then
+  if trade_type>20 then
 objShell.SendKeys "{F1}"
 WScript.Sleep 100
 objShell.SendKeys "{down 4}"
@@ -45,7 +45,7 @@ objShell.SendKeys "{down}"
 WScript.Sleep 200
 objShell.SendKeys trade_sell_price
 WScript.Sleep 400
-'objShell.SendKeys "{Enter}"
+objShell.SendKeys "{Enter}"
 WScript.Sleep 500
 objShell.SendKeys number*100
 WScript.Sleep 300
@@ -63,11 +63,11 @@ else
 objShell.SendKeys "{F5}"
 end if 
 else
-WScript.Sleep 1000
+WScript.Sleep 5000
   end if
   call Main
   objShell.SendKeys "{F1}"
-  WScript.Sleep 1000
+  WScript.Sleep 10000
   objShell.SendKeys "{F4}"
   call countnumber
   objShell.SendKeys "{F5}"
@@ -80,13 +80,14 @@ Dim objHtmlDoc
 	'msgbox now_min
 	if now_min=0 then
 	 WScript.Sleep 300
-    objShell.SendKeys "{down 4}"
+    objShell.SendKeys "{down 3}"
 	 WScript.Sleep 300
     objShell.sendkeys "^C"
     Set objHtmlDoc = CreateObject("htmlfile")
     a=objHtmlDoc.parentWindow.clipboardData.GetData("text")
 	'msgbox a
     MyString =Replace(a, "	", ",")
+			'msgbox MyString
 	MyArray = Split(MyString, ",", -1, 1)
 	b=UBound(MyArray)
 	b=b/17-1
@@ -94,8 +95,10 @@ Dim objHtmlDoc
 	code=MyArray(i*17)
 	total_number= MyArray(i*17+2)/100
 	useable_sell_number=MyArray(i*17+3)/100
+	make_money=MyArray(i*17+5)
 	cost_price=MyArray(i*17+6)
-	FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~hive_number~set~useable_sell_number="&useable_sell_number&",cost_price="&cost_price&",total_number="&total_number&"~where~code="&code&"~order~by~id~desc~limit~1"
+	market_value=MyArray(i*17+9)
+	FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~hive_number~set~useable_sell_number="&useable_sell_number&",cost_price="&cost_price&",make_money="&make_money&",market_value="&market_value&",total_number="&total_number&"~where~code="&code&"~order~by~id~desc~limit~1"
     FHtml = getHTTPPageF(FUrl)
 	next
 	Set objHtmlDoc = Nothing
