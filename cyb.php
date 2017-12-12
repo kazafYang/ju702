@@ -25,7 +25,7 @@ machining_price();
     sleep_time();     
     }elseif ($time_hour>="15") {
       echo "3point!\n";
-      exit(0);    
+     // exit(0);    
     }
   
     $time_out_begin=($time_hour*3600)+($time_min*60)+900;    
@@ -33,7 +33,8 @@ machining_price();
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();
     echo "stat_time_min:$row[stat_time_min]\n";
-    if ($row[stat_time_min]<>$time_min and ($time_min==0 or $time_min==15 or $time_min==30 or $time_min==45)){
+    $stat_time_min=$row[stat_time_min];
+    if ($stat_time_min<>$time_min and ($time_min==0 or $time_min==15 or $time_min==30 or $time_min==45)){
    echo "table:$table_name\n";
    $row[id]=$row[id]+1;   
    $sql = "insert into $table_name (id,stat_date,stat_time_hour,stat_time_min,begin_point) VALUES ('$row[id]','$stat_date','$time_hour','$time_min','$begin_point');";    
