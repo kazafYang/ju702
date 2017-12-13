@@ -61,6 +61,7 @@ objShell.SendKeys "{Enter}"
 
 else
 objShell.SendKeys "{F5}"
+objShell.SendKeys "{Enter}"
 end if 
 else
 WScript.Sleep 5000
@@ -71,6 +72,7 @@ WScript.Sleep 5000
   objShell.SendKeys "{F4}"
   call countnumber
   objShell.SendKeys "{F5}"
+  objShell.SendKeys "{Enter}"
   Html=""  
 Loop Until ac=1
 
@@ -78,7 +80,7 @@ function countnumber
 Dim objHtmlDoc
     now_min=Minute(Now) mod 5
 	'msgbox now_min
-	if now_min=0 then
+	if now_min<>0 then
 	 WScript.Sleep 300
     objShell.SendKeys "{down 3}"
 	 WScript.Sleep 300
@@ -90,16 +92,16 @@ Dim objHtmlDoc
 			'msgbox MyString
 	MyArray = Split(MyString, ",", -1, 1)
 	b=UBound(MyArray)
-	b=b/17-1
+	b=b/14-1
 	for i=1 to b
-	code=MyArray(i*17)
-	total_number= MyArray(i*17+2)/100
-	useable_sell_number=MyArray(i*17+3)/100
-	make_money=MyArray(i*17+5)
-	cost_price=MyArray(i*17+6)
-	market_value=MyArray(i*17+9)
+	code=MyArray(i*14)
+	total_number= MyArray(i*14+2)/100
+	useable_sell_number=MyArray(i*14+3)/100
+	make_money=MyArray(i*14+9)
+	cost_price=MyArray(i*14+6)
+	market_value=MyArray(i*14+10)
 	FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~hive_number~set~useable_sell_number="&useable_sell_number&",cost_price="&cost_price&",make_money="&make_money&",market_value="&market_value&",total_number="&total_number&"~where~code="&code&"~order~by~id~desc~limit~1"
-    FHtml = getHTTPPageF(FUrl)
+	FHtml = getHTTPPageF(FUrl)
 	next
 	Set objHtmlDoc = Nothing
 	end if
