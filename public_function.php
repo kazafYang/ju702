@@ -608,7 +608,7 @@
 	    //回转交易策略的位置,记录回转交易的标志是数据库字段 huizhuan_status
 		//15分钟回转使用死叉交易卖出 switch
 		echo "comming switch-rel~~~~~~~~~"."\n";
-	    if($trade_min15_k>=75 or $trade_min15_d >= 75 and $trade_min15_j < $trade_min15_k and $trade_min15_j < $trade_min15_d and $useable_sell_number>1){
+	    if(($trade_min15_k>=75 or $trade_min15_d >= 75) and $trade_min15_j < $trade_min15_k and $trade_min15_j < $trade_min15_d and $useable_sell_number>1){
 		echo "comming -rel-sell~~~~~~~~~"."\n";
 	      $number=11/$trade_sell_price*$type5;
 	      $number=round($number); 
