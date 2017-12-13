@@ -900,7 +900,7 @@
 
 
 	  function nine_count () {
-	  global $stat_time_min,$time_hour,$time_min,$time_second,$begin_point,$table_name,$time_out_begin,$conn,$buy_one_price,$sell_one_price;
+	  global $stat_time_min,$time_hour,$time_min,$time_second,$begin_point, $table_name,$time_out_begin,$conn,$buy_one_price,$sell_one_price;
 	  echo "comming nine_count\n";
 	  machining_price();   
 	  $max=$begin_point;
@@ -909,12 +909,18 @@
 	  $sql="update $table_name set min15_point_max=$max,min15_point_min=$min order by id desc limit 1 ;";
 	  $conn->query($sql);  
 	  while( $time_out_now < $time_out_begin) {
-	  echo "time_out_now:$time_out_now~time_out_begin:$time_out_begin\n"; 
+	  echo "time_out_now:$time_out_now~time_out_begin:$time_out_begin\n";
+          $sql = "select stat_time_min from $table_name order by id desc limit 1;";
+	  echo $sql."/n";	  
+	  $result=mysqli_query($conn,$sql);
+	  $row=mysqli_fetch_row($result);
+	  $stat_time_min=$row[0];	  
 	  machining_price();
 	  $time_out_now=($time_hour*3600)+($time_min*60);
 	    echo "$max--$begin_point\n"; 
 	    echo $stat_time_min."@@@@@@@@@@@@@\n";	  
 	  if(($time_min%15==0) and $time_min<>$stat_time_min){
+	  echo "***************************";
 	  break;
 	  }	  
 	  if ($begin_point>=$max)
