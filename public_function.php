@@ -634,7 +634,7 @@
 	      }
 	  }    
 		  //回转15分钟超买条件
-	       if($trade_min15_k>=85 or $trade_min15_d >= 80){
+	       if($trade_min15_k>=80 or $trade_min15_d >= 80){
 		echo "comming -rel-sell~~~~~~~~~"."\n";
 	      $number=11/$trade_sell_price*$type6;
 	      $number=round($number); 
@@ -659,7 +659,7 @@
 	      $conn->query($sql);
 	      }
 	  }	  
-	     if($trade_min30_k >= 85  or $trade_min30_d >= 80){
+	     if($trade_min30_k >= 80  or $trade_min30_d >= 80){
 	      $number=11/$trade_sell_price*$type7;
 	      $number=round($number); 
 	      $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=7;";    
@@ -683,7 +683,7 @@
 	      $conn->query($sql);
 	      }
 		  }
-	    if($trade_min60_k >= 85  or $trade_min60_d >= 80){
+	    if($trade_min60_k >= 80  or $trade_min60_d >= 80){
 	      $number=11/$trade_sell_price*$type8;
 	      $number=round($number); 
 	      $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=8;";    
@@ -707,7 +707,7 @@
 	      $conn->query($sql);
 	      }
 		  }
-	      if($trade_min120_k >= 85  or $trade_min120_d >= 80){
+	      if($trade_min120_k >= 80  or $trade_min120_d >= 80){
 	      $number=11/$trade_sell_price*$type9;
 	      $number=round($number); 
 	      $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=9;";    
