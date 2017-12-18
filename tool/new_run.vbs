@@ -13,13 +13,13 @@ WScript.Sleep 200
 objShell.SendKeys "{Enter}"
 WScript.Sleep 200
 objShell.SendKeys code
-WScript.Sleep 300
+WScript.Sleep 200
 objShell.SendKeys "{down}"
 WScript.Sleep 200
 objShell.SendKeys trade_buy_price
 WScript.Sleep 400
 objShell.SendKeys "{Enter}"
-WScript.Sleep 500
+WScript.Sleep 400
 objShell.SendKeys number*100
 WScript.Sleep 200
 objShell.SendKeys "{B}"
@@ -40,13 +40,13 @@ WScript.Sleep 200
 objShell.SendKeys "{Enter}"
 WScript.Sleep 200
 objShell.SendKeys code
-WScript.Sleep 300
+WScript.Sleep 200
 objShell.SendKeys "{down}"
 WScript.Sleep 200
 objShell.SendKeys trade_sell_price
 WScript.Sleep 400
 objShell.SendKeys "{Enter}"
-WScript.Sleep 500
+WScript.Sleep 400
 objShell.SendKeys number*100
 WScript.Sleep 300
 objShell.SendKeys "{S}"
@@ -61,22 +61,56 @@ objShell.SendKeys "{Enter}"
 
 else
 objShell.SendKeys "{F5}"
-objShell.SendKeys "{Enter}"
+'objShell.SendKeys "{Enter}"
 end if 
 else
-WScript.Sleep 5000
-  end if
-  call Main
-  objShell.SendKeys "{F1}"
-  WScript.Sleep 10000
+'objShell.SendKeys "{F1}"
+  WScript.Sleep 5000
   objShell.SendKeys "{F4}"
   call countnumber
+  objShell.SendKeys "{F3}"
+WScript.Sleep 5000
+  call chedan
   objShell.SendKeys "{F5}"
-  objShell.SendKeys "{Enter}"
-  Html=""  
+  WScript.Sleep 1000
+  'objShell.SendKeys "{Enter}"
+  Html=""		
+end if
+  call Main
+    
 Loop Until ac=1
 
 function countnumber
+Dim objHtmlDoc
+    now_min=Minute(Now) mod 5
+	if now_min<>0 then
+	 WScript.Sleep 300
+    objShell.SendKeys "{down 3}"
+	 WScript.Sleep 300
+    objShell.sendkeys "^C"
+	WScript.Sleep 300
+    Set objHtmlDoc = CreateObject("htmlfile")
+    a=objHtmlDoc.parentWindow.clipboardData.GetData("text")
+	MyString =Replace(a, "	", ",")
+	MyArray = Split(MyString, ",", -1, 1)
+	b=UBound(MyArray)
+	b=b/14-1
+	for i=1 to b
+	code=MyArray(i*14)
+	total_number= MyArray(i*14+2)/100
+	useable_sell_number=MyArray(i*14+3)/100
+	make_money=MyArray(i*14+9)
+	cost_price=MyArray(i*14+6)
+	market_value=MyArray(i*14+10)
+	FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~hive_number~set~useable_sell_number="&useable_sell_number&",cost_price="&cost_price&",make_money="&make_money&",market_value="&market_value&",total_number="&total_number&"~where~code="&code&"~order~by~id~desc~limit~1"
+	'msgbox FUrl
+	FHtml = getHTTPPageF(FUrl)
+	next
+	Set objHtmlDoc = Nothing
+	end if
+end function
+
+function chedan
 Dim objHtmlDoc
     now_min=Minute(Now) mod 5
 	'msgbox now_min
@@ -89,23 +123,36 @@ Dim objHtmlDoc
     a=objHtmlDoc.parentWindow.clipboardData.GetData("text")
 	'msgbox a
     MyString =Replace(a, "	", ",")
-			'msgbox MyString
+	'msgbox MyString
 	MyArray = Split(MyString, ",", -1, 1)
 	b=UBound(MyArray)
-	b=b/14-1
+	b=b/13-1
+	'msgbox "b:"&b
 	for i=1 to b
-	code=MyArray(i*14)
-	total_number= MyArray(i*14+2)/100
-	useable_sell_number=MyArray(i*14+3)/100
-	make_money=MyArray(i*14+9)
-	cost_price=MyArray(i*14+6)
-	market_value=MyArray(i*14+10)
-	FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~hive_number~set~useable_sell_number="&useable_sell_number&",cost_price="&cost_price&",make_money="&make_money&",market_value="&market_value&",total_number="&total_number&"~where~code="&code&"~order~by~id~desc~limit~1"
-	FHtml = getHTTPPageF(FUrl)
+	stat_date=MyArray(i*13)
+	'msgbox stat_date
+	stat_date1=Mid(stat_date,1,6)
+	stat_date2=Mid(stat_date,7,2)	
+	stat_date3=Mid(stat_date,9,10)
+	stat_date=stat_date1&"-"&stat_date2&"-"&stat_date3
+	code= MyArray(i*13+1)
+	weituo_type=MyArray(i*13+3)
+	if weituo_type="买入" then
+	weituo_type=21
+	else
+	weituo_type=1
+	end if
+	weituo_price=MyArray(i*13+4)
+	weituo_number=MyArray(i*13+5)/100
+	FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~hive_number~set~code="&code&",weituo_price="&weituo_price&",weituo_type="&weituo_type&",weituo_number="&weituo_number&",stat_date='"&stat_date&"'~where~code="&code&"~and~stat_date='"&stat_date&"'~order~by~id~desc~limit~1"
+				msgbox FUrl
+				FHtml = getHTTPPageF(FUrl)
+				msgbox FHtml
 	next
 	Set objHtmlDoc = Nothing
 	end if
 end function
+
 
 function machining_price
 a = int(rnd * 100000 + 1)
