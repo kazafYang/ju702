@@ -136,16 +136,30 @@ Dim objHtmlDoc
 	stat_date3=Mid(stat_date,9,10)
 	stat_date=stat_date1&"-"&stat_date2&"-"&stat_date3
 	code= MyArray(i*13+1)
+	weituo_code=MyArray(i*13+9)
 	weituo_type=MyArray(i*13+3)
+	weituo_price=MyArray(i*13+4)
+	weituo_number=MyArray(i*13+5)/100
+	FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=3&sql=select~count(*)~from~weituo~where~weituo_code="&weituo_code
+    'msgbox FUrl
+	FHtml = getHTTPPageF(FUrl)
+	FHtml=Replace(FHtml,"'","")
+	'msgbox FHtml
 	if weituo_type="买入" then
 	weituo_type=21
 	else
 	weituo_type=1
 	end if
-	weituo_price=MyArray(i*13+4)
-	weituo_number=MyArray(i*13+5)/100
-	FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~hive_number~set~code="&code&",weituo_price="&weituo_price&",weituo_type="&weituo_type&",weituo_number="&weituo_number&",stat_date='"&stat_date&"'~where~code="&code&"~and~stat_date='"&stat_date&"'~order~by~id~desc~limit~1"
+	if FHtml=0  Then 
+	FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=3&sql=insert~into~weituo~(code,weituo_type,weituo_number,weituo_price,weituo_code,stat_date)~values~("&code&","&weituo_type&","&weituo_number&","&weituo_price&","&weituo_code&",'"&stat_date&"')"
+	msgbox FUrl
+	FHtml = getHTTPPageF(FUrl)
+	else 
+	msgbox "default" 
+	end if
+	FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~weituo~set~code="&code&",weituo_price="&weituo_price&",weituo_type="&weituo_type&",weituo_number="&weituo_number&",stat_date='"&stat_date&"',weituo_code="&weituo_code&"~where~weituo_code="&weituo_code&"~and~stat_date='"&stat_date&"'~order~by~id~desc~limit~1"
 				msgbox FUrl
+				objShell.run FUrl
 				FHtml = getHTTPPageF(FUrl)
 				msgbox FHtml
 	next
