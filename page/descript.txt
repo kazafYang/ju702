@@ -1,3 +1,27 @@
+sum（toal_sell）》A
+sum（total_buy）>B
+if a>B THEN
+IF sell1>xxx and buy1<xxx and buy2<xxx then
+sell buy1
+buy  buy2   buy3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 用cp面板做一个报警装置，提示风险；以及每日成交量结算方式等，后期可以做；
 
 
