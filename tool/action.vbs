@@ -69,36 +69,75 @@ WScript.Sleep 5000
   objShell.SendKeys "{F1}"
   WScript.Sleep 10000
   objShell.SendKeys "{F4}"
+	objShell.SendKeys "{F4}"
   call countnumber
   objShell.SendKeys "{F5}"
   Html=""  
 Loop Until ac=1
 
 function countnumber
-Dim objHtmlDoc
+dim readfile,MyString,ss, re, rv,base_acount_info,FUrl
     now_min=Minute(Now) mod 5
 	'msgbox now_min
 	if now_min=0 then
-	 WScript.Sleep 300
-    objShell.SendKeys "{down 3}"
-	 WScript.Sleep 300
-    objShell.sendkeys "^C"
-    Set objHtmlDoc = CreateObject("htmlfile")
-    a=objHtmlDoc.parentWindow.clipboardData.GetData("text")
-	'msgbox a
-    MyString =Replace(a, "	", ",")
+'On Error Resume Next 
+    Set fs = CreateObject("Scripting.FileSystemObject") 
+    Set file = fs.OpenTextFile("D:\python\htzq\2.txt", 1, false) 
+    readfile=file.readall 
+    file.close 
+    set fs=nothing 
+
+MyArray = Split(readfile, "------------------------------", -1, 1)
+base_acount_info= MyArray(0)
+base_acount_dtail=MyArray(1)
+'msgbox base_acount_dtail
+
+Set re = New RegExp
+re.Pattern = "\s+"
+re.Global = True
+re.IgnoreCase = True
+re.MultiLine = True
+ss = re.Replace(base_acount_info,",")
+
+re.Pattern = "[^\d.|,*]"
+re.Global = True
+re.IgnoreCase = True
+re.MultiLine = True
+ss = re.Replace(ss,"")
+
+re.Pattern = ",+"
+re.Global = True
+re.IgnoreCase = True
+re.MultiLine = True
+ss = re.Replace(ss,",")
+'msgbox "ss:"&ss
+
+MyArray = Split(ss , ",", -1, 1)
+count=UBound(MyArray)
+
+'for i=2 to count-1
+'msgbox MyArray(i)
+'next 
+'msgbox "第二波："
+
+ MyString =Replace(base_acount_dtail, "	", ",")
 	MyArray = Split(MyString, ",", -1, 1)
 	b=UBound(MyArray)
 	b=b/17-1
 	for i=1 to b
 	code=MyArray(i*17)
+        'msgbox code
 	total_number= MyArray(i*17+2)/100
+        'msgbox total_number
 	useable_sell_number=MyArray(i*17+3)/100
+        'msgbox useable_sell_number
 	cost_price=MyArray(i*17+6)
-	FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~hive_number~set~useable_sell_number="&useable_sell_number&",cost_price="&cost_price&",total_number="&total_number&"~where~code="&code&"~order~by~id~desc~limit~1"
-    FHtml = getHTTPPageF(FUrl)
+        'msgbox cost_price
+        FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~hive_number~set~useable_sell_number="&useable_sell_number&",cost_price="&cost_price&",total_number="&total_number&"~where~code="&code&"~order~by~id~desc~limit~1"
+'msgbox FUrl
+'msgbox "222"    
+'FHtml = getHTTPPageF(FUrl)
 	next
-	Set objHtmlDoc = Nothing
 	end if
 end function
 
@@ -187,7 +226,7 @@ Sub WindowActive(ByVal strWindowTitle)
   Set objTasks = objWord.Tasks
   If objTasks.Exists(strWindowTitle) Then
     objTasks(strWindowTitle).Activate         '激活窗口
-    objTasks(strWindowTitle).WindowState = 0  '0平常模式、1最大化模式、2最小化模式
+    objTasks(strWindowTitle).WindowState = 1  '0平常模式、1最大化模式、2最小化模式
   End If 
   objWord.Quit
 End Sub
