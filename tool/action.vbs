@@ -88,13 +88,13 @@ mouse.move 299, 47 '把鼠标移动到坐标
 WScript.Sleep 200
 mouse.clik "dbclick"
 objShell.SendKeys "{down 7}"
-WScript.Sleep 200
+WScript.Sleep 500
 objShell.SendKeys "{Enter}"
-WScript.Sleep 200
+WScript.Sleep 500
 objShell.SendKeys "2"
 WScript.Sleep 200
 objShell.SendKeys "{Enter}"
-WScript.Sleep 200
+WScript.Sleep 500
 objShell.SendKeys "{LEFT}"
 WScript.Sleep 500
 objShell.SendKeys "{Enter}"
@@ -108,7 +108,7 @@ function countnumber
 dim readfile,MyString,ss, re, rv,base_acount_info,FUrl
     now_min=Minute(Now) mod 5
 	'msgbox now_min
-	if now_min=0 then
+	if now_min<>0 then
 'On Error Resume Next 
     Set fs = CreateObject("Scripting.FileSystemObject") 
     Set file = fs.OpenTextFile("D:\python\htzq\2.txt", 1, false) 
@@ -163,9 +163,11 @@ count=UBound(MyArray)
 	cost_price=MyArray(i*17+6)
         'msgbox cost_price
         FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~hive_number~set~useable_sell_number="&useable_sell_number&",cost_price="&cost_price&",total_number="&total_number&"~where~code="&code&"~order~by~id~desc~limit~1"
-'msgbox FUrl
-'msgbox "222"    
-'FHtml = getHTTPPageF(FUrl)
+	'msgbox FUrl
+	'msgbox "222"  
+	'Set oShell = WScript.CreateObject ("WSCript.shell")
+	'oShell.run FUrl					
+	FHtml = getHTTPPageF(FUrl)
 	next
 	end if
 end function
