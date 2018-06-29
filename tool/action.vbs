@@ -148,7 +148,9 @@ count=UBound(MyArray)
 'msgbox MyArray(i)
 'next 
 'msgbox "第二波："
-
+useable_money=MyArray(6)
+total_money=MyArray(7)
+								
  MyString =Replace(base_acount_dtail, "	", ",")
 	MyArray = Split(MyString, ",", -1, 1)
 	b=UBound(MyArray)
@@ -161,9 +163,10 @@ count=UBound(MyArray)
 	useable_sell_number=MyArray(i*17+3)/100
         'msgbox useable_sell_number
 	cost_price=MyArray(i*17+6)
+        market_value=MyArray(i*17+9)
+        make_money=MyArray(i*17+5)
         'msgbox cost_price
-        FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~hive_number~set~useable_sell_number="&useable_sell_number&",cost_price="&cost_price&",total_number="&total_number&"~where~code="&code&"~order~by~id~desc~limit~1"
-	'msgbox FUrl
+	FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~hive_number~set~market_value="&market_value&",make_money="&make_money&",total_money="&total_money&",useable_money="&useable_money&",useable_sell_number="&useable_sell_number&",cost_price="&cost_price&",total_number="&total_number&"~where~code="&code&"~order~by~id~desc~limit~1"	'msgbox FUrl
 	'msgbox "222"  
 	'Set oShell = WScript.CreateObject ("WSCript.shell")
 	'oShell.run FUrl					
