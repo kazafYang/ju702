@@ -15,6 +15,23 @@ connecttion_id  联系id
 
 涉及到卖出的我都去遍历一遍order_list表有没有前期的订单，可以直接卖的
 
+target_price 目标价==begin_price+begin_price*2%
+if begin_price>target_price then
+target_price=begin_price
+end if
+
+select * from trade_history where code=159915 and vifi_status=0 order by stat_date desc limit 1;
+for i to valus
+if begin_price>target_price then
+target_price=begin_price.
+update hive_number set target_price=begin where code= and id=xxx;
+end if
+
+next
+
+
+
+
 vifi_status=0 and begin_price>=target_price and 
 
 要有一个字段随时进行更新，找最大值的
