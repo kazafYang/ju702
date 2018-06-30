@@ -618,7 +618,7 @@
 		 }
 	      }  	  
 	  }    //日线超卖完成
-	  if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>20 and $trade_day_d<80)){
+	  if(($trade_day_k>=20 and $trade_day_k<65) or ($trade_day_d>20 and $trade_day_d<60)){
 	    //回转交易策略的位置,记录回转交易的标志是数据库字段 huizhuan_status
 		//15分钟回转使用死叉交易卖出 switch
 		echo "comming switch-rel~~~~~~~~~"."\n";
@@ -757,7 +757,7 @@
 		  }	  
 
 		//回转15分钟买入  
-	      if ($trade_min15_k <=20 or $trade_min15_d <=20 and ($trade_day_k<80 and $trade_day_d<75)){
+	      if ($trade_min15_k <=20 or $trade_min15_d <=20 and ($trade_day_k<65 and $trade_day_d<60)){
 	      $number=11/$trade_buy_price*$type25;
 	      $number=round($number);
 	      $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=25;";    
@@ -791,23 +791,23 @@
 	      switch ($row[trade_type])
 	      {
 	       case 5:
-		     $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*0.3/100); //在卖出最高价的基础上低于5个点位
+		     $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*1/100); //在卖出最高价的基础上低于5个点位
 		     $loser_price=round($loser_price,3);
 	       break;
 	       case 6:
-		     $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*0.15/100); //在卖出最高价的基础上低于5个点位
+		     $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*0.5/100); //在卖出最高价的基础上低于5个点位
 		     $loser_price=round($loser_price,3);
 	       break;
 	       case 7:
-		     $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*0.4/100); //在卖出最高价的基础上低于5个点位
+		     $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*1/100); //在卖出最高价的基础上低于5个点位
 		     $loser_price=round($loser_price,3);	       
 	       break;
 	       case 8:
-		     $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*0.5/100); //在卖出最高价的基础上低于5个点位
+		     $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*1/100); //在卖出最高价的基础上低于5个点位
 		     $loser_price=round($loser_price,3);	      
 	       break;
 	       case 9:
-		     $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*0.6/100); //在卖出最高价的基础上低于5个点位
+		     $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*1.5/100); //在卖出最高价的基础上低于5个点位
 		     $loser_price=round($loser_price,3);	      
 	       break;
 	       default:
@@ -841,7 +841,7 @@
 	      }   
 	    } //回转结束
 	      //金叉开始	  
-
+              
 /*	      //5日线非分钟线金叉吸入筹码	  
 	      if(($first_min5_avgprice>$first_min10_avgprice) and ($second_min5_avgprice<$second_min10_avgprice) and $trade_day_k<50){
 	      $number=11/$trade_buy_price*$type27;
