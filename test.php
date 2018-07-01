@@ -45,15 +45,16 @@ $code=159915;
 $begin_point=1.543;
 test_cut_price();
 function test_cut_price() {
-global $conn,$code,$begin_point;//,$begin_point;
+echo "comming test_cut_price\n"	
+global $conn,$code,$begin_point;//,$begin_point;	
 $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 order by id desc limit 10;";
-echo $sql;
+//echo $sql;
 $result = $conn->query($sql);
 	    while($row=mysqli_fetch_array($result)){
-	         echo "###".$row[id]."######".$row[code]."\n";
+	        // echo "###".$row[id]."######".$row[code]."\n";
            if($begin_point>$row[cut_price]){
              $sql="update trade_history set cut_price=$begin_point where id=$row[id];";
-             echo $sql."\n";
+            // echo $sql."\n";
              $conn->query($sql); 
            }
 	}
