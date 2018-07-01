@@ -45,18 +45,53 @@ $code=159915;
 $begin_point=1.543;
 test_cut_price();
 function test_cut_price() {
-echo "comming test_cut_price\n"	
+echo "comming test_cut_price\n";	
 global $conn,$code,$begin_point;//,$begin_point;	
-$sql="select * from trade_history where code=$code and vifi_status=0 and status=1 order by id desc limit 10;";
-//echo $sql;
+$sql="select * from trade_history where code=$code and vifi_status=1 and status=1  order by id desc;";
+echo $sql."\n";
 $result = $conn->query($sql);
 	    while($row=mysqli_fetch_array($result)){
-	        // echo "###".$row[id]."######".$row[code]."\n";
+	         echo "###".$row[id]."######".$row[code]."\n";
            if($begin_point>$row[cut_price]){
              $sql="update trade_history set cut_price=$begin_point where id=$row[id];";
-            // echo $sql."\n";
+             echo $sql."\n";
              $conn->query($sql); 
            }
 	}
+mysqli_free_result($result);  //释放结果集
 }
+$stat_date="2018-07-01";
+	      //#######################################################################  
+	      $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$stat_date' order by id asc;";
+              echo $sql."\n";
+              $result = $conn->query($sql);
+	              while($row=mysqli_fetch_array($result)){
+			   $connecttion_id=$row[connecttion_id];
+			   $trade_id=$row[id];
+		           if($begin_point>=$row[cut_price]){
+			      echo "达到条件触发卖出操作\n";   
+			      $sql = "select count(*) from trade_history;";    
+			      $result_id=mysqli_query($conn,$sql);
+			      $row=mysqli_fetch_row($result_id);
+			      $trade_id=$row[0]+1;
+			      echo "trade_id:".$trade_id;	   
+			      //插入交易历史  
+			      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','1','$trade_buy_price','$trade_sell_price','$connecttion_id');";                                                                  
+			      echo $sql."\n";
+			      $conn->query($sql);
+			      mysqli_free_result($result_id);  //释放结果集
+			      //核销已经处理的前期订单，避免订单再次进入
+			      $sql = "update trade_history set connecttion_id='$connecttion_id',vifi_status='1' where id='$trade_id';";
+			      echo $sql."\n";
+			      $conn->query($sql);
+			   }
+	      }
+	     //######################################################################## 
+
+/*
+查询出当前是否有可卖出订单，如果有则继续下一步，如果没有就放弃这次卖出信号；
+在查询的时候应该还有一个type的限制，type必须是买入订单才可以进行操作，如果不是买入订单，则不操作，因为卖出订单，我用不到cut_price字段
+如果有那么需要知道是那条订单可供卖出，需要得到订单的id号，
+*/
+
 ?>
