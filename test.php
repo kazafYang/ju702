@@ -39,12 +39,23 @@ max
 begin
 min
 */
-funcation test(){
-if($trade_min15_k>=85 or $trade_min15_d>=80){	    
-$sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price,vifi_status,) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','1','$trade_buy_price','$trade_sell_price');";                                                                  
-
-
+include 'config_inc.php';
+$conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);
+$code=159915;
+$begin_point=1.543;
+test_cut_price();
+function test_cut_price() {
+global $conn,$code,$begin_point;//,$begin_point;
+$sql="select * from trade_history where code=$code and vifi_status=0 and status=1 order by id desc limit 10;";
+echo $sql;
+$result = $conn->query($sql);
+	    while($row=mysqli_fetch_array($result)){
+	         echo "###".$row[id]."######".$row[code]."\n";
+           if($begin_point>$row[cut_price]){
+             $sql="update trade_history set cut_price=$begin_point where id=$row[id];";
+             echo $sql."\n";
+             $conn->query($sql); 
+           }
+	}
 }
-}
-
 ?>
