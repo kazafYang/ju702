@@ -66,8 +66,8 @@ $stat_date="2018-07-01";
               echo $sql."\n";
               $result = $conn->query($sql);
 	              while($row=mysqli_fetch_array($result)){
-			   $connecttion_id=$row[connecttion_id];
-			   $trade_id=$row[id];
+			   $connecttion_id=$row[id];
+			   echo $connecttion_id."$connecttion_id\n";
 		           if($begin_point>=$row[cut_price]){
 			      echo "达到条件触发卖出操作\n";   
 			      $sql = "select count(*) from trade_history;";    
@@ -81,7 +81,7 @@ $stat_date="2018-07-01";
 			      $conn->query($sql);
 			      mysqli_free_result($result_id);  //释放结果集
 			      //核销已经处理的前期订单，避免订单再次进入
-			      $sql = "update trade_history set connecttion_id='$connecttion_id',vifi_status='1' where id='$trade_id';";
+			      $sql = "update trade_history set connecttion_id='$trade_id',vifi_status='1' where id='$connecttion_id';";
 			      echo $sql."\n";
 			      $conn->query($sql);
 			   }
