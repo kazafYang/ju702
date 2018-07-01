@@ -313,7 +313,7 @@ $result = $conn->query($sql);
 
 	function analyse () {
 	    echo "comming analyse"."\n";
-	    global $table_name,$code,$conn,$begin_point;
+	    global $table_name,$code,$conn,$begin_point,$stat_date;
 	      //五日十日均线数据计算	
 	      $sql = "select avg(now_price) from (select now_price from $table_name order by id desc limit 0,80) as a;";    
 	      $result=mysqli_query($conn,$sql);
@@ -429,18 +429,24 @@ $result = $conn->query($sql);
 	      $row=mysqli_fetch_row($result);
 	      if($row[0]==0 and $useable_sell_number>=$number and ($number*$trade_sell_price*100>=1000)){
 	      //#######################################################################  
-	      $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 order by id asc;";
+	      $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$stat_date' order by id asc;";
               $result = $conn->query($sql);
 	              while($row=mysqli_fetch_array($result)){
+			   $connecttion_id=$row[connecttion_id];
+			   $trade_id=$row[id];
 		           if($begin_point>=$row[cut_price]){
-			     //触发卖出操作   
-			      	      $sql = "select count(*) from trade_history;";    
-	                              $result=mysqli_query($conn,$sql);
-	                              $row=mysqli_fetch_row($result);
-	                              $trade_id=$row[0]+1;  
-	                              //插入交易历史  
-	                              $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','1','$trade_buy_price','$trade_sell_price');";                                                                  
-	                              $conn->query($sql); 	   
+			     //达到条件触发卖出操作   
+			      $sql = "select count(*) from trade_history;";    
+			      $result_id=mysqli_query($conn,$sql);
+			      $row=mysqli_fetch_row($result_id);
+			      $trade_id=$row[0]+1;  
+			      //插入交易历史  
+			      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','1','$trade_buy_price','$trade_sell_price','$connecttion_id');";                                                                  
+			      $conn->query($sql);
+			      mysqli_free_result($result_id);  //释放结果集
+			      //核销已经处理的前期订单，避免订单再次进入
+			      $sql = "update trade_history set connecttion_id='$connecttion_id',vifi_status='1' where id='$trade_id';";
+			      $conn->query($sql);
 			   }
 	      }
 	     //######################################################################## 
