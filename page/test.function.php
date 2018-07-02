@@ -440,7 +440,7 @@ $result = $conn->query($sql);
 			   $connecttion_id=$row[id];
 			   $number=$row[number];   
 			   echo "connecttion_id:"."$connecttion_id\n";
-		           if($begin_point>=$row[cut_price]){
+		           if($begin_point>$row[trade_buy_price]){
 			      echo "达到条件触发卖出操作\n";   
 			      $sql = "select count(*) from trade_history;";    
 			      $result_id=mysqli_query($conn,$sql);
