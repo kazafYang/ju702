@@ -43,7 +43,51 @@ include 'config_inc.php';
 $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);
 $code=159915;
 $begin_point=1.544;
-test_cut_price();
+$stat_date='2018-07-03';	
+$trade_type=5;
+sell_action($code,$conn,$begin_point,$stat_date,$trade_type);
+
+function sell_action($code,$conn,$begin_point,$stat_date,$trade_type) {
+	  //####################################################################### 
+$trade_time_hour=10;
+$trade_time_min=30;
+$number=5;
+$trade_sell_price=1;
+$trade_buy_price=1;
+	  //mysqli_free_result($result);  //释放结果集 	      
+	  echo "comming sell_cut_price\n";
+	  $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$stat_date' order by id asc;";
+	  echo $sql."\n";
+	  $result = $conn->query($sql);
+		  while($row=mysqli_fetch_array($result)){
+		   $connecttion_id=$row[id];
+		   $number=$row[number];   
+		   echo "connecttion_id:"."$connecttion_id\n";
+		   if($begin_point>$row[trade_buy_price]){
+			  echo "达到条件触发卖出操作\n";   
+			  $sql = "select id from trade_history order by id desc limit 1;";    
+			  $result_id=mysqli_query($conn,$sql);
+			  $row=mysqli_fetch_row($result_id);
+			  $trade_id=$row[0]+1;
+			  //设置目标价格
+			  $cut_price=$trade_buy_price+($trade_buy_price*3/100);	   
+			  echo "trade_id:".$trade_id;	   
+			  //插入交易历史  
+			  $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','4','$trade_buy_price','$trade_sell_price','$cut_price','$connecttion_id');";                                                                  
+			  echo $sql."\n";
+			  $conn->query($sql);
+			  mysqli_free_result($result_id);  //释放结果集
+			  //核销已经处理的前期订单，避免订单再次进入
+			  $sql = "update trade_history set connecttion_id='$trade_id',vifi_status='1' where id='$connecttion_id';";
+			  echo $sql."\n";
+			  $conn->query($sql);
+		   }
+	  }
+	 //######################################################################## 
+}   
+/*
+
+//test_cut_price();
 function test_cut_price() {
 echo "comming test_cut_price\n";	
 global $conn,$code,$begin_point;//,$begin_point;	
@@ -87,6 +131,7 @@ $stat_date="2018-07-01";
 			   }
 	      }
 	     //######################################################################## 
+*/	     
 
 /*
 查询出当前是否有可卖出订单，如果有则继续下一步，如果没有就放弃这次卖出信号；
