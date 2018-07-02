@@ -42,7 +42,7 @@ min
 include 'config_inc.php';
 $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);
 $code=159915;
-$begin_point=1.543;
+$begin_point=1.544;
 test_cut_price();
 function test_cut_price() {
 echo "comming test_cut_price\n";	
@@ -67,7 +67,7 @@ $stat_date="2018-07-01";
               $result = $conn->query($sql);
 	              while($row=mysqli_fetch_array($result)){
 			   $connecttion_id=$row[id];
-			   echo $connecttion_id."$connecttion_id\n";
+			   echo "connecttion_id:"."$connecttion_id\n";
 		           if($begin_point>=$row[cut_price]){
 			      echo "达到条件触发卖出操作\n";   
 			      $sql = "select count(*) from trade_history;";    
