@@ -446,9 +446,11 @@ $result = $conn->query($sql);
 			      $result_id=mysqli_query($conn,$sql);
 			      $row=mysqli_fetch_row($result_id);
 			      $trade_id=$row[0]+1;
+			      //设置目标价格
+			      $cut_price=$trade_buy_price+($trade_buy_price*3/100);	   
 			      echo "trade_id:".$trade_id;	   
 			      //插入交易历史  
-			      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','1','$trade_buy_price','$trade_sell_price','$connecttion_id');";                                                                  
+			      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','1','$trade_buy_price','$trade_sell_price','$cut_price','$connecttion_id');";                                                                  
 			      echo $sql."\n";
 			      $conn->query($sql);
 			      mysqli_free_result($result_id);  //释放结果集
