@@ -416,9 +416,11 @@ $result = $conn->query($sql);
 	      //sell判断
 	 //判断当前code是否具备卖出资格，后续可以在这里加上开关等限制性的行为；昨日的总数量，就是今日的可卖数量；$switched=1是开关打开状态
 	    if($useable_sell_number>1 and $sell_switched==1 and ($trade_day_k >= 85 or $trade_day_d >= 80)){ 
+           // if($useable_sell_number>1 and $sell_switched==1 and ($trade_day_k >= 1 or $trade_day_d >= 1)){ 		    
 	      //超买情况下的15分钟卖出指标
 	      echo "comming switch-sell"."\n";
-	      if($trade_min15_k>=85 or $trade_min15_d>=80)	    
+	      if($trade_min15_k>=85 or $trade_min15_d>=80)
+	    //  if($trade_min15_k>=1 or $trade_min15_d>=1)	      
 	      {
 		   echo "comming -sell"."\n";	 
 	      //提前计算数量，避免导致超出数量限制的问题；
@@ -428,13 +430,16 @@ $result = $conn->query($sql);
 	      $result=mysqli_query($conn,$sql);
 	      $row=mysqli_fetch_row($result);
 	      if($row[0]==0 and $useable_sell_number>=$number and ($number*$trade_sell_price*100>=1000)){
-	      //#######################################################################  
+	      //####################################################################### 
+	      mysqli_free_result($result);  //释放结果集 	      
+	      echo "comming sell_cut_price\n";
 	      $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$stat_date' order by id asc;";
               echo $sql."\n";
               $result = $conn->query($sql);
 	              while($row=mysqli_fetch_array($result)){
 			   $connecttion_id=$row[id];
-			   echo $connecttion_id."$connecttion_id\n";
+			   $number=$row[number];   
+			   echo "connecttion_id:"."$connecttion_id\n";
 		           if($begin_point>=$row[cut_price]){
 			      echo "达到条件触发卖出操作\n";   
 			      $sql = "select count(*) from trade_history;";    
