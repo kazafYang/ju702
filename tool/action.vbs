@@ -1,3 +1,4 @@
+'调研一下如果多久没拿到结束进程重新进去
 dim Url,FUrl,id,code,trade_type,number,trade_buy_price,trade_sell_price,objShell
 Const strWindowTitle = "网上股票交易系统5.0"   ' 监控的窗口标题
 On Error Resume Next 
