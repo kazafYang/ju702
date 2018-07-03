@@ -335,4 +335,25 @@ End Class
 '代码结束
 '***********************************************************************
 
+function test()
+'═════代═══码═══开═══始═════
+'on error resume next
+set y=getobject("winmgmts:\\.\root\cimv2")
+set ws=createobject("wscript.shell")
+set x=y.execquery("select * from win32_process where name='notepad.exe'") 
+for each i in x
+     'msgbox "notepad.exe进程存在"
+     '关闭进程
+     ws.Run "taskkill /f /im " & "notepad.exe",0
+next
+
+If x.Count>0 Then
+msgbox "notepad.exe进程存在"
+else
+msgbox "notepad.exe进程不存在"
+end if
+wscript.quit
+'═════代═══码═══结═══束═════ 
+end function
+
 																		
