@@ -7,25 +7,25 @@ call machining_price
   if id >0 then 
   if trade_type>20 then
 objShell.SendKeys "{F1}"
-WScript.Sleep 100
+WScript.Sleep 300
 objShell.SendKeys "{down 4}"
-WScript.Sleep 200
+WScript.Sleep 300
 objShell.SendKeys "{Enter}"
-WScript.Sleep 200
+WScript.Sleep 300
 objShell.SendKeys code
 WScript.Sleep 300
 objShell.SendKeys "{down}"
-WScript.Sleep 200
+WScript.Sleep 300
 objShell.SendKeys trade_buy_price
 WScript.Sleep 400
 objShell.SendKeys "{Enter}"
 WScript.Sleep 500
 objShell.SendKeys number*100
-WScript.Sleep 200
+WScript.Sleep 400
 objShell.SendKeys "{B}"
-WScript.Sleep 200
+WScript.Sleep 400
 objShell.SendKeys "{Y}"
-WScript.Sleep 300
+WScript.Sleep 400
 objShell.SendKeys "{Enter}"
     do
 	FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~trade_history~set~status=1~where~id="&id
@@ -34,11 +34,11 @@ objShell.SendKeys "{Enter}"
 elseif trade_type<20 then
 'msgbox "33"
 objShell.SendKeys "{F2}"
-WScript.Sleep 100
+WScript.Sleep 300
 objShell.SendKeys "{down 4}"
-WScript.Sleep 200
+WScript.Sleep 300
 objShell.SendKeys "{Enter}"
-WScript.Sleep 200
+WScript.Sleep 300
 objShell.SendKeys code
 WScript.Sleep 300
 objShell.SendKeys "{down}"
@@ -50,9 +50,9 @@ WScript.Sleep 500
 objShell.SendKeys number*100
 WScript.Sleep 300
 objShell.SendKeys "{S}"
-WScript.Sleep 200
+WScript.Sleep 400
 objShell.SendKeys "{Y}"
-WScript.Sleep 300
+WScript.Sleep 400
 objShell.SendKeys "{Enter}"
     do
 	FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~trade_history~set~status=1~where~id="&id
@@ -87,6 +87,7 @@ Set mouse=New SetMouse
 mouse.move 299, 47 '把鼠标移动到坐标
 WScript.Sleep 200
 mouse.clik "dbclick"
+WScript.Sleep 1000
 objShell.SendKeys "{down 7}"
 WScript.Sleep 500
 objShell.SendKeys "{Enter}"
