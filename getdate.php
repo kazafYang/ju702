@@ -11,5 +11,6 @@ $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_
     echo $row[id].",".$row[code].",".$row[trade_type].",".$row[number].",".$row[trade_buy_price].",".$row[trade_sell_price];
     } else{
     echo "0";
-    }    
+    }
+ mysqli_free_result($result);  //释放结果集
 ?> 
