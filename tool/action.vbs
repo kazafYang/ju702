@@ -1,81 +1,22 @@
 '调研一下如果多久没拿到结束进程重新进去
-dim Url,FUrl,id,code,trade_type,number,trade_buy_price,trade_sell_price,objShell
+dim Url,FUrl,id,code,trade_type,number,trade_buy_price,trade_sell_price,objShell,find_xiadan
 Const strWindowTitle = "网上股票交易系统5.0"   ' 监控的窗口标题
-On Error Resume Next 
+'On Error Resume Next 
 Set objShell= CreateObject("wscript.shell")
-do
-call machining_price
-  if id >0 then 
-  if trade_type>20 then
-objShell.SendKeys "{F1}"
-WScript.Sleep 300
-objShell.SendKeys "{down 4}"
-WScript.Sleep 300
-objShell.SendKeys "{Enter}"
-WScript.Sleep 300
-objShell.SendKeys code
-WScript.Sleep 300
-objShell.SendKeys "{down}"
-WScript.Sleep 300
-objShell.SendKeys trade_buy_price
-WScript.Sleep 400
-objShell.SendKeys "{Enter}"
-WScript.Sleep 500
-objShell.SendKeys number*100
-WScript.Sleep 400
-objShell.SendKeys "{B}"
-WScript.Sleep 400
-objShell.SendKeys "{Y}"
-WScript.Sleep 400
-objShell.SendKeys "{Enter}"
-    do
-	FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~trade_history~set~status=1~where~id="&id
-	FHtml = getHTTPPageF(FUrl)
-	Loop Until FHtml=200
-elseif trade_type<20 then
-'msgbox "33"
-objShell.SendKeys "{F2}"
-WScript.Sleep 300
-objShell.SendKeys "{down 4}"
-WScript.Sleep 300
-objShell.SendKeys "{Enter}"
-WScript.Sleep 300
-objShell.SendKeys code
-WScript.Sleep 300
-objShell.SendKeys "{down}"
-WScript.Sleep 200
-objShell.SendKeys trade_sell_price
-WScript.Sleep 400
-'objShell.SendKeys "{Enter}"
-WScript.Sleep 500
-objShell.SendKeys number*100
-WScript.Sleep 300
-objShell.SendKeys "{S}"
-WScript.Sleep 400
-objShell.SendKeys "{Y}"
-WScript.Sleep 400
-objShell.SendKeys "{Enter}"
-    do
-	FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~trade_history~set~status=1~where~id="&id
-	FHtml = getHTTPPageF(FUrl)
-    Loop Until FHtml=200
-
-else
-objShell.SendKeys "{F5}"
-end if 
-else
-WScript.Sleep 5000
-  end if
-  call Main
-  objShell.SendKeys "{F1}"
-  WScript.Sleep 10000
-  objShell.SendKeys "{F4}"
-	objShell.SendKeys "{F4}"
-	call save_info
-  call countnumber
-  objShell.SendKeys "{F5}"
-  Html=""  
-Loop Until ac=1
+	do
+	call machining_price
+		if id >0 then 
+		call begin_xiadan()
+        call Main()
+        call action_xiadan()
+		objShell.SendKeys "{F4}"
+        call save_info
+        call countnumber		
+		else
+		WScript.Sleep 5000
+		end if
+	Html=""  
+	Loop Until ac=1
 
 
 function save_info
@@ -90,15 +31,15 @@ WScript.Sleep 200
 mouse.clik "dbclick"
 WScript.Sleep 1000
 objShell.SendKeys "{down 7}"
-WScript.Sleep 500
+WScript.Sleep 1000
 objShell.SendKeys "{Enter}"
-WScript.Sleep 500
+WScript.Sleep 2000
 objShell.SendKeys "2"
-WScript.Sleep 200
+WScript.Sleep 1000
 objShell.SendKeys "{Enter}"
-WScript.Sleep 500
+WScript.Sleep 1000
 objShell.SendKeys "{LEFT}"
-WScript.Sleep 500
+WScript.Sleep 1000
 objShell.SendKeys "{Enter}"
 
 ' "right" 右击， "middle" 中间键点击
@@ -335,25 +276,103 @@ End Class
 '代码结束
 '***********************************************************************
 
-function test()
+function begin_xiadan()
 '═════代═══码═══开═══始═════
 'on error resume next
 set y=getobject("winmgmts:\\.\root\cimv2")
-set ws=createobject("wscript.shell")
-set x=y.execquery("select * from win32_process where name='notepad.exe'") 
-for each i in x
+set find_xiadan=y.execquery("select * from win32_process where name='xiadan.exe'") 
+for each i in find_xiadan
      'msgbox "notepad.exe进程存在"
      '关闭进程
-     ws.Run "taskkill /f /im " & "notepad.exe",0
+     objShell.Run "taskkill /f /im " & "xiadan.exe",0
 next
 
-If x.Count>0 Then
-msgbox "notepad.exe进程存在"
+If find_xiadan.Count>0 Then
+'msgbox "xiadan.exe进程存在"
+     objShell.Run "taskkill /f /im " & "xiadan.exe",0
+	 WScript.Sleep 2000
+	 objShell.run """F:\Program Files\htwt\xiadan.exe"""
+	 WScript.Sleep 5000
+	 objShell.SendKeys "775820"
+	 WScript.Sleep 500
+	 objShell.SendKeys "{down}"
+	 WScript.Sleep 500
+	 objShell.SendKeys "y13608099097"
+	 WScript.Sleep 500
+	 objShell.SendKeys "{Enter}"
+	 WScript.Sleep 10000
+	 objShell.SendKeys "{Enter}"	 
+
 else
-msgbox "notepad.exe进程不存在"
+'msgbox "xiadan.exe进程不存在"
+objShell.run """F:\Program Files\htwt\xiadan.exe"""
+	 WScript.Sleep 5000
+	 objShell.SendKeys "775820"
+	 WScript.Sleep 500
+	 objShell.SendKeys "{down}"
+	 WScript.Sleep 500
+	 objShell.SendKeys "y13608099097"	 
+	 WScript.Sleep 500
+	 objShell.SendKeys "{Enter}"
+	 WScript.Sleep 10000
+	 objShell.SendKeys "{Enter}"
 end if
-wscript.quit
+'wscript.quit
 '═════代═══码═══结═══束═════ 
 end function
 
-																		
+function action_xiadan()
+if trade_type>20 then
+objShell.SendKeys "{F1}"
+WScript.Sleep 500
+objShell.SendKeys code
+WScript.Sleep 500
+objShell.SendKeys "{Enter}"
+WScript.Sleep 500
+objShell.SendKeys trade_buy_price
+WScript.Sleep 500
+objShell.SendKeys "{Enter}"
+WScript.Sleep 500
+objShell.SendKeys number*100
+WScript.Sleep 100
+objShell.SendKeys "{down}"
+WScript.Sleep 100
+objShell.SendKeys "{B}"
+WScript.Sleep 500
+objShell.SendKeys "{Y}"
+WScript.Sleep 1000
+objShell.SendKeys "{Enter}"
+    do
+	FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~trade_history~set~status=1~where~id="&id
+	FHtml = getHTTPPageF(FUrl)
+	Loop Until FHtml=200
+elseif trade_type<20 then
+'msgbox "33"
+objShell.SendKeys "{F2}"
+WScript.Sleep 5000
+objShell.SendKeys code
+WScript.Sleep 500
+objShell.SendKeys "{Enter}"
+WScript.Sleep 500
+objShell.SendKeys trade_sell_price
+WScript.Sleep 500
+objShell.SendKeys "{Enter}"
+WScript.Sleep 500
+objShell.SendKeys 100'number*100
+WScript.Sleep 100
+objShell.SendKeys "{down}"
+WScript.Sleep 1000
+objShell.SendKeys "{S}"
+WScript.Sleep 500
+objShell.SendKeys "{Y}"
+WScript.Sleep 1000
+objShell.SendKeys "{Enter}"
+    do
+	FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~trade_history~set~status=1~where~id="&id
+	FHtml = getHTTPPageF(FUrl)
+    Loop Until FHtml=200
+
+else
+objShell.SendKeys "{F5}"
+end if 
+end function																		
