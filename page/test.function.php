@@ -1108,7 +1108,7 @@ function sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat
 			  $cut_price=$trade_buy_price+($trade_buy_price*3/100);	   
 			  echo "trade_id:".$trade_id;	   
 			  //插入交易历史  
-			  $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','4','$trade_buy_price','$trade_sell_price','$cut_price','$connecttion_id');";                                                                  
+			  $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price','$cut_price','$connecttion_id');";                                                                  
 			  echo $sql."\n";
 			  $conn->query($sql);
 			  mysqli_free_result($result_id);  //释放结果集
