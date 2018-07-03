@@ -806,7 +806,7 @@ $result = $conn->query($sql);
 	       if($trade_min15_k>=80 or $trade_min15_d >= 80){
 		echo "comming -rel-sell~~~~~~~~~"."\n";
 		$trade_type=6;    
-		sell_actionsell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  		       
+		sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  		       
 		/*       
 	      $number=11/$trade_sell_price*$type6;
 	      $number=round($number); 
@@ -834,7 +834,7 @@ $result = $conn->query($sql);
 	  }	  
 	     if($trade_min30_k >= 80  or $trade_min30_d >= 80){
 		$trade_type=7;    
-		sell_actionsell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  
+		sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  
 		/*     
 	      $number=11/$trade_sell_price*$type7;
 	      $number=round($number); 
@@ -863,7 +863,7 @@ $result = $conn->query($sql);
 		  }
 	    if($trade_min60_k >= 80  or $trade_min60_d >= 80){
 		$trade_type=8;    
-		sell_actionsell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  
+		sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  
 		    /*
 	      $number=11/$trade_sell_price*$type8;
 	      $number=round($number); 
