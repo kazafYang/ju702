@@ -979,7 +979,7 @@ $result = $conn->query($sql);
 		echo $loser_price."comming switch-rel-buy~~~~~~~~~".$trade_buy_price."\n"; 
 	     if ($loser_price>0 and $buy_switched==1 and $useable_money>1000 and ($trade_day_k<80 and $trade_day_d<75)){
 		echo $loser_price."comming switch-rel-buy~~~~~~~111111111~~"."\n";       
-	      $sql = "select count(*) from trade_history;";    
+	      $sql = "select id from trade_history order by id desc limit 1;";    
 	      $result=mysqli_query($conn,$sql);
 	      $row=mysqli_fetch_row($result);
 	      $trade_id=$row[0]+1;    
