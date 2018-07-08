@@ -296,8 +296,8 @@
 
 function test_cut_price() {
 echo "comming test_cut_price\n";	
-global $conn,$code,$begin_point;//,$begin_point;	
-$sql="select * from trade_history where code=$code and vifi_status=0 and status=1 order by id desc;";
+global $conn,$code,$begin_point,$stat_date,$time_hour,$time_min;//,$begin_point;	
+$sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 order by id desc;";
 //echo $sql;
 $result = $conn->query($sql);
 	    while($row=mysqli_fetch_array($result)){
@@ -306,7 +306,26 @@ $result = $conn->query($sql);
              $sql="update trade_history set cut_price=$begin_point where id=$row[id];";
             // echo $sql."\n";
              $conn->query($sql); 
-           }		    
+           }
+           if($begin_point <= ($row[cut_price]-$row[cut_price]*1/100) and $row[cut_price] >= ($row[trade_buy_price]+$row[trade_buy_price]*3/100) ){
+	   	$trade_type=10;
+		echo  $row[id]."~".$row[cut_price]."~".$begin_point."~".$row[trade_buy_price]."~".$row[trade_buy_price]."~".$row[number]."\n";
+		echo  $code."~".$begin_point."~".$stat_date."\n";  
+		$sql = "select id from trade_history order by id desc limit 1;";    
+		$result_id=mysqli_query($conn,$sql);
+		$row_id=mysqli_fetch_row($result_id);
+		$trade_id=$row_id[0]+1; 
+		mysqli_free_result($result_id);  //释放结果集  
+		echo "trade_id:".$trade_id;	   
+		//插入交易历史  
+		$sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$code','$stat_date','$time_hour','$time_min','0','0','$row[number]','$trade_type','$row[trade_buy_price]','$begin_point','$row[cut_price]','$row[id]');";                                                                  
+		echo $sql."cut_price sell 处理了！！！！\n";
+		$conn->query($sql);
+		//核销已经处理的前期订单，避免订单再次进入    
+		$sql = "update trade_history set connecttion_id='$trade_id',vifi_status='1' where id='$row[id]';";
+		echo $sql."cut_peice 核销订单sql\n";
+		$conn->query($sql);
+	   }
 	}
  mysqli_free_result($result);  //释放结果集	  
 }
@@ -555,6 +574,10 @@ $result = $conn->query($sql);
 	      }   
 	    } //回转结束
 	      //金叉开始	  
+	     if ($begin_point<$cut_price-($cut_price*1/100) and $begin_point>$trade_buy_price)
+	     {
+	      
+	      }		  
               
 /*	      //5日线非分钟线金叉吸入筹码	  
 	      if(($first_min5_avgprice>$first_min10_avgprice) and ($second_min5_avgprice<$second_min10_avgprice) and $trade_day_k<50){
