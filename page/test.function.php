@@ -307,7 +307,7 @@ $result = $conn->query($sql);
             // echo $sql."\n";
              $conn->query($sql); 
            }
-           if($begin_point <= ($row[cut_price]-$row[cut_price]*1/100) and $row[cut_price] >= ($row[trade_buy_price]+$row[trade_buy_price]*3/100) ){
+           if($begin_point <= ($row[cut_price]-$row[cut_price]*1/100) and $row[cut_price] > ($row[trade_buy_price]+$row[trade_buy_price]*3/100) ){
 	   	$trade_type=10;
 		echo  $row[id]."~".$row[cut_price]."~".$begin_point."~".$row[trade_buy_price]."~".$row[trade_buy_price]."~".$row[number]."\n";
 		echo  $code."~".$begin_point."~".$stat_date."\n";  
