@@ -3,7 +3,7 @@
         $ret = shell_exec("$cmd");                                                                                                                                            
         $ret = rtrim($ret, "\r\n");                                                                                                                                           
      //   echo "test:".$ret;                                                                                                                                                    
-        if($ret > 4) {                                                                                                                                                        
+        if($ret > 6) {                                                                                                                                                        
         echo "sussess!";                                                                                                                                                      
         }                                                                                                                                                                     
         else{                                                                                                                                                                 
