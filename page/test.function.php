@@ -476,7 +476,7 @@ $result = $conn->query($sql);
 	       buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite);
 	      }  	  
 	  }    //日线超卖完成
-	  if(($trade_day_k>=20 and $trade_day_k<75) or ($trade_day_d>=20 and $trade_day_d<75)){
+	  if(($trade_day_k>=50 and $trade_day_k<85) or ($trade_day_d>=50 and $trade_day_d<80)){
 	    //回转交易策略的位置,记录回转交易的标志是数据库字段status=2
 		//15分钟回转使用死叉交易卖出 switch
 		echo "comming switch-rel~~~~~~~~~"."\n";
@@ -554,7 +554,12 @@ $result = $conn->query($sql);
 	       $conn->query($sql);    
 	      }   
 	    } //回转结束
-	      //金叉开始	  
+	      //cut_price 开始
+	    	  
+	if(($trade_day_k>=20 and $trade_day_k<50) or ($trade_day_d>=20 and $trade_day_d<50)){
+	  $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 order by id desc;";
+          $result = $conn->query($sql);
+	  while($row=mysqli_fetch_array($result)){	
            if($begin_point <= ($row[cut_price]-$row[cut_price]*1/100) and $row[cut_price] > ($row[trade_buy_price]+$row[trade_buy_price]*3/100) ){
 	   	$trade_type=10;
 		echo  $row[id]."~".$row[cut_price]."~".$begin_point."~".$row[trade_buy_price]."~".$row[trade_buy_price]."~".$row[number]."\n";
@@ -573,7 +578,9 @@ $result = $conn->query($sql);
 		$sql = "update trade_history set connecttion_id='$trade_id',vifi_status='1' where id='$row[id]';";
 		echo $sql."cut_peice 核销订单sql\n";
 		$conn->query($sql);
-	   }	  
+	    }
+	}
+}
               
 /*	      //5日线非分钟线金叉吸入筹码	  
 	      if(($first_min5_avgprice>$first_min10_avgprice) and ($second_min5_avgprice<$second_min10_avgprice) and $trade_day_k<50){
