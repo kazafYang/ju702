@@ -313,7 +313,7 @@ $result = $conn->query($sql);
 
 	function analyse () {
 	    echo "comming analyse"."\n";
-	    global $table_name,$code,$conn,$begin_point,$stat_date;
+	    global $table_name,$code,$conn,$begin_point,$stat_date,$time_hour,$time_min;
 	      //五日十日均线数据计算	
 	      $sql = "select avg(now_price) from (select now_price from $table_name order by id desc limit 0,80) as a;";    
 	      $result=mysqli_query($conn,$sql);
@@ -581,6 +581,21 @@ $result = $conn->query($sql);
 	    }
 	}
 }
+	if($stat_date>=14 and $time_hour>=45 and $useable_money>1000){
+	   	$trade_type=11;
+		$number=$useable_money/100;
+		$number=round($number);	
+		$trade_stat_date=$stat_date;$trade_time_hour=$time_hour;$trade_time_min=$time_min;
+		$sql = "select id from trade_history order by id desc limit 1;";    
+		$result_id=mysqli_query($conn,$sql);
+		$row=mysqli_fetch_row($result_id);
+		$trade_id=$row[0]+1;   
+		echo "trade_id:".$trade_id;		
+		$sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','131810','$trade_stat_date','$trade_time_hour','$trade_time_min','0','1','$number','$trade_type','1','1','1','131810');";                                                                  
+		echo $sql."国债\n";
+		$conn->query($sql);
+		mysqli_free_result($result_id);  //释放结果集
+		}	  
               
 /*	      //5日线非分钟线金叉吸入筹码	  
 	      if(($first_min5_avgprice>$first_min10_avgprice) and ($second_min5_avgprice<$second_min10_avgprice) and $trade_day_k<50){
