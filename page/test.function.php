@@ -468,7 +468,7 @@ $result = $conn->query($sql);
 	    } //日线超买完成
 
 	    //buy,买入开关限制，限制可用金额不足的情况，和标的开关关闭的情况，关闭 switch=0；
-	  if($useable_money>1000 and $buy_switched==1 and ($trade_day_k <= 20 and $trade_day_d <= 20)){
+	  if($useable_money>1000 and $buy_switched==1 and ($trade_day_k < 20 and $trade_day_d < 20)){
 	  //if($useable_money>10 and $buy_switched==1 and ($trade_day_k <= 70 and $trade_day_d <= 70)){
 		echo "comming switch-buy~~~~~day--kdj~~~~"."\n"; 
 		  //15分钟条件严格一点
@@ -495,7 +495,7 @@ $result = $conn->query($sql);
 	       buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite);
 	      }  	  
 	  }    //日线超卖完成
-	  if(($trade_day_k>=20 and $trade_day_k<75) or ($trade_day_d>20 and $trade_day_d<75)){
+	  if(($trade_day_k>=20 and $trade_day_k<75) or ($trade_day_d>=20 and $trade_day_d<75)){
 	    //回转交易策略的位置,记录回转交易的标志是数据库字段status=2
 		//15分钟回转使用死叉交易卖出 switch
 		echo "comming switch-rel~~~~~~~~~"."\n";
@@ -524,7 +524,7 @@ $result = $conn->query($sql);
 		  }	  
 
 		//回转60分钟买入  
-	      if ($trade_min60_k <=20 or $trade_min60_d <=20 and ($trade_day_k<65 and $trade_day_d<60)){
+	      if ($trade_min60_k <20 or $trade_min60_d <20 and ($trade_day_k<65 and $trade_day_d<60)){
 	       $trade_type=25; 
 	       $trade_bite=$type25;	    
 	       buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite);
