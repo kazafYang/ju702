@@ -31,5 +31,12 @@ if($type==2){
      echo "404";
      }
   mysqli_free_result($result);  //释放结果集    
-}          
+}
+if($type==3){
+     $sql = "select id from trade_history order by id desc limit 1;";
+     $result = $conn->query($sql);
+     $row=mysqli_fetch_row($result); 
+     echo $row[id];
+      mysqli_free_result($result);  //释放结果集  
+}
 ?>
