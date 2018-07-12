@@ -715,7 +715,8 @@ function huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$t
 	  $result = $conn->query($sql);
 		  while($row=mysqli_fetch_array($result)){
 			   $connecttion_id=$row[id];
-			   $number=$row[number];   
+			   $number=$row[number];
+			   $cut_price=$trade_buy_price+$trade_buy_price*3/100;
 			   echo "connecttion_id:"."$connecttion_id\n";
 			   if($begin_point>$row[trade_buy_price] and $huizhuan_sell_number==0){
 				  echo "达到条件触发卖出操作\n";   
