@@ -36,7 +36,11 @@ if($type==3){
      $sql = "select id from trade_history order by id desc limit 1;";
      $result = $conn->query($sql);
      $row=mysqli_fetch_row($result); 
-     echo $row[0];
+     if($row[0]>0){
+        echo $row[0];
+     } else{
+        echo "0";
+     }
       mysqli_free_result($result);  //释放结果集  
 }
 ?>
