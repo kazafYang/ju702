@@ -57,14 +57,12 @@ $password=$_GET['password'];
 if($password=="121212"){
 echo $password."comming!\n";
 $password=0;
-}
-
-	
+}	
 $table_name=array("point_number","point_number_sz","point_number_sz100","point_number_zxb","point_number_hs","point_number_zq","point_number_jg","point_number_yh");                
 	echo '<table border="1"><tr><th>id</th><th>code</th><th>trade_type</th><th>number</th><th>trade_buy_price</th><th>trade_sell_price</th><th>stat_date</th><</tr>';
 	foreach ($table_name as $value)                                                                                                                                                     
 {    
-    $sql = "SELECT id,code,min15_k,min15_d,min15_j,min30_k,min30_d,min30_j,min60_k,min60_d,min60_j,kdjday_k,kdjday_d,kdjday_j,cci FROM $value order by id desc limit 1";                                                                  
+    $sql = "SELECT id,code,min15_k,min15_d,min15_j,min30_k,min30_d,min30_j,min60_k,min60_d,min60_j,kdjday_k,kdjday_d,kdjday_j,cci,stat_date FROM $value order by id desc limit 1";                                                                  
     $result = $conn->query($sql);                                                                                                                                             
     $row = $result->fetch_assoc();
     $row[min15_k]=round($row[min15_k],2);$row[min15_d]=round($row[min15_d],2);$row[min15_j]=round($row[min15_j],2);
@@ -72,15 +70,12 @@ $table_name=array("point_number","point_number_sz","point_number_sz100","point_n
     $row[min60_k]=round($row[min60_k],2);$row[min60_d]=round($row[min60_d],2);$row[min60_j]=round($row[min60_j],2);
     $row[kdjday_k]=round($row[kdjday_k],2);$row[kdjday_d]=round($row[kdjday_d],2);$row[kdjday_j]=round($row[kdjday_j],2);
     $row[cci]=round($row[cci],2);	
-	$sellinfo=$sellinfo."<br>";
+    $sellinfo=$sellinfo."<br>";
     $buyinfo=$buyinfo."<br>";
     $showinfo=$showinfo.",".$row[id].",".$row[code].",15mk:".$row[min15_k].",15md:".$row[min15_d].",15mj：".$row[min15_j].",30mk：".$row[min30_k].",30md：".$row[min30_d].",30mj：".$row[min30_j].",60mK：".$row[min60_k].",60md：".$row[min60_d].",60mj：".$row[min60_j].",dayk：".$row[kdjday_k].",dayd：".$row[kdjday_d].",dayj：".$row[kdjday_j].",cci：".$row[cci]."<br>";                         
    echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[kdjday_k].'</td><td>'.$row[kdjday_d].'</td><td>'.$row[min15_k].'</td><td>'.$row[min15_d].'</td><td>'.$row[stat_date].'</td></tr>';
 
-	}                           
-echo $showinfo;  
-echo "<br>".$sellinfo; 
-echo "<br>".$buyinfo;   	
+	}                            	
 
 ?>
 </body>
