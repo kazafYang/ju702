@@ -5,7 +5,11 @@ $type=$_GET['type'];
 $id=$_GET['id'];                                                                                                                                          
 $code=$_GET['code'];
 $sql_update=$_GET['sql'];
+if($sql_update==""){
+$sql_update=$_POST['sql'];
+}
 $sql_update=str_replace("~"," ",$sql_update);
+
 //更新trade_history表status
 if ($type==1){
 $sql = "select * from trade_history;";
