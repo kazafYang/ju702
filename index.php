@@ -6,10 +6,9 @@
 <p>
 <form action="/page/update.php?type=4" method="post">
 
-<p>&#22995;&#21517;: <input type="text" name="sql_update" /></p>
+<p>&#22995;&#21517;: <input type="text" name="sql" /></p>
 
 <p><input type="submit" value="&#25552;&#20132;"></p>
-
 </form>
 <p>
 <?php
@@ -52,14 +51,14 @@ $table_name=array("point_number","point_number_sz","point_number_sz100","point_n
 	echo '<table border="1"><tr><th>id</th><th>code</th><th>kdjday_k</th><th>kdjday_d</th><th>min15_k</th><th>min15_d</th><th>min30_k</th><th>min30_d</th><th>min60_k</th><th>min60_d</th><th>min120_k</th><th>min120_d</th><th>stat_date</th><</tr>';
 	foreach ($table_name as $value)                                                                                                                                                     
 {    
-    $sql = "SELECT id,code,min15_k,min15_d,min15_j,min30_k,min30_d,min30_j,min60_k,min60_d,min60_j,kdjday_k,kdjday_d,kdjday_j,cci,stat_date FROM $value order by id desc limit 1";                                                                  
+    $sql = "SELECT id,code,min15_k,min15_d,min15_j,min30_k,min30_d,min30_j,min60_k,min60_d,min60_j,min120_k,min120_d,kdjday_k,kdjday_d,kdjday_j,cci,stat_date FROM $value order by id desc limit 1";                                                                  
     $result = $conn->query($sql);                                                                                                                                             
     $row = $result->fetch_assoc();
     $row[min15_k]=round($row[min15_k],2);$row[min15_d]=round($row[min15_d],2);$row[min15_j]=round($row[min15_j],2);
     $row[min30_k]=round($row[min30_k],2);$row[min30_d]=round($row[min30_d],2);$row[min30_j]=round($row[min30_j],2);
-    $row[min60_k]=round($row[min60_k],2);$row[min60_d]=round($row[min60_d],2);$row[min60_j]=round($row[min60_j],2);
+    $row[min60_k]=round($row[min60_k],2);$row[min60_d]=round($row[min60_d],2);$row[min60_j]=round($row[min60_j],2);		
     $row[kdjday_k]=round($row[kdjday_k],2);$row[kdjday_d]=round($row[kdjday_d],2);$row[kdjday_j]=round($row[kdjday_j],2);
-    $row[cci]=round($row[cci],2);	
+    $row[cci]=round($row[cci],2);$row[min120_k]=round($row[min120_k],2);$row[min120_d]=round($row[min120_d],2);	
     $sellinfo=$sellinfo."<br>";
     $buyinfo=$buyinfo."<br>";
     $showinfo=$showinfo.",".$row[id].",".$row[code].",15mk:".$row[min15_k].",15md:".$row[min15_d].",15mj：".$row[min15_j].",30mk：".$row[min30_k].",30md：".$row[min30_d].",30mj：".$row[min30_j].",60mK：".$row[min60_k].",60md：".$row[min60_d].",60mj：".$row[min60_j].",dayk：".$row[kdjday_k].",dayd：".$row[kdjday_d].",dayj：".$row[kdjday_j].",cci：".$row[cci]."<br>";                         
