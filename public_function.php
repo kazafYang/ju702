@@ -301,12 +301,15 @@ $sql="select * from trade_history where code=$code and vifi_status=0 and status=
 //echo $sql;
 $result = $conn->query($sql);
 	    while($row=mysqli_fetch_array($result)){
-	        // echo "###".$row[id]."######".$row[code]."\n";
+	    //更新交易历史表中目标价格信息
            if($begin_point>$row[cut_price]){
              $sql="update trade_history set cut_price=$begin_point where id=$row[id];";
-            // echo $sql."\n";
              $conn->query($sql); 
            }
+	    //计算单笔交易的盈亏情况
+	   $history_make_money=$begin_point*$row[number]-$row[trade_buy_price]*$row[number];
+           $sql="update trade_history set history_make_money=$history_make_money where id=$row[id];";
+           $conn->query($sql);	   	    
 	}
  mysqli_free_result($result);  //释放结果集	  
 }
