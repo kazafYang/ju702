@@ -4,15 +4,11 @@
 <body>
 <a href="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/run.php">RUN Script</a>
 <p>
-tarde_history
+<form action="/page/update.php?type=4" method="post">
 
-<form action="" method="get">
+<p>&#22995;&#21517;: <input type="text" name="sql_update" /></p>
 
-<p>&#22995;&#21517;: <input type="text" name="switch" /></p>
-
-<p>&#23494;&#30721;: <input type="text" name="password" /></p>
-
-<p><input type="submit" value="&#25552;&#20132;" onclick="javascrtpt:window.location.href='http://www.ju70.com/contrul.php"></p>
+<p><input type="submit" value="&#25552;&#20132;"></p>
 
 </form>
 <p>
@@ -24,20 +20,20 @@ if ($conn->connect_error) {
     die("defult: " . $conn->connect_error);
 }
 
-    $sql = "select id,code,number,trade_type,trade_buy_price,trade_sell_price,stat_date from trade_history order by id desc limit 5;"; //where status=0 and stat_date='$stat_date'
+    $sql = "select id,code,status,number,trade_type,trade_buy_price,trade_sell_price,stat_date from trade_history order by id desc limit 5;"; //where status=0 and stat_date='$stat_date'
     //echo $sql."\n";
     $result = $conn->query($sql);
-	echo '<table border="1"><tr><th>id</th><th>code</th><th>trade_type</th><th>number</th><th>trade_buy_price</th><th>trade_sell_price</th><th>stat_date</th><</tr>';
+	echo '<table border="1"><tr><th>id</th><th>code</th><th>status</th><th>trade_type</th><th>number</th><th>trade_buy_price</th><th>trade_sell_price</th><th>stat_date</th><</tr>';
 	while($row=mysqli_fetch_array($result)){
-	echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[trade_type].'</td><td>'.$row[number].'</td><td>'.$row[trade_buy_price].'</td><td>'.$row[trade_sell_price].'</td><td>'.$row[stat_date].'</td></tr>';
+	echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[status].'</td><td>'.$row[trade_type].'</td><td>'.$row[number].'</td><td>'.$row[trade_buy_price].'</td><td>'.$row[trade_sell_price].'</td><td>'.$row[stat_date].'</td></tr>';
 	}
 
-    $sql = "select id,code,stat_date,useable_money,total_money,make_money from hive_number order by id desc limit 8;"; 
+    $sql = "select id,code,switched,sell_switched,buy_switched,stat_date,useable_money,total_money,make_money from hive_number order by id desc limit 8;"; 
     //echo $sql."\n";
     $result = $conn->query($sql);
-	echo '<table border="1"><tr><th>id</th><th>code</th><th>total_money</th><th>useable_money</th><th>make_money </th><th>stat_date</th><</tr>';
+	echo '<table border="1"><tr><th>id</th><th>code</th><th>total_money</th><th>useable_money</th><th>make_money </th><th>switched</th><th>sell_switched</th><th>buy_switched</th><th>stat_date</th><</tr>';
 	while($row=mysqli_fetch_array($result)){
-	echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[total_money].'</td><td>'.$row[useable_money].'</td><td>'.$row[make_money ].'</td><td>'.$row[stat_date].'</td></tr>';
+	echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[total_money].'</td><td>'.$row[useable_money].'</td><td>'.$row[make_money ].'</td><td>'.$row[switched].'</td><td>'.$row[sell_switched].'</td><td>'.$row[buy_switched].'</td><td>'.$row[stat_date].'</td></tr>';
 	}
 
       jincheng();
@@ -51,15 +47,9 @@ if ($conn->connect_error) {
         $n2_html = file_get_contents($n2_url); 
        echo "&#25235;&#21462;&#31243;&#24207;&#36816;&#34892;&#24773;&#20917;&#65306;".$n2_html."<p>" ;
        echo "buy:type>20,sell:type<20\n";
-}
-$username=$_GET['name'];
-$password=$_GET['password'];
-if($password=="121212"){
-echo $password."comming!\n";
-$password=0;
 }	
 $table_name=array("point_number","point_number_sz","point_number_sz100","point_number_zxb","point_number_hs","point_number_zq","point_number_jg","point_number_yh");                
-	echo '<table border="1"><tr><th>id</th><th>code</th><th>kdjday_k</th><th>kdjday_d</th><th>min15_k</th><th>min15_d</th><th>min60_k</th><th>min60_d</th><th>stat_date</th><</tr>';
+	echo '<table border="1"><tr><th>id</th><th>code</th><th>kdjday_k</th><th>kdjday_d</th><th>min15_k</th><th>min15_d</th><th>min30_k</th><th>min30_d</th><th>min60_k</th><th>min60_d</th><th>min120_k</th><th>min120_d</th><th>stat_date</th><</tr>';
 	foreach ($table_name as $value)                                                                                                                                                     
 {    
     $sql = "SELECT id,code,min15_k,min15_d,min15_j,min30_k,min30_d,min30_j,min60_k,min60_d,min60_j,kdjday_k,kdjday_d,kdjday_j,cci,stat_date FROM $value order by id desc limit 1";                                                                  
@@ -73,7 +63,7 @@ $table_name=array("point_number","point_number_sz","point_number_sz100","point_n
     $sellinfo=$sellinfo."<br>";
     $buyinfo=$buyinfo."<br>";
     $showinfo=$showinfo.",".$row[id].",".$row[code].",15mk:".$row[min15_k].",15md:".$row[min15_d].",15mj：".$row[min15_j].",30mk：".$row[min30_k].",30md：".$row[min30_d].",30mj：".$row[min30_j].",60mK：".$row[min60_k].",60md：".$row[min60_d].",60mj：".$row[min60_j].",dayk：".$row[kdjday_k].",dayd：".$row[kdjday_d].",dayj：".$row[kdjday_j].",cci：".$row[cci]."<br>";                         
-   echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[kdjday_k].'</td><td>'.$row[kdjday_d].'</td><td>'.$row[min15_k].'</td><td>'.$row[min15_d].'</td><td>'.$row[min60_k].'</td><td>'.$row[min60_d].'</td><td>'.$row[stat_date].'</td></tr>';
+   echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[kdjday_k].'</td><td>'.$row[kdjday_d].'</td><td>'.$row[min15_k].'</td><td>'.$row[min15_d].'</td><td>'.$row[min30_k].'</td><td>'.$row[min30_d].'</td><td>'.$row[min60_k].'</td><td>'.$row[min60_d].'</td><td>'.$row[min120_k].'</td><td>'.$row[min120_d].'</td><td>'.$row[stat_date].'</td></tr>';
 
 	}                            	
 
