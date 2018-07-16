@@ -20,19 +20,19 @@ if ($conn->connect_error) {
 }
 
     $sql = "select id,code,status,number,trade_type,trade_buy_price,trade_sell_price,stat_date,history_make_money,cut_price from trade_history order by id desc limit 10;"; //where status=0 and stat_date='$stat_date'
-    //echo $sql."\n";
+    //查询交易历史
     $result = $conn->query($sql);
 	echo '<table border="1"><tr><th>id</th><th>code</th><th>status</th><th>trade_type</th><th>number</th><th>trade_buy_price</th><th>trade_sell_price</th><th>cut_price</th><th>history_make_money</th><th>stat_date</th><</tr>';
 	while($row=mysqli_fetch_array($result)){
 	echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[status].'</td><td>'.$row[trade_type].'</td><td>'.$row[number].'</td><td>'.$row[trade_buy_price].'</td><td>'.$row[trade_sell_price].'</td><td>'.$row[cut_price].'</td><td>'.$row[history_make_money].'</td><td>'.$row[stat_date].'</td></tr>';
 	}
 
-    $sql = "select id,code,switched,sell_switched,buy_switched,stat_date,useable_money,total_money,make_money from hive_number order by id desc limit 8;"; 
-    //echo $sql."\n";
+    $sql = "select id,code,switched,sell_switched,buy_switched,stat_date,useable_money,total_money,make_money,total_number,useable_sell_number from hive_number order by id desc limit 8;"; 
+    //查询hive_number数据
     $result = $conn->query($sql);
-	echo '<table border="1"><tr><th>id</th><th>code</th><th>total_money</th><th>useable_money</th><th>make_money </th><th>switched</th><th>sell_switched</th><th>buy_switched</th><th>stat_date</th><</tr>';
+	echo '<table border="1"><tr><th>id</th><th>code</th><th>total_money</th><th>useable_money</th><th>total_number</th><th>useable_sell_number</th><th>make_money </th><th>switched</th><th>sell_switched</th><th>buy_switched</th><th>stat_date</th><</tr>';
 	while($row=mysqli_fetch_array($result)){
-	echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[total_money].'</td><td>'.$row[useable_money].'</td><td>'.$row[make_money ].'</td><td>'.$row[switched].'</td><td>'.$row[sell_switched].'</td><td>'.$row[buy_switched].'</td><td>'.$row[stat_date].'</td></tr>';
+	echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[total_money].'</td><td>'.$row[useable_money].'</td><td>'.$row[total_number].'</td><td>'.$row[useable_sell_number].'</td><td>'.$row[make_money ].'</td><td>'.$row[switched].'</td><td>'.$row[sell_switched].'</td><td>'.$row[buy_switched].'</td><td>'.$row[stat_date].'</td></tr>';
 	}
 
       jincheng();
