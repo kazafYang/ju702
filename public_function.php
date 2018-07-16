@@ -308,6 +308,7 @@ $result = $conn->query($sql);
            }
 	    //计算单笔交易的盈亏情况
 	   $history_make_money=($begin_point*$row[number]-$row[trade_buy_price]*$row[number])*100;
+	   $history_make_money=round($history_make_money,3);
            $sql="update trade_history set history_make_money=$history_make_money where id=$row[id];";
            $conn->query($sql);	   	    
 	}
