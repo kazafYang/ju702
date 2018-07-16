@@ -307,7 +307,7 @@ $result = $conn->query($sql);
              $conn->query($sql); 
            }
 	    //计算单笔交易的盈亏情况
-	   $history_make_money=$begin_point*$row[number]-$row[trade_buy_price]*$row[number];
+	   $history_make_money=($begin_point*$row[number]-$row[trade_buy_price]*$row[number])*100;
            $sql="update trade_history set history_make_money=$history_make_money where id=$row[id];";
            $conn->query($sql);	   	    
 	}
@@ -560,7 +560,7 @@ $result = $conn->query($sql);
 		  
 	//cut_price卖出开始开始	  
 	if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<80)){
-	  $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 order by id desc;";
+	  $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and $stat_date<'$stat_date' order by id desc;";
           $result = $conn->query($sql);
 	  while($row=mysqli_fetch_array($result)){	
            if($begin_point <= ($row[cut_price]-$row[cut_price]*1/100) and $row[cut_price] > ($row[trade_buy_price]+$row[trade_buy_price]*3/100) ){
