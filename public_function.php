@@ -562,8 +562,9 @@ $result = $conn->query($sql);
 	if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<80)){
 	  $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and $stat_date<'$stat_date' order by id desc;";
           $result = $conn->query($sql);
-	  while($row=mysqli_fetch_array($result)){	
-           if($begin_point <= ($row[cut_price]-$row[cut_price]*1/100) and $row[cut_price] > ($row[trade_buy_price]+$row[trade_buy_price]*3/100) ){
+	  while($row=mysqli_fetch_array($result)){
+	   //故意将比例调高到3.02避免cut_price因为四舍五入取整后造成判断失效的问题，也可以将取出来的数据也取整，但是个人感觉这样更简单一点	  
+           if($begin_point <= ($row[cut_price]-$row[cut_price]*1/100) and $row[cut_price] > ($row[trade_buy_price]+$row[trade_buy_price]*3.02/100) ){
 	   	$trade_type=10;
 		echo  $row[id]."~".$row[cut_price]."~".$begin_point."~".$row[trade_buy_price]."~".$row[trade_buy_price]."~".$row[number]."\n";
 		echo  $code."~".$begin_point."~".$stat_date."\n";  
