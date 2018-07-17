@@ -760,7 +760,7 @@ function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_
 		      $row=mysqli_fetch_row($result);
 		      $trade_id=$row[0]+1;  
 		      $cut_price=$trade_buy_price+($trade_buy_price*3/100);
-		      $cut_price=round($cut_price,3);
+		      //$cut_price=round($cut_price,3);
 		      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price','$cut_price','0');";
 		      echo "buy_action".$sql."\n";
 		      $conn->query($sql);
