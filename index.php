@@ -19,7 +19,7 @@ if ($conn->connect_error) {
     die("defult: " . $conn->connect_error);
 }
 
-    $sql = "select id,code,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,stat_date,history_make_money,cut_price from trade_history order by id desc limit 10;"; //where status=0 and stat_date='$stat_date'
+    $sql = "select id,code,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,stat_date,history_make_money,cut_price from trade_history order by id desc limit 20;"; //where status=0 and stat_date='$stat_date'
     //查询交易历史
     $result = $conn->query($sql);
 	echo '<table border="1"><tr><th>id</th><th>code</th><th>status</th><th>vifi_status</th><th>trade_type</th><th>number</th><th>trade_buy_price</th><th>trade_sell_price</th><th>cut_price</th><th>history_make_money</th><th>stat_date</th><</tr>';
