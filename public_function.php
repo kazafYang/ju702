@@ -576,7 +576,7 @@ $result = $conn->query($sql);
 		mysqli_free_result($result_id);  //释放结果集  
 		echo "trade_id:".$trade_id;	   
 		//插入交易历史  
-		$sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$code','$stat_date','$time_hour','$time_min','0','0','$row[number]','$trade_type','$row[trade_buy_price]','$begin_point','0','$row[id]');";                                                                  
+		$sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$code','$stat_date','$time_hour','$time_min','0','0','$row[number]','$trade_type','$row[trade_buy_price]','$begin_point-0.001','0','$row[id]');";                                                                  
 		echo $sql."cut_price sell 处理了！！！！\n";
 		$conn->query($sql);
 		//核销已经处理的前期订单，避免订单再次进入    
@@ -692,7 +692,7 @@ function sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat
 				  $trade_id=$row[0]+1;   
 				  echo "trade_id:".$trade_id;	   
 				  //插入交易历史  
-				  $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price','0','$connecttion_id');";                                                                  
+				  $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price-0.001','0','$connecttion_id');";                                                                  
 				  echo $sql."\n";
 				  $conn->query($sql);
 				  mysqli_free_result($result_id);  //释放结果集
@@ -731,7 +731,7 @@ function huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$t
 				  $trade_id=$row[0]+1;   
 				  echo "trade_id:".$trade_id;	   
 				  //插入交易历史  
-				  $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price','0','$connecttion_id');";                                                                  
+				  $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price-0.001','0','$connecttion_id');";                                                                  
 				  echo $sql."\n";
 				  $conn->query($sql);
 				  mysqli_free_result($result_id);  //释放结果集
@@ -761,7 +761,7 @@ function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_
 		      $trade_id=$row[0]+1;  
 		      $cut_price=$trade_buy_price+($trade_buy_price*3/100);
 		      //$cut_price=round($cut_price,3);
-		      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price','$cut_price','0');";
+		      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price+0.001','$trade_sell_price','$cut_price','0');";
 		      echo "buy_action".$sql."\n";
 		      $conn->query($sql);
 		 }
