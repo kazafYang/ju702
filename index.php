@@ -35,7 +35,7 @@ if ($conn->connect_error) {
   $buy_one_price=$pieces[6];  //买一价	  
   $sell_one_price=$pieces[7]-0.001; //卖一价 
   $stat_date=$pieces[30];
-  $stat_date="'".$stat_date."'";
+  $stat_date='"'.$stat_date.'"';
   echo $stat_date;
   $pieces = explode(":", $pieces[31]);    
   $time_hour=$pieces[0];
