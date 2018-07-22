@@ -23,7 +23,7 @@ if ($conn->connect_error) {
   function machining_price ($code) 
   {
  // echo "comming machining_price\n";
-  //global $stat_date,$time_hour,$time_min,$time_second,$begin_point,$code,$buy_one_price,$sell_one_price;
+  global $stat_date,$time_hour,$time_min;
   if ($code<500000) {
   $url='http://hq.sinajs.cn/list=sz'.$code; 
   }  else{
@@ -64,7 +64,7 @@ if ($conn->connect_error) {
 	$stat_date=date('Y-m-d');
 	$stat_hour=date('h');
 	$stat_min=date('i');	
-	$FUrl="http://www.ju70.com/page/update.php?type=4&sql=insert~into~trade_history~(id,code,status,trade_type,number,trade_buy_price,trade_sell_price,stat_date,stat_time_hour,stat_time_min,trade_number,cut_price,connecttion_id)~values~(".trade_history($conn).",$row[code],0,11,$row[number],$trade_price,$trade_price,15,16,17,0,0,$row[id].");";
+	$FUrl="http://www.ju70.com/page/update.php?type=4&sql=insert~into~trade_history~(id,code,status,trade_type,number,trade_buy_price,trade_sell_price,stat_date,stat_time_hour,stat_time_min,trade_number,cut_price,connecttion_id)~values~(".trade_history($conn).",$row[code],0,11,$row[number],$trade_price,$trade_price,$stat_date,$time_hour,$time_min,0,0,$row[id]);";
         //echo $FUrl;
 	$FUrl_a="<a href='$FUrl'>立即操作</a>";	
 	echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[status].'</td><td>'.$row[vifi_status].'</td><td>'.$row[trade_type].'</td><td>'.$row[number].'</td><td>'.$row[trade_buy_price].'</td><td>'.$row[trade_sell_price].'</td><td>'.$row[cut_price].'</td><td>'.$row[history_make_money].'</td><td>'."$FUrl_a".'</td><td>'.$row[stat_date].'</td></tr>';
