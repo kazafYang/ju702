@@ -6,7 +6,7 @@
 <p>
 <form action="/page/update.php?type=4" method="post">
 
-<p>SQL: <input type="text" name="sql" /></p>
+<p>SQL: <input type="text" name="程式" /></p>
 
 <p><input type="submit" value="提交"></p>
 </form>
@@ -14,11 +14,39 @@
 <?php
 include 'config_inc.php';
 $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);
+	
 // Check connection
 if ($conn->connect_error) {
     die("defult: " . $conn->connect_error);
 }
+	
+  function machining_price () 
+  {
+  echo "comming machining_price\n";
+  //global $stat_date,$time_hour,$time_min,$time_second,$begin_point,$code,$buy_one_price,$sell_one_price;
+  if ($code<500000) {
+  $url='http://hq.sinajs.cn/list=sz'.$code; 
+  }  else{
+  $url='http://hq.sinajs.cn/list=sh'.$code; 
+  } 
 
+  $html = file_get_contents($url); 
+  $pieces = explode(",", $html);
+  $begin_point=$pieces[3];
+  $buy_one_price=$pieces[6];  //买一价
+  $sell_one_price=$pieces[7]; //卖一价 
+  $stat_date=$pieces[30];
+  $pieces = explode(":", $pieces[31]);    
+  $time_hour=$pieces[0];
+  $time_min=$pieces[1];
+  $time_second=$pieces[2];
+  return $sell_one_price;	  
+  } 
+	
+	echo "这是我的测试代码：".machining_price($code=159915);
+	
+	
+	
     $sql = "select id,code,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,stat_date,history_make_money,cut_price from trade_history order by id desc limit 20;"; //where status=0 and stat_date='$stat_date'
     //查询交易历史
     $result = $conn->query($sql);
