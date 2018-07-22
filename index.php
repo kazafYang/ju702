@@ -20,20 +20,19 @@ if ($conn->connect_error) {
     die("defult: " . $conn->connect_error);
 }
 	
-  function machining_price () 
+  function machining_price ($code) 
   {
-  echo "comming machining_price\n";
+ // echo "comming machining_price\n";
   //global $stat_date,$time_hour,$time_min,$time_second,$begin_point,$code,$buy_one_price,$sell_one_price;
   if ($code<500000) {
   $url='http://hq.sinajs.cn/list=sz'.$code; 
   }  else{
   $url='http://hq.sinajs.cn/list=sh'.$code; 
   } 
-
   $html = file_get_contents($url); 
   $pieces = explode(",", $html);
   $begin_point=$pieces[3];
-  $buy_one_price=$pieces[6];  //买一价
+  $buy_one_price=$pieces[6];  //买一价	  
   $sell_one_price=$pieces[7]; //卖一价 
   $stat_date=$pieces[30];
   $pieces = explode(":", $pieces[31]);    
@@ -43,16 +42,31 @@ if ($conn->connect_error) {
   return $sell_one_price;	  
   } 
 	
-	echo "这是我的测试代码：".machining_price($code=159915);
+//	echo "这是我的测试代码：".machining_price($code=159915);
+  function trade_history($conn)  
+  {
+    $sql = "select * from trade_history order by id desc limit 1;"; //where status=0 and stat_date='$stat_date'
+    $result = $conn->query($sql);
+    $row = $result->fetch_assoc();
+   // $a= $row[id];
+   // echo $a;	
+    return $row[id];	  
+  }	
+ //   echo trade_history($conn);
 	
-	
-	
-    $sql = "select id,code,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,stat_date,history_make_money,cut_price from trade_history order by id desc limit 20;"; //where status=0 and stat_date='$stat_date'
+    $sql = "select * from trade_history order by id desc limit 20;"; //where status=0 and stat_date='$stat_date'
     //查询交易历史
     $result = $conn->query($sql);
 	echo '<table border="1"><tr><th>id</th><th>code</th><th>status</th><th>vifi_status</th><th>trade_type</th><th>number</th><th>trade_buy_price</th><th>trade_sell_price</th><th>cut_price</th><th>history_make_money</th><th>操作</th><th>stat_date</th><</tr>';
 	while($row=mysqli_fetch_array($result)){
-	echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[status].'</td><td>'.$row[vifi_status].'</td><td>'.$row[trade_type].'</td><td>'.$row[number].'</td><td>'.$row[trade_buy_price].'</td><td>'.$row[trade_sell_price].'</td><td>'.$row[cut_price].'</td><td>'.$row[history_make_money].'</td><td>'."<a href='http://www.baidu.com'>立即操作</a>".'</td><td>'.$row[stat_date].'</td></tr>';
+        $trade_price=machining_price($code=$row[code]);
+	//echo $trade_price;
+	$stat_date=date('Y-m-d');
+	$stat_hour=date('h');
+	$stat_min=date('i');	
+	$FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=insert~into~trade_history~(id,code,status,trade_type,number,trade_buy_price,trade_sell_price,stat_date,stat_time_hour,stat_time_min,trade_number,cut_price)~values~(".trade_history($conn).",$row[code],0,11,$row[number],$trade_price,$trade_price,'$stat_date','$stat_hour','$stat_min',0,0);";
+        //echo $FUrl;    
+	echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[status].'</td><td>'.$row[vifi_status].'</td><td>'.$row[trade_type].'</td><td>'.$row[number].'</td><td>'.$row[trade_buy_price].'</td><td>'.$row[trade_sell_price].'</td><td>'.$row[cut_price].'</td><td>'.$row[history_make_money].'</td><td>'."<a href='$FUrl'>立即操作</a>".'</td><td>'.$row[stat_date].'</td></tr>';
 	}
 
     $sql = "select id,code,switched,sell_switched,buy_switched,stat_date,useable_money,total_money,make_money,total_number,useable_sell_number from hive_number order by id desc limit 8;"; 
