@@ -65,8 +65,9 @@ if ($conn->connect_error) {
 	$stat_hour=date('h');
 	$stat_min=date('i');	
 	$FUrl="http://www.ju70.com/page/update.php?type=4&sql=insert~into~trade_history~(id,code,status,trade_type,number,trade_buy_price,trade_sell_price,stat_date,stat_time_hour,stat_time_min,trade_number,cut_price)~values~(".trade_history($conn).",$row[code],0,11,$row[number],$trade_price,$trade_price,'$stat_date','$stat_hour','$stat_min',0,0);";
-        //echo $FUrl;    
-	echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[status].'</td><td>'.$row[vifi_status].'</td><td>'.$row[trade_type].'</td><td>'.$row[number].'</td><td>'.$row[trade_buy_price].'</td><td>'.$row[trade_sell_price].'</td><td>'.$row[cut_price].'</td><td>'.$row[history_make_money].'</td><td>'."<a href='$FUrl'>立即操作</a>".'</td><td>'.$row[stat_date].'</td></tr>';
+        //echo $FUrl;
+	$FUrl_a="<a href='$FUrl'>立即操作</a>"	
+	echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[status].'</td><td>'.$row[vifi_status].'</td><td>'.$row[trade_type].'</td><td>'.$row[number].'</td><td>'.$row[trade_buy_price].'</td><td>'.$row[trade_sell_price].'</td><td>'.$row[cut_price].'</td><td>'.$row[history_make_money].'</td><td>'."$FUrl_a".'</td><td>'.$row[stat_date].'</td></tr>';
 	}
 
     $sql = "select id,code,switched,sell_switched,buy_switched,stat_date,useable_money,total_money,make_money,total_number,useable_sell_number from hive_number order by id desc limit 8;"; 
