@@ -33,7 +33,7 @@ if ($conn->connect_error) {
   $pieces = explode(",", $html);
   $begin_point=$pieces[3];
   $buy_one_price=$pieces[6];  //买一价	  
-  $sell_one_price=$pieces[7]; //卖一价 
+  $sell_one_price=$pieces[7]-0.001; //卖一价 
   $stat_date=$pieces[30];
   $pieces = explode(":", $pieces[31]);    
   $time_hour=$pieces[0];
@@ -50,7 +50,7 @@ if ($conn->connect_error) {
     $row = $result->fetch_assoc();
    // $a= $row[id];
    // echo $a;	
-    return $row[id];	  
+    return $row[id]+1;	  
   }	
  //   echo trade_history($conn);
 	
