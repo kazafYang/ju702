@@ -27,25 +27,25 @@ if ($conn->connect_error) {
 	      {
 	       case "volvo":
 	       	      
-               $sql = "select * from trade_history where status=1 and vifi_status=1 and stat_date='$stat_date' order by id desc;"; 
+               $sql = "select * from trade_history where  stat_date='$stat_date' order by id desc;"; 
 	       break;
 	       case "saab":
 	       $stat_date=date("Y-m-d",strtotime("-7 day"));	      
-               $sql = "select * from trade_history where status=1 and vifi_status=1 and stat_date>='$stat_date' and stat_date<='$end_date' order by id desc;"; 
+               $sql = "select * from trade_history where  stat_date>='$stat_date' and stat_date<='$end_date' order by id desc;"; 
 
 	       break;
 	       case "opel":
 	       $stat_date=date("Y-m-d",strtotime("-31 day"));
-               $sql = "select * from trade_history where status=1 and vifi_status=1 and stat_date>='$stat_date' and stat_date<='$end_date' order by id desc;"; 
+               $sql = "select * from trade_history where  stat_date>='$stat_date' and stat_date<='$end_date' order by id desc;"; 
 	       
 	       break;
 	       case "audi":
 	       $stat_date=date("Y-m-d",strtotime("-90 day"));
-               $sql = "select * from trade_history where status=1 and vifi_status=1 and stat_date>='$stat_date-90' and stat_date<='$end_date' order by id desc;"; 
+               $sql = "select * from trade_history where  stat_date>='$stat_date-90' and stat_date<='$end_date' order by id desc;"; 
 	      
 	       break;
 	       default:
-               $sql = "select * from trade_history where status=1 and vifi_status=1 and stat_date='$stat_date' order by id desc;"; 
+               $sql = "select * from trade_history where  stat_date='$stat_date' order by id desc;"; 
 	       } 	
 	
     $sql = $sql;
