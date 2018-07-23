@@ -5,6 +5,7 @@ $type=$_GET['type'];
 $id=$_GET['id'];                                                                                                                                          
 $code=$_GET['code'];
 $sql_update=$_GET['sql'];
+$trade_update==$_GET['trade_update'];
 if($sql_update==""){
 $sql_update=$_POST['sql'];
 }
@@ -48,7 +49,15 @@ $result = $conn->query($sql);
 //验证实际插入sql可能存在问题，还是需要组合才行
   elseif($type==5){
   $sql = "$sql_update";
+  $update_update=$trade_update
   if ($conn->query($sql) === TRUE) 
+   {
+   echo "200";
+     }
+    else {
+    echo "Error: " . $sql . $conn->error."\n";
+}
+  if ($conn->query($update_update) === TRUE) 
    {
    echo "200";
      }
