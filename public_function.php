@@ -1,4 +1,4 @@
-	  <?php
+<?php
 	  function machining_price () 
 	  {
 	  echo "comming machining_price\n";
@@ -19,7 +19,16 @@
 	  $time_hour=$pieces[0];
 	  $time_min=$pieces[1];
 	  $time_second=$pieces[2];
-	  } 
+	  }
+
+	  function table_id ($conn,$table_name) {
+	    $sql = "select id from $table_name order by id desc limit 1;"; //where status=0 and stat_date='$stat_date'
+	    $result = $conn->query($sql);
+	    $row = $result->fetch_assoc();
+	    return $row[id]+1;
+            mysqli_free_result($result);  //释放结果集		  
+	  }
+
 	  function sleep_time () {
 	  echo "comming sleep_time\n";
 	  global $time_hour,$time_min;  
@@ -383,12 +392,15 @@ $result = $conn->query($sql);
 	      $row=mysqli_fetch_row($result);
 	      if($row[0]==0){
 	      //拿取hive_number表数据条数获得插入的下一个id
+	      $hive_number_id=table_id($conn,"hive_number");
+	      /*	      
 	      $sql = "select id from hive_number order by id desc limit 1;";    
 	      $result=mysqli_query($conn,$sql);
 	      $row=mysqli_fetch_row($result);
 	      $hive_number_id=$row[0]+1;
 	      mysqli_free_result($result);  //释放结果集
 	      //拿取hive_number的基础属性
+	      */
 	      $sql = "select switched,sell_switched,buy_switched,total_money,useable_money,total_number,useable_sell_number,total_sell_number,market_value,cost_price,make_money from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
 	      $result = $conn->query($sql);
 	      $row = $result->fetch_assoc();
@@ -426,7 +438,7 @@ $result = $conn->query($sql);
 	      if($trade_min15_k>=85 or $trade_min15_d>=80)
 	    //  if($trade_min15_k>=1 or $trade_min15_d>=1)	      
 	      {
-		echo "comming -sell"."\n";	 
+		echo "comming -sell-15\n";	 
 		$trade_type=1;    
 		sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  		      
 	      } 
@@ -434,6 +446,7 @@ $result = $conn->query($sql);
 	  //30min  
 	     if($trade_min30_k>=85 or $trade_min30_d>=80)	 
 	     {
+	        echo "comming -sell-30\n";
 		$trade_type=2;    
 		sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  		     
 	      } 
@@ -441,12 +454,14 @@ $result = $conn->query($sql);
 	   //60分钟          
 	     if($trade_min60_k>=85 or $trade_min60_d>=80)
 	     {
+	        echo "comming -sell-60\n";
 		$trade_type=3;    
 		sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  		     
 	      }
 		    //120分钟          
 	     if($trade_min120_k>=85 or $trade_min120_d>=80)	 
 	     {
+	     	echo "comming -sell-120\n";
 		$trade_type=4;    
 		sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  		     
 	      }    
@@ -458,23 +473,27 @@ $result = $conn->query($sql);
 		echo "comming switch-buy~~~~~day--kdj~~~~"."\n"; 
 		  //15分钟条件严格一点
 	    if ($trade_min15_k <=15 or $trade_min15_d <=20){
-            //if ($trade_min15_k <=75 or $trade_min15_d <70){		    
+            //if ($trade_min15_k <=75 or $trade_min15_d <70){
+	       echo "comming switch-buy~~~~~day-kdj-min15~~~~"."\n"; 
 	       $trade_type=21; 
 	       $trade_bite=$type21;	    
 	       buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite);
 	      }  
 	    if ($trade_min30_k <=15 or $trade_min30_d <=20){
+	       echo "comming switch-buy~~~~~day-kdj-min30~~~~"."\n"; 
 	       $trade_type=22; 
 	       $trade_bite=$type22;	    
 	       buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite);
 	      }   
 	    if ($trade_min60_k <=15 or $trade_min60_d <=20){ 
+	       echo "comming switch-buy~~~~~day-kdj-min60~~~~"."\n"; 
 	       $trade_type=23; 
 	       $trade_bite=$type23;	    
 	       buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite);
 	      }
 		  //120日线超卖
 	      if ($trade_min120_k <=15 or $trade_min120_d <=20){
+	       echo "comming switch-buy~~~~~day-kdj-min120~~~~"."\n"; 
 	       $trade_type=24; 
 	       $trade_bite=$type24;	    
 	       buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite);
@@ -485,31 +504,35 @@ $result = $conn->query($sql);
 		//15分钟回转使用死叉交易卖出 switch
 		echo "comming switch-rel~~~~~~~~~"."\n";
 	    if(($trade_min15_k>=75 or $trade_min15_d >= 75) and $trade_min15_j < $trade_min15_k and $trade_min15_j < $trade_min15_d and $useable_sell_number>1){
-		echo "comming -rel-sell~~~~~~~~~"."\n";
+		echo "comming -rel-sell~~dead~~~~~~~"."\n";
 		$trade_type=5;    
 		huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);     
 	  }    
 		  //回转15分钟超买条件
 	       if($trade_min15_k>=80 or $trade_min15_d >= 80){
-		echo "comming -rel-sell~~~~~~~~~"."\n";
+		echo "comming -rel-sell~~min15~~~~~~~"."\n";
 		$trade_type=6;    
 		huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  		       
 	  }	  
 	     if($trade_min30_k >= 80  or $trade_min30_d >= 80){
+	        echo "comming -rel-sell~~min30~~~~~~~"."\n";
 		$trade_type=7;    
 		huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  
 		  }
 	    if($trade_min60_k >= 80  or $trade_min60_d >= 80){
+	        echo "comming -rel-sell~~min60~~~~~~~"."\n";
 		$trade_type=8;    
 		huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  
 		  }
 	      if($trade_min120_k >= 80  or $trade_min120_d >= 80){
+	        echo "comming -rel-sell~~min120~~~~~~"."\n";
 		$trade_type=9;    
 		huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  
 		  }	  
 
 		//回转60分钟买入  
 	      if ($trade_min60_k <20 or $trade_min60_d <20 and ($trade_day_k<65 and $trade_day_d<60)){
+	       echo "comming -rel-buy~~min60~~~~~~"."\n";  
 	       $trade_type=25; 
 	       $trade_bite=$type25;	    
 	       buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite);
@@ -551,6 +574,7 @@ $result = $conn->query($sql);
 	      //发出回转交易买入信号，向交易库插入交易数据信息，回转交易买入也需要一个trade_type；  
 		echo $loser_price."comming switch-rel-buy~~~~~~~~~".$trade_buy_price."\n"; 
 	     if ($loser_price>0 and $buy_switched==1 and $useable_money>1000 and ($trade_day_k<80 and $trade_day_d<75)){
+	       echo "coming huizhuan_buy\n";
 	       $trade_type=26; 
 	       $trade_bite=$type26;	    
 	       buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite);  
@@ -568,12 +592,15 @@ $result = $conn->query($sql);
            if($begin_point <= ($row[cut_price]-$row[cut_price]*1/100) and $row[cut_price] > ($row[trade_buy_price]+$row[trade_buy_price]*3.02/100) ){
 	   	$trade_type=10;
 		echo  $row[id]."~".$row[cut_price]."~".$begin_point."~".$row[trade_buy_price]."~".$row[trade_buy_price]."~".$row[number]."\n";
-		echo  $code."~".$begin_point."~".$stat_date."\n";  
+		echo  $code."~".$begin_point."~".$stat_date."\n";
+		$trade_id=table_id($conn,"trade_history");
+		/*   
 		$sql = "select id from trade_history order by id desc limit 1;";    
 		$result_id=mysqli_query($conn,$sql);
 		$row_id=mysqli_fetch_row($result_id);
 		$trade_id=$row_id[0]+1; 
-		mysqli_free_result($result_id);  //释放结果集  
+		mysqli_free_result($result_id);  //释放结果集
+		*/
 		echo "trade_id:".$trade_id;	   
 		//插入交易历史  
 		$sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$code','$stat_date','$time_hour','$time_min','0','0','$row[number]','$trade_type','$row[trade_buy_price]','$begin_point-0.001','0','$row[id]');";                                                                  
@@ -685,11 +712,14 @@ function sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat
 			   $number=$row[number];   
 			   echo "connecttion_id:"."$connecttion_id\n";
 			   if($begin_point>$row[trade_buy_price]){
-				  echo "达到条件触发卖出操作\n";   
+				  echo "达到条件触发卖出操作\n";
+				  $trade_id=table_id($conn,"trade_history"); 
+				  /* 
 				  $sql = "select id from trade_history order by id desc limit 1;";    
 				  $result_id=mysqli_query($conn,$sql);
 				  $row=mysqli_fetch_row($result_id);
-				  $trade_id=$row[0]+1;   
+				  $trade_id=$row[0]+1;
+				  */
 				  echo "trade_id:".$trade_id;	   
 				  //插入交易历史  
 				  $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price-0.001','0','$connecttion_id');";                                                                  
@@ -724,11 +754,14 @@ function huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$t
 			   $cut_price=$trade_buy_price+$trade_buy_price*3/100;
 			   echo "connecttion_id:"."$connecttion_id\n";
 			   if($begin_point>$row[trade_buy_price] and $huizhuan_sell_number==0){
-				  echo "达到条件触发卖出操作\n";   
+				  echo "达到条件触发卖出操作\n";
+				  $trade_id=table_id($conn,"trade_history"); 
+				  /* 
 				  $sql = "select id from trade_history order by id desc limit 1;";    
 				  $result_id=mysqli_query($conn,$sql);
 				  $row=mysqli_fetch_row($result_id);
-				  $trade_id=$row[0]+1;   
+				  $trade_id=$row[0]+1;
+				  */
 				  echo "trade_id:".$trade_id;	   
 				  //插入交易历史  
 				  $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price-0.001','0','$connecttion_id');";                                                                  
@@ -755,10 +788,13 @@ function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_
 	      if($row[0]==0 and $useable_money>=($number*100*$trade_buy_price)){
 	      //if($row[0]==0 or $useable_money>=($number*100*$trade_buy_price)){	      
 		      echo "begin action~~~~~~~~\n";
+		      $trade_id=table_id($conn,"trade_history");
+		      /*
 		      $sql = "select id from trade_history order by id desc limit 1;";    
 		      $result=mysqli_query($conn,$sql);
 		      $row=mysqli_fetch_row($result);
-		      $trade_id=$row[0]+1;  
+		      $trade_id=$row[0]+1; 
+		      */
 		      $cut_price=$trade_buy_price+($trade_buy_price*3/100);
 		      //$cut_price=round($cut_price,3);
 		      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price+0.001','$trade_sell_price','$cut_price','0');";
@@ -786,7 +822,7 @@ function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_
 	  machining_price();
 	  $time_out_now=($time_hour*3600)+($time_min*60);
 	    echo "$max--$begin_point\n"; 
-	    echo $stat_time_min."@@@@@@@@@@@@@\n";	  
+	    echo $stat_time_min."-stat_time_min\n";	  
 	  if(($time_min%15==0) and $time_min<>$stat_time_min){
 	  echo "***************************";
 	  break;
