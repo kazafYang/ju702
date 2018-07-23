@@ -49,7 +49,7 @@ $result = $conn->query($sql);
 //验证实际插入sql可能存在问题，还是需要组合才行
   elseif($type==5){
   $sql = "$sql_update";
-  $update_update=$trade_update
+  $update_update=$trade_update;
   echo "################sql:".$sql;
   echo "################update_update:".$update_update;  
   if ($conn->query($sql) === TRUE) 
