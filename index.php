@@ -57,7 +57,7 @@ if ($conn->connect_error) {
   }	
  //   echo trade_history($conn);
 	
-    $sql = "select * from trade_history where trade_type>20 and status=0 order by id desc;"; //where status=0 and stat_date='$stat_date'
+    $sql = "select * from trade_history where trade_type>20 and vifi_status=0 order by id desc;"; //where status=0 and stat_date='$stat_date'
     //查询未交易订单
     $result = $conn->query($sql);
 	echo '<table border="1"><tr><th>id</th><th>code</th><th>status</th><th>vifi_status</th><th>trade_type</th><th>number</th><th>trade_buy_price</th><th>trade_sell_price</th><th>cut_price</th><th>history_make_money</th><th>操作</th><th>stat_date</th><</tr>';
