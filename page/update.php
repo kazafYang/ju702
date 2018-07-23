@@ -45,4 +45,15 @@ $result = $conn->query($sql);
     echo "Error: " . $sql . $conn->error."\n";
 }
 }
+//验证实际插入sql可能存在问题，还是需要组合才行
+  elseif($type==5){
+  $sql = "$sql_update";
+  if ($conn->query($sql) === TRUE) 
+   {
+   echo "200";
+     }
+    else {
+    echo "Error: " . $sql . $conn->error."\n";
+}
+}
 ?>
