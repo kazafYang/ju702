@@ -64,7 +64,7 @@ if ($conn->connect_error) {
         $trade_price=machining_price($code=$row[code]);
 	//手动干预
 	$trade_id=trade_history($conn);	
-	$FUrl="http://www.ju70.com/page/update.php?type=4&sql=insert~into~trade_history~(id,code,status,trade_type,number,trade_buy_price,trade_sell_price,stat_date,stat_time_hour,stat_time_min,trade_number,cut_price,connecttion_id)~values~(".$trade_id.",$row[code],0,11,$row[number],$trade_price,$trade_price,$stat_date,$time_hour,$time_min,0,0,$row[id]);";
+	$FUrl="http://www.ju70.com/page/update.php?type=5&sql=insert~into~trade_history~(id,code,status,trade_type,number,trade_buy_price,trade_sell_price,stat_date,stat_time_hour,stat_time_min,trade_number,cut_price,connecttion_id)~values~(".$trade_id.",$row[code],0,11,$row[number],$trade_price,$trade_price,$stat_date,$time_hour,$time_min,0,0,$row[id]);";
         $trade_update="&trade_update=update~trade_history~set~status=1,vifi_status=1,connecttion_id=$trade_id~where~id=$row[id];";
 	//echo $FUrl;
 	$FUrl_a="<a href='$FUrl'.$trade_update>立即操作</a>";	
