@@ -2,6 +2,15 @@
 <head>
 </head>
 <body>
+<form action="" method="get">
+<select name="select_date">
+  <option value ="volvo">当日</option>
+  <option value ="saab">一周</option>
+  <option value="opel">一月</option>
+  <option value="audi">三月</option>
+</select>
+  <input type="submit" value="Submit" />
+</form>
 <?php
 include 'config_inc.php';
 $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);
@@ -9,6 +18,8 @@ $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_
 if ($conn->connect_error) {
     die("defult: " . $conn->connect_error);
 }
+    $select_date = $_GET["select_date"];
+    echo $select_date."@@@@@@@@@@@@@@@@@@@\n"	
     $sql = "select * from trade_history where status=1 and vifi_status=1 order by id desc;"; //where status=0 and stat_date='$stat_date'
     //查询已交易完成订单
     $result = $conn->query($sql);
