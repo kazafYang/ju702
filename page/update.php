@@ -50,6 +50,8 @@ $result = $conn->query($sql);
   elseif($type==5){
   $sql = "$sql_update";
   $update_update=$trade_update
+  echo "################sql:".$sql;
+  echo "################update_update:".$update_update;  
   if ($conn->query($sql) === TRUE) 
    {
    echo "200";
