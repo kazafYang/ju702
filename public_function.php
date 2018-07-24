@@ -326,7 +326,7 @@ $result = $conn->query($sql);
 
 	function analyse () {
 	    echo "comming analyse"."\n";
-	    global $table_name,$code,$conn,$begin_point,$stat_date,$time_hour,$time_min;
+	    global $table_name,$code,$conn,$begin_point,$stat_date,$time_hour,$time_min,$useable_money;
 	      //五日十日均线数据计算	
 	      $sql = "select avg(now_price) from (select now_price from $table_name order by id desc limit 0,80) as a;";    
 	      $result=mysqli_query($conn,$sql);
@@ -470,11 +470,11 @@ $result = $conn->query($sql);
 
 	    //buy,买入开关限制，限制可用金额不足的情况，和标的开关关闭的情况，关闭 switch=0；
 	  if($useable_money>1000 and $buy_switched==1 and ($trade_day_k < 20 and $trade_day_d < 20)){
-	  //if($useable_money>10 and $buy_switched==1 and ($trade_day_k <= 70 and $trade_day_d <= 70)){
-		echo "comming switch-buy~~~~~day--kdj~~~~"."\n"; 
+	  //if($useable_money>10 and $buy_switched==1 and ($trade_day_k <= 90 and $trade_day_d <= 90)){
+		echo "comming switch-buy~~~~~day--kdj~~~~$useable_money"."\n"; 
 		  //15分钟条件严格一点
 	    if ($trade_min15_k <=15 or $trade_min15_d <=20){
-            //if ($trade_min15_k <=75 or $trade_min15_d <70){
+            //if ($trade_min15_k <=95 or $trade_min15_d <90){
 	       echo "comming switch-buy~~~~~day-kdj-min15~~~~"."\n"; 
 	       $trade_type=21; 
 	       $trade_bite=$type21;	    
@@ -777,11 +777,13 @@ function huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$t
 }
 
 function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite) {
+      global $useable_money;
       echo "coming buy_action~~~~".$trade_bite."\n";
       $number=11/$trade_buy_price*$trade_bite;
       $number=round($number);	    
       //$sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=$trade_type;";
       $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and trade_type=$trade_type;";
+      echo $sql."~~~~~~~~$useable_money~~~~~~$number~~~~$trade_buy_price\n";
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);    
 	      if($row[0]==0 and $useable_money>=($number*100*$trade_buy_price)){
