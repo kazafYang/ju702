@@ -1,4 +1,5 @@
 <?php
+include 'common/logs.php';
   function machining_price () 
   {
   $log -> log_work("comming machining_price\n");  	  
