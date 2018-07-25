@@ -7,7 +7,7 @@
 <a href="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/index2.php">过往记录</a>
 <form action="/page/update.php?type=4" method="post">
 
-<p>SQL: <input type="text" name="程式" /></p>
+<p>SQL: <input type="text" name="sql" /></p>
 
 <p><input type="submit" value="提交"></p>
 </form>
