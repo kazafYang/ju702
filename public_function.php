@@ -1,7 +1,7 @@
 <?php
   function machining_price () 
   {
-  echo "comming machining_price\n";
+  $log -> log_work("comming machining_price\n");  	  
   global $stat_date,$time_hour,$time_min,$time_second,$begin_point,$code,$buy_one_price,$sell_one_price;
   if ($code<500000) {
   $url='http://hq.sinajs.cn/list=sz'.$code; 
@@ -56,14 +56,14 @@ function sleep_time () {
   $k=2/3*$min15_k+1/3*$rsv;
   $d=2/3*$min15_d+1/3*$k;
   $j=3*$k-2*$d;
-  echo "15kdj:$k,$d,$j\n";
+  $log -> log_work("15kdj:$k,$d,$j\n");  	  
   $sql="update $table_name set min15_k='$k' , min15_d='$d' , min15_j='$j' order by id desc limit 1 ; ";
      if ($conn->query($sql) === TRUE) 
      {
-      echo "15kdjupdate:update\n";
+      $log -> log_work("15kdjupdate:update\n");	     
        } 
     else {
-      echo "maxError: " . $sql . $conn->error."\n";
+      $log -> log_work("maxError: " . $sql . $conn->error."\n"); 	    
   }  
   }
   function kdjthirty () {
@@ -96,7 +96,7 @@ function sleep_time () {
   $k=2/3*$min30_k+1/3*$rsv;
   $d=2/3*$min30_d+1/3*$k;
   $j=3*$k-2*$d;
-  echo "30kdj:$k,$d,$j\n";
+  $log -> log_work("30kdj:$k,$d,$j\n");	  
   $sql="update $table_name set min30_k='$k' , min30_d='$d' , min30_j='$j' order by id desc limit 1 ; ";
      if ($conn->query($sql) === TRUE) 
      {
