@@ -527,6 +527,7 @@ function analyse () {
 
 	//回转60分钟买入  
       if ($trade_min60_k <20 or $trade_min60_d <20 and ($trade_day_k<65 and $trade_day_d<60)){
+       echo "huizhuan_buy:60mink=$trade_min60_k,60mind=$trade_min60_d,dayk:$trade_day_k,dayd=$trade_day_d\n";	      
        echo "comming -rel-buy~~min60~~~~~~"."\n";  
        $trade_type=25; 
        $trade_bite=$type25;	    
