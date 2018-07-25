@@ -413,7 +413,7 @@ function analyse () {
       } 
 	  else{
 	//拿取hive_number的基础属性
-      echo "当日hive_number已经存在，开始获取最新hive_number数据"		  
+      echo "当日hive_number已经存在，开始获取最新hive_number数据";		  
       $sql = "select switched,sell_switched,buy_switched,total_money,useable_money,total_number,useable_sell_number,total_sell_number,cost_price from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
       $result = $conn->query($sql);
       $row = $result->fetch_assoc();
