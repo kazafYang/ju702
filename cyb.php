@@ -1,6 +1,7 @@
 <?php
 include 'config_inc.php';
 include 'public_function.php';
+include 'common/logs.php';
 $table_name="point_number";
 $code="159915";
 $begin_point="";
@@ -25,6 +26,7 @@ machining_price();
     sleep_time();     
     }elseif ($time_hour>="15") {
       echo "3point!\n";
+      $Boy -> log_work("3point!\n");  
       exit(0);    
     }
   
