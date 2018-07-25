@@ -40,9 +40,9 @@ machining_price();
    $row[id]=$row[id]+1;   
    $sql = "insert into $table_name (id,stat_date,stat_time_hour,stat_time_min,begin_point) VALUES ('$row[id]','$stat_date','$time_hour','$time_min','$begin_point');";    
    if ($conn->query($sql) === TRUE) {
-    echo "new inser into\n";
+    $log -> log_work("new inser into\n");    
 } else {
-    echo "Error: " . $sql . $conn->error."\n";
+    $log -> log_work("Error: " . $sql . $conn->error."\n");   
 }
    nine_count();     
     }
