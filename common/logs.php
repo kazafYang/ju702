@@ -1,6 +1,6 @@
 <?php
-$Boy = new log();
-    class log{
+$log = new logs();
+    class logs{
         var $time;
          
         function log_work($text){
