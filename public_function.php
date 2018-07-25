@@ -410,33 +410,33 @@ function analyse () {
     if($useable_sell_number>1 and $sell_switched==1 and ($trade_day_k >= 85 or $trade_day_d >= 80)){ 
     //if($useable_sell_number>=1 and $sell_switched==1 and ($trade_day_k >= 1 or $trade_day_d >= 1)){ 		    
       //超买情况下的15分钟卖出指标
-      echo "comming switch-sell"."\n";
-      echo "test##################".$trade_min15_k."########".$trade_min15_d;	    
+      echo "comming daykdj-sell"."\n";
+      echo "test##################".$trade_min15_k."########".$trade_min15_d."\n";	    
       if($trade_min15_k>=85 or $trade_min15_d>=80)
     //  if($trade_min15_k>=1 or $trade_min15_d>=1)	      
       {
-	echo "comming -sell-15\n";	 
+	echo "comming daykdj-sell-15\n";	 
 	$trade_type=1;    
 	sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  		      
       } 
   //30min  
      if($trade_min30_k>=85 or $trade_min30_d>=80)	 
      {
-	echo "comming -sell-30\n";
+	echo "comming daykdj-sell-30\n";
 	$trade_type=2;    
 	sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  		     
       } 
    //60分钟          
      if($trade_min60_k>=85 or $trade_min60_d>=80)
      {
-	echo "comming -sell-60\n";
+	echo "comming daykdj-sell-60\n";
 	$trade_type=3;    
 	sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  		     
       }
 	    //120分钟          
      if($trade_min120_k>=85 or $trade_min120_d>=80)	 
      {
-	echo "comming -sell-120\n";
+	echo "comming daykdj-sell-120\n";
 	$trade_type=4;    
 	sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  		     
       }    
@@ -473,40 +473,46 @@ function analyse () {
        buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite);
       }  	  
   }    //日线超卖完成
-  if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<80)){
+echo "回转sell开始\n";	  
+  if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<80) and $useable_sell_number>1){
     //回转交易策略的位置,记录回转交易的标志是数据库字段status=2
 	//15分钟回转使用死叉交易卖出 switch
-	echo "comming switch-rel~~~~~~~~~"."\n";
-    if(($trade_min15_k>=75 or $trade_min15_d >= 75) and $trade_min15_j < $trade_min15_k and $trade_min15_j < $trade_min15_d and $useable_sell_number>1){
-	echo "comming -rel-sell~~dead~~~~~~~"."\n";
+	echo "comming huizhuan-sell~~~~~~~~~"."\n";
+    if(($trade_min15_k>=75 or $trade_min15_d >= 75) and $trade_min15_j < $trade_min15_k and $trade_min15_j < $trade_min15_d){
+	echo "comming huizhuan-rel-sell~~dead~~~~~~~"."\n";
 	$trade_type=5;    
 	huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);     
   }    
 	  //回转15分钟超买条件
        if($trade_min15_k>=80 or $trade_min15_d >= 80){
-	echo "comming -rel-sell~~min15~~~~~~~"."\n";
+	echo "comming huizhuan-rel-sell~~min15~~~~~~~"."\n";
 	$trade_type=6;    
 	huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  		       
   }	  
      if($trade_min30_k >= 80  or $trade_min30_d >= 80){
-	echo "comming -rel-sell~~min30~~~~~~~"."\n";
+	echo "comming huizhuan-rel-sell~~min30~~~~~~~"."\n";
 	$trade_type=7;    
 	huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  
 	  }
     if($trade_min60_k >= 80  or $trade_min60_d >= 80){
-	echo "comming -rel-sell~~min60~~~~~~~"."\n";
+	echo "comming huizhuan-rel-sell~~min60~~~~~~~"."\n";
 	$trade_type=8;    
 	huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  
 	  }
       if($trade_min120_k >= 80  or $trade_min120_d >= 80){
-	echo "comming -rel-sell~~min120~~~~~~"."\n";
+	echo "comming huizhuan-rel-sell~~min120~~~~~~"."\n";
 	$trade_type=9;    
 	huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  
-	  }	  
-	//回转60分钟买入  
-      if ($trade_min60_k <20 or $trade_min60_d <20 and ($trade_day_k<65 and $trade_day_d<60)){
+	  }
+    } //卖出回转结束
+	 //回转买入开始 
+	//回转60分钟买入
+echo "回转buy开始\n";	  
+ if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<80) and $useable_money>1000){	  
+      echo "huizhuan_buy:60mink=$trade_min60_k,60mind=$trade_min60_d,dayk:$trade_day_k,dayd=$trade_day_d\n";	  
+      if (($trade_min60_k <20 or $trade_min60_d <20) and ($trade_day_k<65 and $trade_day_d<60)){
        echo "huizhuan_buy:60mink=$trade_min60_k,60mind=$trade_min60_d,dayk:$trade_day_k,dayd=$trade_day_d\n";	      
-       echo "comming -rel-buy~~min60~~~~~~"."\n";  
+       echo "comming -huizhuan-buy~~min60~~~~~~"."\n";  
        $trade_type=25; 
        $trade_bite=$type25;	    
        buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite);
@@ -546,7 +552,7 @@ function analyse () {
       $loser_price_id=$row[id];  
       echo $loser_price_id."loser_price".$loser_price."~~~~~".$row[trade_sell_price]."\n";
       //发出回转交易买入信号，向交易库插入交易数据信息，回转交易买入也需要一个trade_type；  
-	echo $loser_price."comming switch-rel-buy~~~~~~~~~".$trade_buy_price."\n"; 
+     echo $loser_price."comming switch-rel-buy~~$useable_money~~~~~~~".$trade_buy_price."\n"; 
      if ($loser_price>0 and $buy_switched==1 and $useable_money>1000 and ($trade_day_k<80 and $trade_day_d<75)){
        echo "coming huizhuan_buy\n";
        $trade_type=26; 
@@ -554,11 +560,11 @@ function analyse () {
        buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite);  
        $sql = "update trade_history set status=2 where id=$loser_price_id;";                                                                  
        $conn->query($sql);    
-      }   
-    } //回转结束
-		  
+      }
+ }
+echo "cut_sell_开始\n";		  
 //cut_price卖出开始开始	  
-if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<80)){
+if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<80) and $useable_sell_number>1){
   $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and $stat_date<'$stat_date' order by id desc;";
   $result = $conn->query($sql);
   while($row=mysqli_fetch_array($result)){
