@@ -1,9 +1,8 @@
 <?php
-include 'common/logs.php';
   function machining_price () 
-  {
-  $log -> log_work("comming machining_price\n");  	  
-  global $stat_date,$time_hour,$time_min,$time_second,$begin_point,$code,$buy_one_price,$sell_one_price;
+  {  
+  global $log, $stat_date,$time_hour,$time_min,$time_second,$begin_point,$code,$buy_one_price,$sell_one_price,$log;
+  $log -> log_work("comming machining_price");  
   if ($code<500000) {
   $url='http://hq.sinajs.cn/list=sz'.$code; 
   }  else{
@@ -29,13 +28,13 @@ function table_id ($conn,$table_name) {
 }
 function sleep_time () {
 	echo "comming sleep_time\n";
-	global $time_hour,$time_min;  
+	global $log,$time_hour,$time_min;  
 	while(($time_hour==9 and $time_min<30) or ($time_hour<13 and $time_hour>=11) or $time_hour<9) {
 	machining_price();
 }
 		 }
   function kdjfifteen () {
-  global $begin_point,$conn,$table_name;
+  global $log,$begin_point,$conn,$table_name;
   machining_price();
   $sql="select max(min15_point_max) from (select * from $table_name order by id desc limit 9) as a;";
   $result=mysqli_query($conn,$sql);
@@ -68,7 +67,7 @@ function sleep_time () {
   }  
   }
   function kdjthirty () {
-  global $begin_point,$conn,$table_name,$time_hour,$time_min;
+  global $log, $begin_point,$conn,$table_name,$time_hour,$time_min;
   machining_price();
   $sql="select max(min15_point_max) from (select * from $table_name order by id desc limit 18) as a;";
   $result=mysqli_query($conn,$sql);
@@ -107,9 +106,9 @@ function sleep_time () {
       echo "maxError: " . $sql . $conn->error."\n";
   }  
   }  
-  function kdjsixty () {
- echo "~~~~~~".$time_hour;	  
-  global $begin_point,$conn,$table_name,$time_hour,$time_min;
+  function kdjsixty () {	  
+  global $log, $begin_point,$conn,$table_name,$time_hour,$time_min;
+  $log -> log_work("comming kdjsixty");		  
   machining_price();
   $sql="select max(min15_point_max) from (select * from $table_name order by id desc limit 36) as a;";
   $result=mysqli_query($conn,$sql);
@@ -165,7 +164,8 @@ function sleep_time () {
   }
 	//kdj 120min
    function two_hour () {
-  global $begin_point,$conn,$table_name,$stat_date,$time_hour,$time_min;
+  global $log, $begin_point,$conn,$table_name,$stat_date,$time_hour,$time_min;
+   $log -> log_work("comming two_hour");		   
   machining_price();
   $sql="select max(min15_point_max) from (select * from $table_name order by id desc limit 72) as a;";
   $result=mysqli_query($conn,$sql);
@@ -206,7 +206,7 @@ function sleep_time () {
   }
 	  //day kdj
   function kdjday () {
-  global $begin_point,$conn,$table_name,$stat_date;
+  global $log, $begin_point,$conn,$table_name,$stat_date;
   machining_price();
   $sql="select max(min15_point_max) from (select * from $table_name order by id desc limit 144) as a;";
   $result=mysqli_query($conn,$sql);
@@ -230,16 +230,16 @@ function sleep_time () {
   $sql="update $table_name set kdjday_k='$k' , kdjday_d='$d' , kdjday_j='$j' order by id desc limit 1 ; ";
      if ($conn->query($sql) === TRUE) 
      {
-      echo "daykdjupdate:update\n";
+      $log -> log_work("daykdjupdate:update\n");	     
        } 
     else {
-      echo "daykdj:updateError: " . $sql . $conn->error."\n";
+      $log -> log_work("daykdj:updateError: " . $sql . $conn->error."\n");	    
   }  
   }
 	  // cci count
   function cci () {
-  global $conn,$table_name; 
-  echo "comming cci\n";
+  global $log, $conn,$table_name; 
+  $log -> log_work("comming cci\n");	  
   $min15_point_max= array();
   $min15_point_min = array();
   $now_price = array();
@@ -289,7 +289,7 @@ function sleep_time () {
   }  
 function test_cut_price() {
 echo "comming test_cut_price\n";	
-global $conn,$code,$begin_point,$stat_date,$time_hour,$time_min;//,$begin_point;	
+global $log,$conn,$code,$begin_point,$stat_date,$time_hour,$time_min;//,$begin_point;	
 $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 order by id desc;";
 //echo $sql;
 $result = $conn->query($sql);
@@ -309,7 +309,7 @@ $result = $conn->query($sql);
 }
 function analyse () {
     echo "comming analyse"."\n";
-    global $table_name,$code,$conn,$begin_point,$stat_date,$time_hour,$time_min,$useable_money;
+    global $log,$table_name,$code,$conn,$begin_point,$stat_date,$time_hour,$time_min,$useable_money;
       //五日十日均线数据计算	
       $sql = "select avg(now_price) from (select now_price from $table_name order by id desc limit 0,80) as a;";    
       $result=mysqli_query($conn,$sql);
@@ -370,7 +370,7 @@ function analyse () {
       mysqli_free_result($result);  //释放结果集
       //判断当日数据是否已经存在
       $sql = "select count(*) from hive_number where code='$trade_code' and stat_date='$trade_stat_date';";
-      echo $sql."数据是否存在sql\n";
+      $log -> log_work($sql."数据是否存在sql\n");	
       $result=mysqli_query($conn,$sql);
       $row=mysqli_fetch_row($result);
       if($row[0]==0){
@@ -681,7 +681,8 @@ if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<
   }//方法结束
 function sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price) {
       //####################################################################### 
-	  //mysqli_free_result($result);  //释放结果集 	      
+	  //mysqli_free_result($result);  //释放结果集
+	  global $log;
 	  echo "comming sell_action\n";
 	  $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$stat_date' order by id asc;";
 	  echo $sql."\n";
@@ -708,6 +709,7 @@ function sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat
 }
 function huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price) {
       //####################################################################### 
+	global $log;
 	 echo "comming huizhuan_sell_action\n";
 	  $sql = "select count(*) from trade_history where code=$code and vifi_status=1 and status=1 and trade_type<20 and stat_date='$stat_date' and stat_time_hour='$trade_time_hour';";
           $result = $conn->query($sql);
@@ -740,7 +742,7 @@ function huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$t
 	 //######################################################################## 
 }
 function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite) {
-      global $useable_money;
+      global $useable_money,$log;;
       echo "coming buy_action~~~~".$trade_bite."\n";
       $number=11/$trade_buy_price*$trade_bite;
       $number=round($number);	    
