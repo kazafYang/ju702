@@ -163,7 +163,7 @@ function sleep_time () {
   $sql="update $table_name set min60_k='$k' , min60_d='$d' , min60_j='$j' order by id desc limit 1 ; ";
      if ($conn->query($sql) === TRUE) 
      {
-      echo "60kdjupdate:update\n";
+      echo "60kdjupdate:success\n";
        } 
     else {
       echo "60kdjError: " . $sql . $conn->error."\n";
@@ -197,7 +197,7 @@ function sleep_time () {
   $min120_d=$row[min120_d];
   }
 
-  echo "begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~min60_k:$min60_k~min60_d:$min60_d\n";   
+  echo "begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~\n";   
   $rsv=($begin_point-$min15_point_min)/($min15_point_max-$min15_point_min)*100;
   $k=2/3*$min120_k+1/3*$rsv;
   $d=2/3*$min120_d+1/3*$k;
@@ -383,7 +383,7 @@ function analyse () {
 	$pieces = explode(",", $str);
       $type1=$pieces[0];$type2=$pieces[1];$type3=$pieces[2];$type4=$pieces[3];$type5=$pieces[4];$type6=$pieces[5];$type7=$pieces[6];$type8=$pieces[7];$type9=$pieces[8];$type10=$pieces[9];$type11=$pieces[10];
       $type21=$pieces[11];$type22=$pieces[12];$type23=$pieces[13];$type24=$pieces[14];$type25=$pieces[15];$type26=$pieces[16];$type27=$pieces[17];$type28=$pieces[18];
-      echo $type1.$type2.$type3.$type4.$type5.$type6.$type7.$type8."~~~~~~~~~~~~~~~~~~~\n";
+      echo $type1.$type2.$type3.$type4.$type5.$type6.$type7.$type8."trade_bate\n";
       mysqli_free_result($result);  //释放结果集
       //判断当日数据是否已经存在
       $sql = "select count(*) from hive_number where code='$trade_code' and stat_date='$trade_stat_date';";
@@ -413,7 +413,7 @@ function analyse () {
       } 
 	  else{
 	//拿取hive_number的基础属性
-      echo "当日hive_number已经存在，开始获取最新hive_number数据";		  
+      echo "当日hive_number已经存在，开始获取最新hive_number数据\n";		  
       $sql = "select switched,sell_switched,buy_switched,total_money,useable_money,total_number,useable_sell_number,total_sell_number,cost_price from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
       $result = $conn->query($sql);
       $row = $result->fetch_assoc();
