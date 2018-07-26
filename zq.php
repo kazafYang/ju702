@@ -1,6 +1,7 @@
 <?php
 include 'config_inc.php';
 include 'public_function.php';
+include 'common/logs.php';
 $table_name="point_number_zq";
 $code="512880";
 $begin_point="";
