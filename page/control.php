@@ -1,9 +1,9 @@
 <?php                                                                                                                                                                         
-        $cmd = 'ps aux|grep php -c';                                                                                                                                          
+        $cmd = 'ps -ef|grep php|grep -v grep -c';                                                                                                                                          
         $ret = shell_exec("$cmd");                                                                                                                                            
         $ret = rtrim($ret, "\r\n");                                                                                                                                           
      //   echo "test:".$ret;                                                                                                                                                    
-        if($ret > 6) {                                                                                                                                                        
+        if($ret == 8) {                                                                                                                                                        
         echo "sussess!";                                                                                                                                                      
         }                                                                                                                                                                     
         else{                                                                                                                                                                 
