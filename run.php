@@ -1,18 +1,22 @@
 <?php
    ignore_user_abort(); // houtai
    set_time_limit(0); // qu xiao shi jian shang xian
-   echo 'start.'; 
-   for ($i=0;$i<=20;$i++){
+   $cmd = 'ps -ef|grep php|grep -v grep -c'; //查找php进程去掉grep进程
+   $ret = shell_exec("$cmd");
+   $ret = rtrim($ret, "\r\n");
+   if($ret==0){
    exec("bash together.sh");
-   sleep(0);
-   $cmd = 'ps aux|grep php -c';
+   sleep(2);
+   $cmd = 'ps -ef|grep php|grep -v grep -c';
         $ret = shell_exec("$cmd");
         $ret = rtrim($ret, "\r\n");
-        echo "test:".$ret;
-        if($ret > 4) {
+        if($ret == 8) {
         echo "find sussess!";
         exit(0);
         }
-  echo 'end.<br>'.$i;
-}
+      else{
+      echo "启动失败，请再次尝试！";
+      }
+  
+   }
 ?>
