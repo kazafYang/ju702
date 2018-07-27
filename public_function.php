@@ -7,7 +7,9 @@
   $url='http://hq.sinajs.cn/list=sz'.$code; 
   }  else{
   $url='http://hq.sinajs.cn/list=sh'.$code; 
-  } 
+  }
+  do {
+  $log -> log_work("开始调用接口拿数据\n");   	  
   $html = file_get_contents($url); 
   $pieces = explode(",", $html);
   $begin_point=$pieces[3];
@@ -18,6 +20,7 @@
   $time_hour=$pieces[0];
   $time_min=$pieces[1];
   $time_second=$pieces[2];
+  } while ($html==false);	  
   }
 function table_id ($conn,$table_name) {
 	$sql = "select id from $table_name order by id desc limit 1;"; //where status=0 and stat_date='$stat_date'
