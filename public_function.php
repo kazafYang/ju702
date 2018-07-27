@@ -303,7 +303,7 @@ $result = $conn->query($sql);
              $conn->query($sql); 
            }
 	    //计算单笔交易的盈亏情况
-	   $history_make_money=($begin_point*$row[number]-$row[trade_buy_price]*$row[number])*100;
+	   $history_make_money=($begin_point*$row[number]-0.001-$row[trade_buy_price]*$row[number])*100;
 	   $history_make_money=round($history_make_money,3);
            $sql="update trade_history set history_make_money=$history_make_money where id=$row[id];";
            $conn->query($sql);	   	    
@@ -379,13 +379,13 @@ function analyse () {
       if($row[0]==0){
       //拿取hive_number表数据条数获得插入的下一个id
       $hive_number_id=table_id($conn,"hive_number");
-      echo "拿取到的hive_number_id：$hive_number_id.\n";
+      $log -> log_work("拿取到的hive_number_id：$hive_number_id.\n");	      
       $sql = "select switched,sell_switched,buy_switched,total_money,useable_money,total_number,useable_sell_number,total_sell_number,market_value,cost_price,make_money from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
       $result = $conn->query($sql);
       $row = $result->fetch_assoc();
       $switched=$row[switched];$sell_switched=$row[sell_switched];$buy_switched=$row[buy_switched];$total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[total_number];$total_sell_number=$row[total_number];$cost_price=$row[cost_price];$make_money=$row[make_money];$market_value=$row[market_value];
       mysqli_free_result($result);  //释放结果集
-      echo $switched.$sell_switched.$buy_switched."开关\n"; 	      
+      $log -> log_work($switched.$sell_switched.$buy_switched."开关\n");	      
       //计算最近2日的平均买入成本   switch
       $cost_stat_date=date("Y-m-d",strtotime("-2 day"));  
       $sql = "select avg(trade_sell_price) from trade_history where code='$trade_code' and trade_type>=5 and stat_date>='$cost_stat_date';";    
@@ -399,16 +399,17 @@ function analyse () {
       } 
 	  else{
 	//拿取hive_number的基础属性
-      echo "当日hive_number已经存在，开始获取最新hive_number数据\n";		  
+      $log -> log_work("当日hive_number已经存在，开始获取最新hive_number数据\n");		  
+      $switched.$sell_switched.$buy_switched."开关\n"		  
       $sql = "select switched,sell_switched,buy_switched,total_money,useable_money,total_number,useable_sell_number,total_sell_number,cost_price from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
       $result = $conn->query($sql);
       $row = $result->fetch_assoc();
        $switched=$row[switched];$sell_switched=$row[sell_switched];$buy_switched=$row[buy_switched];$total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[useable_sell_number];$total_sell_number=$row[$total_sell_number];$cost_price=$row[cost_price];
       mysqli_free_result($result);  //释放结果集
       }
-  echo $switched."开始判断\n";	  
+  $log -> log_work($switched."开始判断\n");	
   if($switched==1){
-  echo $switched."判断开关开启了\n";	  
+  $log -> log_work($switched."判断开关开启了\n");		  
       //sell判断
  //判断当前code是否具备卖出资格，后续可以在这里加上开关等限制性的行为；昨日的总数量，就是今日的可卖数量；$switched=1是开关打开状态
     if($useable_sell_number>1 and $sell_switched==1 and ($trade_day_k >= 85 or $trade_day_d >= 80)){ 
