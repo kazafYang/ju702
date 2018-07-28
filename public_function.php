@@ -22,6 +22,15 @@
   $time_second=$pieces[2];
   } while ($html==false);	  
   }
+
+function result_select($sql){
+	global $conn;
+	$result = $conn->query($sql);
+	$row=mysqli_fetch_array($result);
+	return $row;
+	mysqli_free_result($result);  //释放结果集
+}
+
 function table_id ($conn,$table_name) {
 	$sql = "select id from $table_name order by id desc limit 1;"; //where status=0 and stat_date='$stat_date'
 	$result = $conn->query($sql);
@@ -72,25 +81,17 @@ function sleep_time () {
   function kdjthirty () {
   global $log, $begin_point,$conn,$table_name,$time_hour,$time_min;
   machining_price();
-  $sql="select max(min15_point_max) from (select * from $table_name order by id desc limit 18) as a;";
-  $result=mysqli_query($conn,$sql);
-  $row=mysqli_fetch_row($result);
+  $row=result_select("select max(min15_point_max) from (select * from $table_name order by id desc limit 18) as a;");
   $min15_point_max=$row[0];
-  $sql="select min(min15_point_min) from (select * from $table_name order by id desc limit 18) as a;";
-  $result=mysqli_query($conn,$sql);
-  $row=mysqli_fetch_row($result);
+  $row=result_select("select min(min15_point_min) from (select * from $table_name order by id desc limit 18) as a;");	  
   $min15_point_min=$row[0];
   if (($time_hour==9 and $time_min==30) or ($time_hour==10 and $time_min==0) or ($time_hour==10 and $time_min==30) or ($time_hour==11 and $time_min==0) or ($time_hour==13 and $time_min==0) or ($time_hour==13 and $time_min==30) or ($time_hour==14 and $time_min==0)) {
-  $sql="select min30_k,min30_d from $table_name order by id  desc  limit 1,1;";
-  $result = $conn->query($sql);  
-  $row=$result->fetch_assoc();
+  $row=result_select("select min30_k,min30_d from $table_name order by id  desc  limit 1,1;");	  
   $min30_k=$row[min30_k]; 
   $min30_d=$row[min30_d];
   }
   else {
-  $sql="select min30_k,min30_d from $table_name order by id  desc  limit 2,1;";
-  $result = $conn->query($sql);  
-  $row=$result->fetch_assoc();
+  $row=result_select("select min30_k,min30_d from $table_name order by id  desc  limit 2,1;");	  
   $min30_k=$row[min30_k]; 
   $min30_d=$row[min30_d];
   }  
@@ -113,13 +114,9 @@ function sleep_time () {
   global $log, $begin_point,$conn,$table_name,$time_hour,$time_min;
   $log -> log_work("comming kdjsixty");		  
   machining_price();
-  $sql="select max(min15_point_max) from (select * from $table_name order by id desc limit 36) as a;";
-  $result=mysqli_query($conn,$sql);
-  $row=mysqli_fetch_row($result);
+  $row=result_select("select max(min15_point_max) from (select * from $table_name order by id desc limit 36) as a;");	  
   $min15_point_max=$row[0];
-  $sql="select min(min15_point_min) from (select * from $table_name order by id desc limit 36) as a;";
-  $result=mysqli_query($conn,$sql);
-  $row=mysqli_fetch_row($result);
+  $row=result_select("select min(min15_point_min) from (select * from $table_name order by id desc limit 36) as a;");	  
   $min15_point_min=$row[0];
   echo "---------------".$time_hour;
   if (($time_hour==9 and $time_min==30) or ($time_hour==10 and $time_min==30) or ($time_hour==13 and $time_min==0) or ($time_hour==14 and $time_min==0)) {
