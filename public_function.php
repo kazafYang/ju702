@@ -394,7 +394,7 @@ function analyse () {
       $cost_price=round($row[0],3);
       mysqli_free_result($result);  //释放结果集   
       $sql = "insert into hive_number values ('$hive_number_id','$trade_code','$switched','$sell_switched','$buy_switched','$total_money','$useable_money','$total_number','$useable_sell_number','$total_sell_number','$market_value','$cost_price','$make_money','$trade_stat_date');";                                                                  
-      echo $sql."插入hive_number\n";
+      $log -> log_work($sql."插入hive_number\n");	      
       $conn->query($sql);   
       } 
 	  else{
@@ -415,12 +415,11 @@ function analyse () {
     if($useable_sell_number>1 and $sell_switched==1 and ($trade_day_k >= 85 or $trade_day_d >= 80)){ 
     //if($useable_sell_number>=1 and $sell_switched==1 and ($trade_day_k >= 1 or $trade_day_d >= 1)){ 		    
       //超买情况下的15分钟卖出指标
-      echo "comming daykdj-sell"."\n";
-      echo "test##################".$trade_min15_k."########".$trade_min15_d."\n";	    
+      $log -> log_work("comming $trade_min15_k daykdj $trade_min15_d-sell"."\n");
       if($trade_min15_k>=85 or $trade_min15_d>=80)
     //  if($trade_min15_k>=1 or $trade_min15_d>=1)	      
       {
-	echo "comming日线超买开始 daykdj-sell-15\n";	 
+	$log -> log_work("comming日线超买开始 daykdj-sell-15\n");
 	$trade_type=1;    
 	sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  		      
       } 
@@ -697,7 +696,7 @@ function sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat
 			   $number=$row[number];   
 			   echo "connecttion_id:"."$connecttion_id\n";
 			   if($begin_point>$row[trade_buy_price]){
-				  echo "达到条件触发卖出操作\n";
+				  $log -> log_work("达到条件触发卖出操作\n"); 
 				  $trade_id=table_id($conn,"trade_history"); 
 				  echo "trade_id:".$trade_id;	   
 				  //插入交易历史  
@@ -731,7 +730,7 @@ function huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$t
 			   $cut_price=$trade_buy_price+$trade_buy_price*3/100;
 			   echo "connecttion_id:"."$connecttion_id~$cut_price\n";
 			   if($begin_point>$row[trade_buy_price] and $huizhuan_sell_number==0){
-				  echo "达到条件触发卖出操作\n";
+				  $log -> log_work("达到条件触发卖出操作\n"); 
 				  $trade_id=table_id($conn,"trade_history"); 
 				  echo "trade_id:".$trade_id;	   
 				  //插入交易历史  
@@ -759,6 +758,7 @@ function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_
 	      if($row[0]==0 and $useable_money>=($number*100*$trade_buy_price)){
 	      //if($row[0]==0 or $useable_money>=($number*100*$trade_buy_price)){	      
 		      echo "begin buy_action：$number\n";
+		      $log -> log_work("达到条件触发买入操作\n");
 		      $trade_id=table_id($conn,"trade_history");
 		      $cut_price=$trade_buy_price+($trade_buy_price*3/100);
 		      echo "cut_price:$cut_price\n";
@@ -769,8 +769,8 @@ function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_
 		 }
 }
   function nine_count () {
-	  global $stat_time_min,$time_hour,$time_min,$time_second,$begin_point, $table_name,$time_out_begin,$conn,$buy_one_price,$sell_one_price;
-	  echo "comming nine_count\n";
+	  global $log,$stat_time_min,$time_hour,$time_min,$time_second,$begin_point, $table_name,$time_out_begin,$conn,$buy_one_price,$sell_one_price;
+	  $log -> log_work("comming nine_count,开始执行~\n");
 	  machining_price();   
 	  $max=$begin_point;
 	  $min=$begin_point;
