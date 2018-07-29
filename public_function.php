@@ -501,7 +501,7 @@ echo "回转buy开始\n";
        $conn->query($sql);    
       }
  }
-echo "cut_sell_开始\n";		  
+$log -> log_work("cut_sell_开始\n");		  
 //cut_price卖出开始开始	  
 if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<80) and $useable_sell_number>1){
   	
@@ -524,8 +524,12 @@ if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<
 	echo $sql."cut_peice 核销订单sql\n";
 	$conn->query($sql);
     }
-   mysqli_free_result($result);  //释放结果集  
+    else{
+         $log -> log_work("不符合cut_price函数条件，不执行!begin_point:$begin_point,cut_price:$row[cut_price],trade_buy_price:$row[trade_buy_price]");
+    } 	  
 }
+   mysqli_free_result($result);  //循环结束释放结果集  
+	
 }
               
 /*	      //5日线非分钟线金叉吸入筹码	  
@@ -618,9 +622,9 @@ function sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat
 		   }
 		   else{
 			  $log -> log_work("未达到条件不能触发卖出操作，$begin_point，$row[trade_buy_price]，$number\n"); 
-	                }		  
-          mysqli_free_result($result);		  
+	                }		  	  
 	  }
+	   mysqli_free_result($result);  //循环结束释放结果集  
 	 //######################################################################## 
 }
 function huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price) {
@@ -653,9 +657,9 @@ function huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$t
 		   }
 		   else{
 			  $log -> log_work("未达到条件不能触发回转卖出操作$begin_point，$huizhuan_sell_number，$number，$row[trade_buy_price]\n"); 
-	                }
-	  mysqli_free_result($result);	  
+	                } 
 	  }
+	   mysqli_free_result($result);  //循环结束释放结果集  
 	 //######################################################################## 
 }
 function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite) {
@@ -741,6 +745,7 @@ function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_
 	  test_cut_price();		  
 	  analyse();  
 	  cci();
+	  $log -> log_work("本次程序执行完成------------------------->\n");	  
 	  } 
 	  }
   ?>
