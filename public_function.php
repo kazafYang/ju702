@@ -120,30 +120,22 @@ function sleep_time () {
   $min15_point_min=$row[0];
   echo "---------------".$time_hour;
   if (($time_hour==9 and $time_min==30) or ($time_hour==10 and $time_min==30) or ($time_hour==13 and $time_min==0) or ($time_hour==14 and $time_min==0)) {
-  $sql="select min60_k,min60_d from $table_name order by id  desc  limit 1,1;";
-  $result = $conn->query($sql);
-  $row=$result->fetch_assoc();
+  $row=result_select("select min60_k,min60_d from $table_name order by id  desc  limit 1,1;");	  
   $min60_k=$row[min60_k];
   $min60_d=$row[min60_d];
   }
   elseif (($time_hour==9 and $time_min==45) or ($time_hour==10 and $time_min==45) or ($time_hour==13 and $time_min==15) or ($time_hour==14 and $time_min==15)) {
-  $sql="select min60_k,min60_d from $table_name order by id  desc  limit 2,1;";
-  $result = $conn->query($sql);
-  $row=$result->fetch_assoc();
+  $row=result_select("select min60_k,min60_d from $table_name order by id  desc  limit 2,1;");	  
   $min60_k=$row[min60_k];
   $min60_d=$row[min60_d];
   }
   elseif(($time_hour==10 and $time_min==0) or ($time_hour==11 and $time_min==0) or ($time_hour==13 and $time_min==30) or ($time_hour==14 and $time_min==30)) {
-  $sql="select min60_k,min60_d from $table_name order by id  desc  limit 3,1;";
-  $result = $conn->query($sql);
-  $row=$result->fetch_assoc();
+  $row=result_select("select min60_k,min60_d from $table_name order by id  desc  limit 3,1;");	  
   $min60_k=$row[min60_k];
   $min60_d=$row[min60_d];
   }
   else{
-  $sql="select min60_k,min60_d from $table_name order by id  desc  limit 4,1;";
-  $result = $conn->query($sql);
-  $row=$result->fetch_assoc();
+  $row=result_select("select min60_k,min60_d from $table_name order by id  desc  limit 4,1;");	  
   $min60_k=$row[min60_k];
   $min60_d=$row[min60_d];
   }
@@ -167,25 +159,19 @@ function sleep_time () {
   global $log, $begin_point,$conn,$table_name,$stat_date,$time_hour,$time_min;
    $log -> log_work("comming two_hour");		   
   machining_price();
-  $sql="select max(min15_point_max) from (select * from $table_name order by id desc limit 72) as a;";
-  $result=mysqli_query($conn,$sql);
-  $row=mysqli_fetch_row($result);
+  $row=result_select("select max(min15_point_max) from (select * from $table_name order by id desc limit 72) as a;");	   
   $min15_point_max=$row[0];
   $sql="select min(min15_point_min) from (select * from $table_name order by id desc limit 72) as a;";
   $result=mysqli_query($conn,$sql);
   $row=mysqli_fetch_row($result);
   $min15_point_min=$row[0];
   if ($time_hour<13) {
-  $sql="select min120_k,min120_d from $table_name where stat_date<'$stat_date' order by id  desc  limit 0,1;";
-  $result = $conn->query($sql);
-  $row=$result->fetch_assoc();
+  $row=result_select("select min120_k,min120_d from $table_name where stat_date<'$stat_date' order by id  desc  limit 0,1;");	  
   $min120_k=$row[min120_k];
   $min120_d=$row[min120_d];
   }
   elseif ($time_hour>=13) {
-  $sql="select min120_k,min120_d from $table_name where stat_time_hour='11' and stat_time_min='15' order by id  desc  limit 1;";
-  $result = $conn->query($sql);
-  $row=$result->fetch_assoc();
+  $row=result_select("select min120_k,min120_d from $table_name where stat_time_hour='11' and stat_time_min='15' order by id  desc  limit 1;");	  
   $min120_k=$row[min120_k];
   $min120_d=$row[min120_d];
   }
@@ -208,17 +194,11 @@ function sleep_time () {
   function kdjday () {
   global $log, $begin_point,$conn,$table_name,$stat_date;
   machining_price();
-  $sql="select max(min15_point_max) from (select * from $table_name order by id desc limit 144) as a;";
-  $result=mysqli_query($conn,$sql);
-  $row=mysqli_fetch_row($result);
+  $row=result_select("select max(min15_point_max) from (select * from $table_name order by id desc limit 144) as a;");	  
   $min15_point_max=$row[0];
-  $sql="select min(min15_point_min) from (select * from $table_name order by id desc limit 144) as a;";
-  $result=mysqli_query($conn,$sql);
-  $row=mysqli_fetch_row($result);
+  $row=result_select("select min(min15_point_min) from (select * from $table_name order by id desc limit 144) as a;");	  
   $min15_point_min=$row[0];
-  $sql="select kdjday_k,kdjday_d from $table_name where stat_date<'$stat_date' order by id desc limit 1;";
-  $result = $conn->query($sql);  
-  $row=$result->fetch_assoc();
+  $row=result_select("select kdjday_k,kdjday_d from $table_name where stat_date<'$stat_date' order by id desc limit 1;");	  
   $kdjday_k=$row[kdjday_k]; 
   $kdjday_d=$row[kdjday_d];
   echo "begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~kdjday_k:$kdjday_k~kdjday_d:$kdjday_d\n";                       
@@ -245,18 +225,11 @@ function sleep_time () {
   $now_price = array();
   
   for ($i=1;$i<15;$i++){
-  $sql="select max(min15_point_max) from (select * from $table_name order by id desc limit $i,1) as a;";
-  //echo $sql."/n";
-  $result=mysqli_query($conn,$sql);
-  $row=mysqli_fetch_row($result);
+  $row=result_select("select max(min15_point_max) from (select * from $table_name order by id desc limit $i,1) as a;");	  
   $date_point_max=$row[0];
-  $sql="select min(min15_point_min) from (select * from $table_name order by id desc limit $i,1) as a;";
-  $result=mysqli_query($conn,$sql);
-  $row=mysqli_fetch_row($result);
+  $row=result_select("select min(min15_point_min) from (select * from $table_name order by id desc limit $i,1) as a;");	  
   $date_point_min=$row[0];
-  $sql="select now_price from $table_name order by id desc limit 1,$i;";
-  $result=mysqli_query($conn,$sql);
-  $row=mysqli_fetch_row($result);
+  $row=result_select("select now_price from $table_name order by id desc limit 1,$i;");	  
   $date_now_price=$row[0];
   $min15_point_max[]=$date_point_max;
   $min15_point_min[]=$date_point_min;
@@ -311,48 +284,30 @@ function analyse () {
     global $log,$table_name,$code,$conn,$begin_point,$stat_date,$time_hour,$time_min,$useable_money;
       $log -> log_work("comming analyse\n");
       //五日十日均线数据计算	
-      $sql = "select avg(now_price) from (select now_price from $table_name order by id desc limit 0,80) as a;";    
-      $result=mysqli_query($conn,$sql);
-      $row=mysqli_fetch_row($result); 
+      $row=result_select("select avg(now_price) from (select now_price from $table_name order by id desc limit 0,80) as a;");	
       $first_min5_avgprice=$row[0];
-      mysqli_free_result($result);  //释放结果集
-      $sql = "select avg(now_price) from (select now_price from $table_name order by id desc limit 0,160) as a;";    
-      $result=mysqli_query($conn,$sql);
-      $row=mysqli_fetch_row($result); 
-      $first_min10_avgprice=$row[0];
-      mysqli_free_result($result);  //释放结果集 	  
-      $sql = "select avg(now_price) from (select now_price from $table_name order by id desc limit 16,80) as a;";    
-      $result=mysqli_query($conn,$sql);
-      $row=mysqli_fetch_row($result); 
+      $row=result_select("select avg(now_price) from (select now_price from $table_name order by id desc limit 0,160) as a;");	
+      $first_min10_avgprice=$row[0];	   
+      $row=result_select("select avg(now_price) from (select now_price from $table_name order by id desc limit 16,80) as a;");	
       $second_min5_avgprice=$row[0];
-      mysqli_free_result($result);  //释放结果集
-      $sql = "select avg(now_price) from (select now_price from $table_name order by id desc limit 16,160) as a;";    
-      $result=mysqli_query($conn,$sql);
-      $row=mysqli_fetch_row($result); 
+      $row=result_select("select avg(now_price) from (select now_price from $table_name order by id desc limit 16,160) as a;");	
       $second_min10_avgprice=$row[0];
-      mysqli_free_result($result);  //释放结果集	
       //获取分时kdj数据;
-      $sql = "SELECT code,stat_date,stat_time_hour,stat_time_min,min15_k,min15_d,min15_j,min30_k,min30_d,min30_j,min60_k,min60_d,min60_j,min120_k,min120_d,min120_j,kdjday_k,kdjday_d,kdjday_j,cci,buy_one_price,sell_one_price FROM $table_name order by id desc limit 1";                                                                  
-      $result = $conn->query($sql);
-      $row = $result->fetch_assoc();
+      $row=result_select("SELECT code,stat_date,stat_time_hour,stat_time_min,min15_k,min15_d,min15_j,min30_k,min30_d,min30_j,min60_k,min60_d,min60_j,min120_k,min120_d,min120_j,kdjday_k,kdjday_d,kdjday_j,cci,buy_one_price,sell_one_price FROM $table_name order by id desc limit 1");	
       $trade_code=$row[code];$trade_buy_price=$row[buy_one_price];$trade_sell_price=$row[sell_one_price];
       $trade_stat_date=$row[stat_date];$trade_time_hour=$row[stat_time_hour];$trade_time_min=$row[stat_time_min];
       $trade_min15_k=round($row[min15_k],2);$trade_min15_d=round($row[min15_d],2);$trade_min15_j=round($row[min15_j],2);
       $trade_min30_k=round($row[min30_k],2);$trade_min30_d=round($row[min30_d],2);$trade_min30_j=round($row[min30_j],2);
       $trade_min60_k=round($row[min60_k],2);$trade_min60_d=round($row[min60_d],2);$trade_min60_j=round($row[min60_j],2);
       $trade_min120_k=round($row[min120_k],2);$trade_min120_d=round($row[min120_d],2);$trade_min120_j=round($row[min120_j],2);	  
-      $trade_day_k=round($row[kdjday_k],2);$trade_day_d=round($row[kdjday_d],2);$trade_day_j=round($row[kdjday_j],2);
-      mysqli_free_result($result);  //释放结果集	  
+      $trade_day_k=round($row[kdjday_k],2);$trade_day_d=round($row[kdjday_d],2);$trade_day_j=round($row[kdjday_j],2);	  
       //获取上一次分时kdj数据用来判断kdj金叉死叉;
-      $sql = "SELECT code,stat_date,stat_time_hour,stat_time_min,min15_k,min15_d,min15_j,min30_k,min30_d,min30_j,min60_k,min60_d,min60_j,min120_k,min120_d,min120_j,kdjday_k,kdjday_d,kdjday_j,cci,buy_one_price,sell_one_price FROM $table_name order by id desc limit 1,1";                                                                  
-      $result = $conn->query($sql);
-      $row = $result->fetch_assoc();
+      $row=result_select("SELECT code,stat_date,stat_time_hour,stat_time_min,min15_k,min15_d,min15_j,min30_k,min30_d,min30_j,min60_k,min60_d,min60_j,min120_k,min120_d,min120_j,kdjday_k,kdjday_d,kdjday_j,cci,buy_one_price,sell_one_price FROM $table_name order by id desc limit 1,1");
       $trade_second_min15_k=round($row[min15_k],2);$trade_second_min15_d=round($row[min15_d],2);$trade_second_min15_j=round($row[min15_j],2);
       $trade_second_min30_k=round($row[min30_k],2);$trade_second_min30_d=round($row[min30_d],2);$trade_second_min30_j=round($row[min30_j],2);
       $trade_second_min60_k=round($row[min60_k],2);$trade_second_min60_d=round($row[min60_d],2);$trade_second_min60_j=round($row[min60_j],2);
       $trade_second_min120_k=round($row[min120_k],2);$trade_second_min120_d=round($row[min120_d],2);$trade_second_min120_j=round($row[min120_j],2);	  
-      $trade_second_day_k=round($row[kdjday_k],2);$trade_second_day_d=round($row[kdjday_d],2);$trade_second_day_j=round($row[kdjday_j],2); 	
-      mysqli_free_result($result);  //释放结果集	  
+      $trade_second_day_k=round($row[kdjday_k],2);$trade_second_day_d=round($row[kdjday_d],2);$trade_second_day_j=round($row[kdjday_j],2); 		  
      //获取bite倍数信息，给各个阶段加倍
       $str="";
       $switched=0; 	  
@@ -369,19 +324,14 @@ function analyse () {
       echo $type1.$type2.$type3.$type4.$type5.$type6.$type7.$type8."trade_bate\n";
       mysqli_free_result($result);  //释放结果集
       //判断当日数据是否已经存在
-      $sql = "select count(*) from hive_number where code='$trade_code' and stat_date='$trade_stat_date';";
+      $row=result_select("select count(*) from hive_number where code='$trade_code' and stat_date='$trade_stat_date';");	
       $log -> log_work($sql."数据是否存在sql\n");	
-      $result=mysqli_query($conn,$sql);
-      $row=mysqli_fetch_row($result);
       if($row[0]==0){
       //拿取hive_number表数据条数获得插入的下一个id
       $hive_number_id=table_id($conn,"hive_number");
       $log -> log_work("拿取到的hive_number_id：$hive_number_id.\n");	      
-      $sql = "select switched,sell_switched,buy_switched,total_money,useable_money,total_number,useable_sell_number,total_sell_number,market_value,cost_price,make_money from hive_number where code='$trade_code' order by stat_date desc limit 1;";    
-      $result = $conn->query($sql);
-      $row = $result->fetch_assoc();
+      $row=result_select("select switched,sell_switched,buy_switched,total_money,useable_money,total_number,useable_sell_number,total_sell_number,market_value,cost_price,make_money from hive_number where code='$trade_code' order by stat_date desc limit 1;");	      
       $switched=$row[switched];$sell_switched=$row[sell_switched];$buy_switched=$row[buy_switched];$total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[total_number];$total_sell_number=$row[total_number];$cost_price=$row[cost_price];$make_money=$row[make_money];$market_value=$row[market_value];
-      mysqli_free_result($result);  //释放结果集
       $log -> log_work($switched.$sell_switched.$buy_switched."开关\n");	      
       //计算最近2日的平均买入成本   switch
       $cost_stat_date=date("Y-m-d",strtotime("-2 day"));  
