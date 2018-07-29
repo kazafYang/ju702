@@ -24,7 +24,8 @@
   }
 
 function result_select($sql){
-	global $conn;
+	global $conn,$log;
+	$log -> log_work("result_select函数执行的sql：$sql\n");
 	$result = $conn->query($sql);
 	$row=mysqli_fetch_array($result);
 	return $row;
@@ -32,15 +33,17 @@ function result_select($sql){
 }
 
 function table_id ($conn,$table_name) {
+	global $log;
 	$sql = "select id from $table_name order by id desc limit 1;"; //where status=0 and stat_date='$stat_date'
+	$log -> log_work("查询下一个插入数据的id，sql语句为：$sql\n");
 	$result = $conn->query($sql);
 	$row = $result->fetch_assoc();
 	return $row[id]+1;
 	mysqli_free_result($result);  //释放结果集		  
 }
 function sleep_time () {
-	echo "comming sleep_time\n";
-	global $log,$time_hour,$time_min;  
+	global $log,$time_hour,$time_min; 
+	$log -> log_work("comming sleep_time\n");
 	while(($time_hour==9 and $time_min<30) or ($time_hour<13 and $time_hour>=11) or $time_hour<9) {
 	machining_price();
 }
@@ -176,7 +179,7 @@ function sleep_time () {
   $sql="update $table_name set min120_k='$k' , min120_d='$d' , min120_j='$j' order by id desc limit 1 ; ";
      if ($conn->query($sql) === TRUE) 
      {
-      echo "120kdjupdate:update\n";
+      $log -> log_work("120kdjupdate:success\n");
        } 
     else {
       echo "120kdjError: " . $sql . $conn->error."\n";
@@ -202,7 +205,7 @@ function sleep_time () {
   $sql="update $table_name set kdjday_k='$k' , kdjday_d='$d' , kdjday_j='$j' order by id desc limit 1 ; ";
      if ($conn->query($sql) === TRUE) 
      {
-      $log -> log_work("daykdjupdate:update\n");	     
+      $log -> log_work("daykdjupdate:success\n");	     
        } 
     else {
       $log -> log_work("daykdj:updateError: " . $sql . $conn->error."\n");	    
@@ -317,8 +320,9 @@ function analyse () {
       mysqli_free_result($result);  //释放结果集
       //判断当日数据是否已经存在
       $row=result_select("select count(*) from hive_number where code='$trade_code' and stat_date='$trade_stat_date';");	
-      $log -> log_work($sql."数据是否存在sql\n");	
+      $log -> log_work("当日数据是否存在判断\n");	
       if($row[0]==0){
+	      $log -> log_work("当日数据不存在，开始新增数据\n");
 	      //拿取hive_number表数据条数获得插入的下一个id
 	      $hive_number_id=table_id($conn,"hive_number");
 	      $log -> log_work("拿取到的hive_number_id：$hive_number_id.\n");	      
@@ -520,6 +524,7 @@ if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<
 	echo $sql."cut_peice 核销订单sql\n";
 	$conn->query($sql);
     }
+   mysqli_free_result($result);  //释放结果集  
 }
 }
               
@@ -590,7 +595,7 @@ if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<
 function sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price) {
 	  //mysqli_free_result($result);  //释放结果集
 	  global $log;
-	  echo "comming sell_action\n";
+	  $log -> log_work("comming sell_action\n");
 	  $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$stat_date' order by id asc;";
 	  echo $sql."\n";
 	  $result = $conn->query($sql);
@@ -604,11 +609,11 @@ function sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat
 			  echo "trade_id:".$trade_id;	   
 			  //插入交易历史  
 			  $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price','0','$connecttion_id');";                                                                  
-			  echo "插入交易指令".$sql."\n";
+			  $log -> log_work("插入交易指令".$sql."\n");
 			  $conn->query($sql);
 			  //核销已经处理的前期订单，避免订单再次进入
 			  $sql = "update trade_history set connecttion_id='$trade_id',vifi_status='1' where id='$connecttion_id';";
-			  echo "核销已经处理的订单".$sql."\n";
+			  $log -> log_work("核销已经处理的订单".$sql."\n");
 			  $conn->query($sql);
 		   }
 		   else{
@@ -621,12 +626,12 @@ function sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat
 function huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price) {
       //####################################################################### 
 	global $log;
-	 echo "comming huizhuan_sell_action\n";
+	  $log -> log_work("comming huizhuan_sell_action\n");
 	  $row=result_select("select count(*) from trade_history where code=$code and vifi_status=1 and status=1 and trade_type<20 and stat_date='$stat_date' and stat_time_hour='$trade_time_hour';");
 	  $huizhuan_sell_number=$row[0];
 	
 	  $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$stat_date' order by id asc;";
-	  echo $sql."\n";
+	  $log -> log_work($sql."\n");
 	  $result = $conn->query($sql);
 	  while($row=mysqli_fetch_array($result)){
 		   $connecttion_id=$row[id];
@@ -636,14 +641,14 @@ function huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$t
 		   if($begin_point>$row[trade_buy_price] and $huizhuan_sell_number==0){
 			  $log -> log_work("达到条件触发卖出操作$begin_point，$huizhuan_sell_number，$number，$row[trade_buy_price]\n"); 
 			  $trade_id=table_id($conn,"trade_history"); 
-			  echo "trade_id:".$trade_id;	   
+			  $log -> log_work("trade_id:".$trade_id);	   
 			  //插入交易历史  
 			  $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price','0','$connecttion_id');";                                                                  
-			  echo "插入交易指令".$sql."\n";
+			  $log -> log_work("插入交易指令".$sql."\n");
 			  $conn->query($sql);
 			  //核销已经处理的前期订单，避免订单再次进入
 			  $sql = "update trade_history set connecttion_id='$trade_id',vifi_status='1' where id='$connecttion_id';";
-			  echo "核销已经处理的订单".$sql."\n";
+			  $log -> log_work("核销已经处理的订单".$sql."\n");
 			  $conn->query($sql);
 		   }
 		   else{
@@ -655,7 +660,7 @@ function huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$t
 }
 function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite) {
       global $useable_money,$log;;
-      echo "coming buy_action~~~~".$trade_bite."\n";
+      $log -> log_work("coming buy_action~~~~".$trade_bite."\n");
       $number=11/$trade_buy_price*$trade_bite;
       $number=round($number);
       //每次发出指令以前都判断一下当前是否有足额可用资金	
@@ -663,17 +668,16 @@ function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_
       $useable_money=$row[useable_money];	
       //$sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=$trade_type;";
       $row=result_select("select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and trade_type=$trade_type;");
-      echo $sql."~~~~~~~~$useable_money~~~~~~$number~~~~$trade_buy_price\n";  
+      $log -> log_work("$useable_money~~~~~~$number~~~~$trade_buy_price\n");  
       if($row[0]==0 and $useable_money>=($number*100*$trade_buy_price)){
       //if($row[0]==0 or $useable_money>=($number*100*$trade_buy_price)){	      
-	      echo "begin buy_action：$number\n";
-	      $log -> log_work("达到条件触发买入操作，$useable_money，$row[0]，$number，$trade_buy_price\n");
+	      $log -> log_work("达到条件触发买入操作，useable_money:$useable_money，row[0]:$row[0]，number:$number，$trade_buy_price\n");
 	      $trade_id=table_id($conn,"trade_history");
 	      $cut_price=$trade_buy_price+($trade_buy_price*3/100);
-	      echo "cut_price:$cut_price\n";
+	      $log -> log_work("cut_price:$cut_price\n");
 	      //$cut_price=round($cut_price,3);
 	      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price','$cut_price','0');";
-	      echo "buy_action交易指令".$sql."\n";
+	      $log -> log_work("buy_action交易指令".$sql."\n");
 	      $conn->query($sql);
 	      }
 	else{
@@ -690,9 +694,8 @@ function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_
 	  $sql="update $table_name set min15_point_max=$max,min15_point_min=$min order by id desc limit 1 ;";
 	  $conn->query($sql);  
 	  while( $time_out_now < $time_out_begin) {
-	  echo "time_out_now:$time_out_now~time_out_begin:$time_out_begin\n";
+	  $log -> log_work("time_out_now:$time_out_now~time_out_begin:$time_out_begin\n");
 	  $row=result_select("select stat_time_min from $table_name order by id desc limit 1;");	  
-	  echo $sql."/n";	  
 	  $stat_time_min=$row[0];	  
 	  machining_price();
 	  $time_out_now=($time_hour*3600)+($time_min*60);
