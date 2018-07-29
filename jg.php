@@ -30,7 +30,8 @@ if ($result->num_rows > 0) {
 }
 */
 #code begin
-while(1==1) {    
+while(1==1) { 
+$log -> log_work("开始执行程序-------------->");      
 machining_price();
     if ($time_hour<9 or ($time_hour==9 and $time_min<30)) {
       echo "comming mainwhile if--9\n";
