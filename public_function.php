@@ -623,7 +623,7 @@ function sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat
 		   $number=$row[number];   
 		   echo "connecttion_id:"."$connecttion_id\n";
 		   if($begin_point>$row[trade_buy_price]){
-			  $log -> log_work("达到条件触发卖出操作\n"); 
+			  $log -> log_work("达到条件触发卖出操作，$begin_point，$row[trade_buy_price]，$number\n"); 
 			  $trade_id=table_id($conn,"trade_history"); 
 			  echo "trade_id:".$trade_id;	   
 			  //插入交易历史  
@@ -635,6 +635,9 @@ function sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat
 			  echo "核销已经处理的订单".$sql."\n";
 			  $conn->query($sql);
 		   }
+		   else{
+			  $log -> log_work("未达到条件不能触发卖出操作，$begin_point，$row[trade_buy_price]，$number\n"); 
+	                }		  
           mysqli_free_result($result);		  
 	  }
 	 //######################################################################## 
@@ -655,7 +658,7 @@ function huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$t
 		   $cut_price=$trade_buy_price+$trade_buy_price*3/100;
 		   echo "connecttion_id:"."$connecttion_id~$cut_price\n";
 		   if($begin_point>$row[trade_buy_price] and $huizhuan_sell_number==0){
-			  $log -> log_work("达到条件触发卖出操作\n"); 
+			  $log -> log_work("达到条件触发卖出操作$begin_point，$huizhuan_sell_number，$number，$row[trade_buy_price]\n"); 
 			  $trade_id=table_id($conn,"trade_history"); 
 			  echo "trade_id:".$trade_id;	   
 			  //插入交易历史  
@@ -667,6 +670,9 @@ function huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$t
 			  echo "核销已经处理的订单".$sql."\n";
 			  $conn->query($sql);
 		   }
+		   else{
+			  $log -> log_work("未达到条件不能触发回转卖出操作$begin_point，$huizhuan_sell_number，$number，$row[trade_buy_price]\n"); 
+	                }
 	  mysqli_free_result($result);	  
 	  }
 	 //######################################################################## 
@@ -685,7 +691,7 @@ function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_
       if($row[0]==0 and $useable_money>=($number*100*$trade_buy_price)){
       //if($row[0]==0 or $useable_money>=($number*100*$trade_buy_price)){	      
 	      echo "begin buy_action：$number\n";
-	      $log -> log_work("达到条件触发买入操作\n");
+	      $log -> log_work("达到条件触发买入操作，$useable_money，$row[0]，$number，$trade_buy_price\n");
 	      $trade_id=table_id($conn,"trade_history");
 	      $cut_price=$trade_buy_price+($trade_buy_price*3/100);
 	      echo "cut_price:$cut_price\n";
@@ -693,7 +699,10 @@ function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_
 	      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price','$cut_price','0');";
 	      echo "buy_action交易指令".$sql."\n";
 	      $conn->query($sql);
-	 }
+	      }
+	else{
+		$log -> log_work("未达到条件不能触发买入操作，$useable_money，$row[0]，$number，$trade_buy_price\n"); 
+	    }
 }
   function nine_count () {
 	  global $log,$stat_time_min,$time_hour,$time_min,$time_second,$begin_point, $table_name,$time_out_begin,$conn,$buy_one_price,$sell_one_price;
