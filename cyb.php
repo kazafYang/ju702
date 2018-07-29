@@ -17,8 +17,9 @@ if ($conn->connect_error) {
     die("defult: " . $conn->connect_error);
 } 
 #code begin
-while(1==1) {    
-machining_price();
+while(1==1) {
+    $log -> log_work("开始执行程序-------------->");    
+    machining_price();
     if ($time_hour<9 or ($time_hour==9 and $time_min<30)) {
       echo "comming mainwhile if--9\n";
     sleep_time();
@@ -40,7 +41,7 @@ machining_price();
    $row[id]=$row[id]+1;   
    $sql = "insert into $table_name (id,stat_date,stat_time_hour,stat_time_min,begin_point,min15_k,min15_d,min30_k,min30_d,min60_k,min60_d,min120_k,min120_d,kdjday_k,kdjday_d) VALUES ('$row[id]','$stat_date','$time_hour','$time_min','$begin_point',50,50,50,50,50,50,50,50,50,50);";    
    if ($conn->query($sql) === TRUE) {
-    $log -> log_work("new inser into\n");    
+    $log -> log_work("new inser into success $sql\n");    
 } else {
     $log -> log_work("Error: " . $sql . $conn->error."\n");   
 }   
