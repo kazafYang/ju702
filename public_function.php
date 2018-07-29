@@ -53,9 +53,7 @@ function sleep_time () {
   $row=result_select("select min(min15_point_min) from (select * from $table_name order by id desc limit 9) as a;");	  
   $min15_point_min=$row[0];
   echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~".$min15_point_min;
-  $sql="select min15_k,min15_d from $table_name order by id  desc  limit 1,1;"; 
-  $result = $conn->query($sql);  
-  $row=$result->fetch_assoc();
+  $row=result_select("select min15_k,min15_d from $table_name order by id  desc  limit 1,1;");	  
   $min15_k=$row[min15_k];   
   $min15_d=$row[min15_d];
   echo "begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~min15_k:$min15_k~min15_d:$min15_d\n";                      
@@ -68,7 +66,7 @@ function sleep_time () {
   $sql="update $table_name set min15_k='$k' , min15_d='$d' , min15_j='$j' order by id desc limit 1 ; ";
      if ($conn->query($sql) === TRUE) 
      {
-      $log -> log_work("15kdjupdate:update\n");	     
+      $log -> log_work("15kdjupdate:success\n");	     
        } 
     else {
       $log -> log_work("maxError: " . $sql . $conn->error."\n"); 	    
@@ -157,9 +155,7 @@ function sleep_time () {
   machining_price();
   $row=result_select("select max(min15_point_max) from (select * from $table_name order by id desc limit 72) as a;");	   
   $min15_point_max=$row[0];
-  $sql="select min(min15_point_min) from (select * from $table_name order by id desc limit 72) as a;";
-  $result=mysqli_query($conn,$sql);
-  $row=mysqli_fetch_row($result);
+  $row=result_select("select min(min15_point_min) from (select * from $table_name order by id desc limit 72) as a;");	   
   $min15_point_min=$row[0];
   if ($time_hour<13) {
   $row=result_select("select min120_k,min120_d from $table_name where stat_date<'$stat_date' order by id  desc  limit 0,1;");	  
@@ -309,7 +305,7 @@ function analyse () {
       $switched=0; 	  
       $sql = "select bite as a from trade_bate  order by id asc ;";    
       $result=mysqli_query($conn,$sql);
-	  while ($row=mysqli_fetch_row($result))
+      while ($row=mysqli_fetch_row($result))
     {
 	$a = sprintf("%s,%s",$row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],$row[7],$row[8],$row[9],$row[10],$row[11],$row[12],$row[13],$row[14],$row[15],$row[16],$row[17],$row[18]);
 	$str=$str.$a;    
@@ -531,14 +527,9 @@ if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<
 	      if(($first_min5_avgprice>$first_min10_avgprice) and ($second_min5_avgprice<$second_min10_avgprice) and $trade_day_k<50){
 	      $number=11/$trade_buy_price*$type27;
 	      $number=round($number); 
-	      $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=27;";    
-	      $result=mysqli_query($conn,$sql);
-	      $row=mysqli_fetch_row($result);
+	      $row=result_select("select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=27;");
 	      if($row[0]==0 and $buy_switched==1 and $useable_money>=($number*100*$trade_buy_price)){
-	      $sql = "select count(*) from trade_history;";    
-	      $result=mysqli_query($conn,$sql);
-	      $row=mysqli_fetch_row($result);
-	      $trade_id=$row[0]+1;  	      
+	      $trade_id=table_id($conn,"trade_history");	      
 	      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','27','$trade_buy_price','$trade_sell_price');";    
 	      echo $sql."comming -min5-avg-buy-sql~~~~~~~~~"."\n";                                                                  
 	      $conn->query($sql);
@@ -547,35 +538,25 @@ if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<
 		//5日线非分钟线死叉抛出筹码	  
 	      if(($first_min5_avgprice<$first_min10_avgprice) and ($second_min5_avgprice>$second_min10_avgprice) and $trade_day_k>60){
 	      $number=11/$trade_sell_price*$type10;
-	      $number=round($number); 
-	      $sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=10;";    
-	      $result=mysqli_query($conn,$sql);
-	      $row=mysqli_fetch_row($result);
+	      $number=round($number);   
+	      $row=result_select("select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=10;");
 	      if($row[0]==0 and $sell_switched==1 and $useable_sell_number>=$number and ($number*$trade_sell_price*100>=1000)){
-	      $sql = "select count(*) from trade_history;";    
-	      $result=mysqli_query($conn,$sql);
-	      $row=mysqli_fetch_row($result);
-	      $trade_id=$row[0]+1;  	      
-	      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','10','$trade_buy_price','$trade_sell_price');";    
-	      echo $sql."comming -min5-avg-buy-sql~~~~~~~~~"."\n";                                                                  
-	      $conn->query($sql);
+		      $trade_id=table_id($conn,"trade_history");  	      
+		      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','10','$trade_buy_price','$trade_sell_price');";    
+		      echo $sql."comming -min5-avg-buy-sql~~~~~~~~~"."\n";                                                                  
+		      $conn->query($sql);
 	      }
 	      } //死叉结束	
 		  //金叉+当前价高于五日均线
 	     if($trade_day_k>$trade_day_d and $begin_point>$first_min5_avgprice and $trade_day_k<55){
-		      $number=11/$trade_buy_price*$type28;
+	      $number=11/$trade_buy_price*$type28;
 	      $number=round($number);     
-		$sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=28;";    
-	      $result=mysqli_query($conn,$sql);
-	      $row=mysqli_fetch_row($result);    
-		if($row[0]==0 and $buy_switched==1 and $useable_money>=($number*100*$trade_buy_price)){
-	      $sql = "select count(*) from trade_history;";    
-	      $result=mysqli_query($conn,$sql);
-	      $row=mysqli_fetch_row($result);
-	      $trade_id=$row[0]+1;  
+	      $row=result_select("select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=28;");   
+	      if($row[0]==0 and $buy_switched==1 and $useable_money>=($number*100*$trade_buy_price)){
+	      $trade_id=table_id($conn,"trade_history");   
 	      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','28','$trade_buy_price','$trade_sell_price');";                                                                  
 	      $conn->query($sql);
-		    //更新hive_number表数据
+	      //更新hive_number表数据
 	      $total_number=$total_number+$number;  
 	      $useable_money=$useable_money-($number*$trade_buy_price*100);  
 	      $sql = "update hive_number set total_number='$total_number' where code='$trade_code' and stat_date='$trade_stat_date' order by id desc limit 1;";                                                                  
@@ -587,15 +568,10 @@ if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<
 		  //死叉+低于五日均线
 	     if($trade_day_k<$trade_day_d and $begin_point<$first_min5_avgprice and $trade_day_k>60){
 	      $number=11/$trade_buy_price*$type11;
-	      $number=round($number);      
-		$sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=11;";    
-	      $result=mysqli_query($conn,$sql);
-	      $row=mysqli_fetch_row($result);    
-		if($row[0]==0  and $sell_switched==1 and ($number*$trade_sell_price*100>=1000) ){
-	      $sql = "select count(*) from trade_history;";    
-	      $result=mysqli_query($conn,$sql);
-	      $row=mysqli_fetch_row($result);
-	      $trade_id=$row[0]+1;  
+	      $number=round($number);        
+	      $row=result_select("select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=11;");  
+	      if($row[0]==0  and $sell_switched==1 and ($number*$trade_sell_price*100>=1000) ){
+	      $trade_id=table_id($conn,"trade_history");   
 	      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,number,trade_type,trade_buy_price,trade_sell_price) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','$number','11','$trade_buy_price','$trade_sell_price');";                                                                  
 	      $conn->query($sql);
 		    //更新hive_number表数据
