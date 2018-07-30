@@ -1,7 +1,7 @@
-$log -> log_work(?php
-  function )machining_price () 
+<?php
+  function machining_price () 
   {  
-  global $log, $stat_date,$time_hour,$time_min,$time_second,$begin_point,$code,$buy_one_price,$sell_one_price,$log;
+  global $log, $stat_date,$time_hour,$time_min,$time_second,$begin_point,$code,$buy_one_price,$sell_one_price;
   $log -> log_work("comming machining_price");  
   if ($code<500000) {
   $url='http://hq.sinajs.cn/list=sz'.$code; 
