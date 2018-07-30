@@ -1,5 +1,5 @@
-<?php
-  function machining_price () 
+$log -> log_work(?php
+  function )machining_price () 
   {  
   global $log, $stat_date,$time_hour,$time_min,$time_second,$begin_point,$code,$buy_one_price,$sell_one_price,$log;
   $log -> log_work("comming machining_price");  
@@ -55,7 +55,7 @@ function sleep_time () {
   $min15_point_max=$row[0];
   $row=result_select("select min(min15_point_min) from (select * from $table_name order by id desc limit 9) as a;");	  
   $min15_point_min=$row[0];
-  echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~".$min15_point_min;
+  $log -> log_work("min15_point_min:$min15_point_min");
   $row=result_select("select min15_k,min15_d from $table_name order by id  desc  limit 1,1;");	  
   $min15_k=$row[min15_k];   
   $min15_d=$row[min15_d];
