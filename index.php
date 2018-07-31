@@ -83,14 +83,13 @@ if ($conn->connect_error) {
       jincheng();
        function jincheng(){
        date_default_timezone_set('PRC');
-       $hour= date("H");
- //      $min= date("i");
-  //     echo $min%15;
-      // echo  $hour;
+       $hour= date("H"); 	       
+       do {	          
         $n2_url='http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/control.php'; 
-        $n2_html = file_get_contents($n2_url); 
-       echo "&#25235;&#21462;&#31243;&#24207;&#36816;&#34892;&#24773;&#20917;&#65306;".$n2_html."<p>" ;
-       echo "buy:type>20,sell:type<20\n";
+        $n2_html = file_get_contents($n2_url);
+	} while ($n2_html != "fail" or $n2_html != "sussess!");       
+        echo "&#25235;&#21462;&#31243;&#24207;&#36816;&#34892;&#24773;&#20917;&#65306;".$n2_html."<p>" ;
+        echo "buy:type>20,sell:type<20\n";
 }	
 $table_name=array("point_number","point_number_sz","point_number_sz100","point_number_zxb","point_number_hs","point_number_zq","point_number_jg","point_number_yh");                
 	echo '<table border="1"><tr><th>id</th><th>code</th><th>kdjday_k</th><th>kdjday_d</th><th>min15_k</th><th>min15_d</th><th>min30_k</th><th>min30_d</th><th>min60_k</th><th>min60_d</th><th>min120_k</th><th>min120_d</th><th>stat_date</th><</tr>';
