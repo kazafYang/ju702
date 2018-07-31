@@ -59,9 +59,9 @@ function sleep_time () {
   $row=result_select("select min15_k,min15_d from $table_name order by id  desc  limit 1,1;");	  
   $min15_k=$row[min15_k];   
   $min15_d=$row[min15_d];
-  $log -> logwork("begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~min15_k:$min15_k~min15_d:$min15_d\n");                      
+  $log -> log_work("begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~min15_k:$min15_k~min15_d:$min15_d\n");                      
   $rsv=($begin_point-$min15_point_min)/($min15_point_max-$min15_point_min)*100;
-  $log -> logwork("rsv:$rsv");
+  $log -> log_work("rsv:$rsv");
   $k=2/3*$min15_k+1/3*$rsv;
   $d=2/3*$min15_d+1/3*$k;
   $j=3*$k-2*$d;
@@ -92,7 +92,7 @@ function sleep_time () {
   $min30_k=$row[min30_k]; 
   $min30_d=$row[min30_d];
   }  
-  $log -> logwork("begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~min30_k:$min30_k~min30_d:$min30_d\n");                       
+  $log -> log_work("begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~min30_k:$min30_k~min30_d:$min30_d\n");                       
   $rsv=($begin_point-$min15_point_min)/($min15_point_max-$min15_point_min)*100;
   $k=2/3*$min30_k+1/3*$rsv;
   $d=2/3*$min30_d+1/3*$k;
@@ -101,10 +101,10 @@ function sleep_time () {
   $sql="update $table_name set min30_k='$k' , min30_d='$d' , min30_j='$j' order by id desc limit 1 ; ";
      if ($conn->query($sql) === TRUE) 
      {
-      $log -> logwork("30kdjupdate:success\n");
+      $log -> log_work("30kdjupdate:success\n");
        } 
     else {
-      $log -> logwork("maxError: " . $sql . $conn->error."\n");
+      $log -> log_work("maxError: " . $sql . $conn->error."\n");
   }  
   }  
   function kdjsixty () {	  
@@ -115,7 +115,7 @@ function sleep_time () {
   $min15_point_max=$row[0];
   $row=result_select("select min(min15_point_min) from (select * from $table_name order by id desc limit 36) as a;");	  
   $min15_point_min=$row[0];
-  $log -> logwork("time_hour:$time_hour\n");
+  $log -> log_work("time_hour:$time_hour\n");
   if (($time_hour==9 and $time_min==30) or ($time_hour==10 and $time_min==30) or ($time_hour==13 and $time_min==0) or ($time_hour==14 and $time_min==0)) {
   $row=result_select("select min60_k,min60_d from $table_name order by id  desc  limit 1,1;");	  
   $min60_k=$row[min60_k];
@@ -136,19 +136,19 @@ function sleep_time () {
   $min60_k=$row[min60_k];
   $min60_d=$row[min60_d];
   }
-  $log -> logwork("begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~min60_k:$min60_k~min60_d:$min60_d\n");   
+  $log -> log_work("begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~min60_k:$min60_k~min60_d:$min60_d\n");   
   $rsv=($begin_point-$min15_point_min)/($min15_point_max-$min15_point_min)*100;
   $k=2/3*$min60_k+1/3*$rsv;
   $d=2/3*$min60_d+1/3*$k;
   $j=3*$k-2*$d;
-  $log -> logwork("60kdj:$k,$d,$j\n");
+  $log -> log_work("60kdj:$k,$d,$j\n");
   $sql="update $table_name set min60_k='$k' , min60_d='$d' , min60_j='$j' order by id desc limit 1 ; ";
      if ($conn->query($sql) === TRUE) 
      {
-      $log -> logwork("60kdjupdate:success\n");
+      $log -> log_work("60kdjupdate:success\n");
        } 
     else {
-      $log -> logwork("60kdjError: " . $sql . $conn->error."\n");
+      $log -> log_work("60kdjError: " . $sql . $conn->error."\n");
   }  
   }
 	//kdj 120min
@@ -170,19 +170,19 @@ function sleep_time () {
   $min120_k=$row[min120_k];
   $min120_d=$row[min120_d];
   }
-  $log -> logwork("begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~\n");   
+  $log -> log_work("begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~\n");   
   $rsv=($begin_point-$min15_point_min)/($min15_point_max-$min15_point_min)*100;
   $k=2/3*$min120_k+1/3*$rsv;
   $d=2/3*$min120_d+1/3*$k;
   $j=3*$k-2*$d;
-  $log -> logwork("120kdj:$k,$d,$j\n");
+  $log -> log_work("120kdj:$k,$d,$j\n");
   $sql="update $table_name set min120_k='$k' , min120_d='$d' , min120_j='$j' order by id desc limit 1 ; ";
      if ($conn->query($sql) === TRUE) 
      {
       $log -> log_work("120kdjupdate:success\n");
        } 
     else {
-      $log -> logwork("120kdjError: " . $sql . $conn->error."\n");
+      $log -> log_work("120kdjError: " . $sql . $conn->error."\n");
   }  
   }
 	  //day kdj
@@ -196,12 +196,12 @@ function sleep_time () {
   $row=result_select("select kdjday_k,kdjday_d from $table_name where stat_date<'$stat_date' order by id desc limit 1;");	  
   $kdjday_k=$row[kdjday_k]; 
   $kdjday_d=$row[kdjday_d];
-  $log -> logwork("begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~kdjday_k:$kdjday_k~kdjday_d:$kdjday_d\n");                       
+  $log -> log_work("begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~kdjday_k:$kdjday_k~kdjday_d:$kdjday_d\n");                       
   $rsv=($begin_point-$min15_point_min)/($min15_point_max-$min15_point_min)*100;
   $k=2/3*$kdjday_k+1/3*$rsv;
   $d=2/3*$kdjday_d+1/3*$k;
   $j=3*$k-2*$d;
-  $log -> logwork("daykdj:$k,$d,$j\n");
+  $log -> log_work("daykdj:$k,$d,$j\n");
   $sql="update $table_name set kdjday_k='$k' , kdjday_d='$d' , kdjday_j='$j' order by id desc limit 1 ; ";
      if ($conn->query($sql) === TRUE) 
      {
@@ -249,10 +249,10 @@ function sleep_time () {
   $cci=($typ1-$matyp)/$aytyp/0.015;
   $sql="update $table_name set cci='$cci' order by id desc limit 1 ; ";
      if ($conn->query($sql) === TRUE) {
-      $log -> logwork("cci:新记录更新成功\n");
+      $log -> log_work("cci:新记录更新成功\n");
        } 
     else {
-      $log -> logwork("cci新纪录更新Error: " . $sql . $conn->error."\n");
+      $log -> log_work("cci新纪录更新Error: " . $sql . $conn->error."\n");
   }
   }  
 function test_cut_price() { 	
@@ -363,21 +363,21 @@ function analyse () {
   //30min  
      if($trade_min30_k>=85 or $trade_min30_d>=80)	 
      {
-	$log -> logwork("comming daykdj-sell-30\n");
+	$log -> log_work("comming daykdj-sell-30\n");
 	$trade_type=2;    
 	sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  		     
       } 
    //60分钟          
      if($trade_min60_k>=85 or $trade_min60_d>=80)
      {
-	$log -> logwork("comming daykdj-sell-60\n");
+	$log -> log_work("comming daykdj-sell-60\n");
 	$trade_type=3;    
 	sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  		     
       }
 	    //120分钟          
      if($trade_min120_k>=85 or $trade_min120_d>=80)	 
      {
-	$log -> logwork("comming daykdj-sell-120\n");
+	$log -> log_work("comming daykdj-sell-120\n");
 	$trade_type=4;    
 	sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  		     
       }    
@@ -389,26 +389,26 @@ function analyse () {
 	  //15分钟条件严格一点
     if ($trade_min15_k <=15 or $trade_min15_d <=20){
     //if ($trade_min15_k <=95 or $trade_min15_d <90){
-       $log -> logwork("comming switch-buy~~~~~day-kdj-min15~~$trade_min15_k~$trade_min15_d~"."\n"); 
+       $log -> log_work("comming switch-buy~~~~~day-kdj-min15~~$trade_min15_k~$trade_min15_d~"."\n"); 
        $trade_type=21; 
        $trade_bite=$type21;	    
        buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite);
       }  
     if ($trade_min30_k <=15 or $trade_min30_d <=20){
-       $log -> logwork("comming switch-buy~~~~~day-kdj-min30~$trade_min30_k~$trade_min30_d~~"."\n"); 
+       $log -> log_work("comming switch-buy~~~~~day-kdj-min30~$trade_min30_k~$trade_min30_d~~"."\n"); 
        $trade_type=22; 
        $trade_bite=$type22;	    
        buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite);
       }   
     if ($trade_min60_k <=15 or $trade_min60_d <=20){ 
-       $log -> logwork("comming switch-buy~~~~~day-kdj-min60~$trade_min60_k~$trade_min60_d~~"."\n"); 
+       $log -> log_work("comming switch-buy~~~~~day-kdj-min60~$trade_min60_k~$trade_min60_d~~"."\n"); 
        $trade_type=23; 
        $trade_bite=$type23;	    
        buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite);
       }
 	  //120日线超卖
       if ($trade_min120_k <=15 or $trade_min120_d <=20){
-       $log -> logwork("comming switch-buy~~~~~day-kdj-min120~$trade_min120_k~$trade_min120_d~~"."\n"); 
+       $log -> log_work("comming switch-buy~~~~~day-kdj-min120~$trade_min120_k~$trade_min120_d~~"."\n"); 
        $trade_type=24; 
        $trade_bite=$type24;	    
        buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite);
@@ -418,42 +418,42 @@ echo "回转sell开始\n";
   if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<80) and $useable_sell_number>1){
     //回转交易策略的位置,记录回转交易的标志是数据库字段status=2
 	//15分钟回转使用死叉交易卖出 switch
-	$log -> logwork("comming 回转交易开始-sell~~~~$trade_day_k~~~$trade_day_d~~"."\n");
+	$log -> log_work("comming 回转交易开始-sell~~~~$trade_day_k~~~$trade_day_d~~"."\n");
     if(($trade_min15_k>=75 or $trade_min15_d >= 75) and $trade_min15_j < $trade_min15_k and $trade_min15_j < $trade_min15_d){
-	$log -> logwork("comming huizhuan-rel-sell~~dead~~$trade_min15_k~~~$trade_min15_d~$trade_min15_j~"."\n");
+	$log -> log_work("comming huizhuan-rel-sell~~dead~~$trade_min15_k~~~$trade_min15_d~$trade_min15_j~"."\n");
 	$trade_type=5;    
 	huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);     
   }    
 	  //回转15分钟超买条件
        if($trade_min15_k>=80 or $trade_min15_d >= 80){
-	$log -> logwork("comming huizhuan-rel-sell~~min15~~~~$trade_min15_k~~$trade_min15_d~"."\n");
+	$log -> log_work("comming huizhuan-rel-sell~~min15~~~~$trade_min15_k~~$trade_min15_d~"."\n");
 	$trade_type=6;    
 	huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  		       
   }	  
      if($trade_min30_k >= 80  or $trade_min30_d >= 80){
-	$log ->logwork("comming huizhuan-rel-sell~~min30~~~$trade_min30_k~~$trade_min30_d~~"."\n");
+	$log ->log_work("comming huizhuan-rel-sell~~min30~~~$trade_min30_k~~$trade_min30_d~~"."\n");
 	$trade_type=7;    
 	huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  
 	  }
     if($trade_min60_k >= 80  or $trade_min60_d >= 80){
-	$log -> logwork("comming huizhuan-rel-sell~~min60~~$trade_min60_k~$trade_min60_d~~~~"."\n");
+	$log -> log_work("comming huizhuan-rel-sell~~min60~~$trade_min60_k~$trade_min60_d~~~~"."\n");
 	$trade_type=8;    
 	huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  
 	  }
       if($trade_min120_k >= 80  or $trade_min120_d >= 80){
-	$log -> logwork("comming huizhuan-rel-sell~~min120~$trade_min120_k~~~$trade_min120_d~~"."\n");
+	$log -> log_work("comming huizhuan-rel-sell~~min120~$trade_min120_k~~~$trade_min120_d~~"."\n");
 	$trade_type=9;    
 	huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price);  
 	  }
     } //卖出回转结束
 	 //回转买入开始 
 	//回转60分钟买入
-$log -> logwork("回转buy开始\n");	  
+$log -> log_work("回转buy开始\n");	  
  if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<80) and $useable_money>1000){	  
-      $log ->logwork("huizhuan_buy:60mink=$trade_min60_k,60mind=$trade_min60_d,dayk:$trade_day_k,dayd=$trade_day_d\n");	  
+      $log ->log_work("huizhuan_buy:60mink=$trade_min60_k,60mind=$trade_min60_d,dayk:$trade_day_k,dayd=$trade_day_d\n");	  
       if (($trade_min60_k <20 or $trade_min60_d <20) and ($trade_day_k<65 and $trade_day_d<60)){
-       $log -> logwork("回转买入开始:60mink=$trade_min60_k,60mind=$trade_min60_d,dayk:$trade_day_k,dayd=$trade_day_d\n");	      
-       $log -> logwork("comming -huizhuan-buy~~min60~~~~~~"."\n");  
+       $log -> log_work("回转买入开始:60mink=$trade_min60_k,60mind=$trade_min60_d,dayk:$trade_day_k,dayd=$trade_day_d\n");	      
+       $log -> log_work("comming -huizhuan-buy~~min60~~~~~~"."\n");  
        $trade_type=25; 
        $trade_bite=$type25;	    
        buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite);
@@ -486,14 +486,14 @@ $log -> logwork("回转buy开始\n");
 	     $loser_price=round($loser_price,3);	      
        break;
        default:
-       $log -> logwork("No number 超买");
+       $log -> log_work("No number 超买");
        }  
       $loser_price_id=$row[id];  
-      $log -> logwork($loser_price_id."loser_price".$loser_price."~~~~~".$row[trade_sell_price]."\n");
+      $log -> log_work($loser_price_id."loser_price".$loser_price."~~~~~".$row[trade_sell_price]."\n");
       //发出回转交易买入信号，向交易库插入交易数据信息，回转交易买入也需要一个trade_type；  
-     $log -> logwork($loser_price."comming switch-rel-buy~~$useable_money~~~~~~~".$trade_buy_price."\n"); 
+     $log -> log_work($loser_price."comming switch-rel-buy~~$useable_money~~~~~~~".$trade_buy_price."\n"); 
      if ($loser_price>0 and $buy_switched==1 and $useable_money>1000 and ($trade_day_k<80 and $trade_day_d<75)){
-       $log -> logwork("coming huizhuan_buy:$loser_price~$buy_switched~$useable_money~$trade_day_k~$trade_day_k\n");
+       $log -> log_work("coming huizhuan_buy:$loser_price~$buy_switched~$useable_money~$trade_day_k~$trade_day_k\n");
        $trade_type=26; 
        $trade_bite=$type26;	    
        buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite);  
@@ -511,17 +511,17 @@ if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<
    //故意将比例调高到3.02避免cut_price因为四舍五入取整后造成判断失效的问题，也可以将取出来的数据也取整，但是个人感觉这样更简单一点	  
    if($begin_point <= ($row[cut_price]-$row[cut_price]*1/100) and $row[cut_price] > ($row[trade_buy_price]+$row[trade_buy_price]*3.02/100) ){
 	$trade_type=10;
-	$log -> logwork ("cut_price开始".$row[id]."~".$row[cut_price]."~".$begin_point."~".$row[trade_buy_price]."~".$row[trade_buy_price]."~".$row[number]."\n");
-	$log -> logwork($code."~".$begin_point."~".$stat_date."\n");
+	$log -> log_work ("cut_price开始".$row[id]."~".$row[cut_price]."~".$begin_point."~".$row[trade_buy_price]."~".$row[trade_buy_price]."~".$row[number]."\n");
+	$log -> log_work($code."~".$begin_point."~".$stat_date."\n");
 	$trade_id=table_id($conn,"trade_history");
-	$log -> logwork("trade_id:$trade_id");	   
+	$log -> log_work("trade_id:$trade_id");	   
 	//插入交易历史  
 	$sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$code','$stat_date','$time_hour','$time_min','0','0','$row[number]','$trade_type','$row[trade_buy_price]','$begin_point','0','$row[id]');";                                                                  
-	$log -> logwork("$sql:cut_price sell 处理了！！！！\n");
+	$log -> log_work("$sql:cut_price sell 处理了！！！！\n");
 	$conn->query($sql);
 	//核销已经处理的前期订单，避免订单再次进入    
 	$sql = "update trade_history set connecttion_id='$trade_id',vifi_status='1' where id='$row[id]';";
-	$log ->logwork("$sql~cut_price 核销订单sql\n");
+	$log ->log_work("$sql~cut_price 核销订单sql\n");
 	$conn->query($sql);
     }
     else{
@@ -594,23 +594,23 @@ if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<
 	      }	
 	      */
 }//开关结束
-	   $log -> logwork($switched."判断开关结束了\n");
+	   $log -> log_work($switched."判断开关结束了\n");
   }//方法结束
 function sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price) {
 	  //mysqli_free_result($result);  //释放结果集
 	  global $log;
 	  $log -> log_work("comming sell_action\n");
 	  $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$stat_date' order by id asc;";
-	  $log -> logwork("$sql\n");
+	  $log -> log_work("$sql\n");
 	  $result = $conn->query($sql);
 	  while($row=mysqli_fetch_array($result)){
 		   $connecttion_id=$row[id];
 		   $number=$row[number];   
-		   $log -> logwork("connecttion_id:$connecttion_id\n");
+		   $log -> log_work("connecttion_id:$connecttion_id\n");
 		   if($begin_point>$row[trade_buy_price]){
 			  $log -> log_work("达到条件触发卖出操作，$begin_point，$row[trade_buy_price]，$number\n"); 
 			  $trade_id=table_id($conn,"trade_history"); 
-			  $log -> logwork("trade_id:$trade_id\n");	   
+			  $log -> log_work("trade_id:$trade_id\n");	   
 			  //插入交易历史  
 			  $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price','0','$connecttion_id');";                                                                  
 			  $log -> log_work("插入交易指令".$sql."\n");
@@ -641,7 +641,7 @@ function huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$t
 		   $connecttion_id=$row[id];
 		   $number=$row[number];
 		   $cut_price=$trade_buy_price+$trade_buy_price*3/100;
-		   $log -> logwork("connecttion_id:"."$connecttion_id~$cut_price\n");
+		   $log -> log_work("connecttion_id:"."$connecttion_id~$cut_price\n");
 		   if($begin_point>$row[trade_buy_price] and $huizhuan_sell_number==0){
 			  $log -> log_work("达到条件触发卖出操作$begin_point，$huizhuan_sell_number，$number，$row[trade_buy_price]\n"); 
 			  $trade_id=table_id($conn,"trade_history"); 
@@ -703,23 +703,23 @@ function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_
 	  $stat_time_min=$row[0];	  
 	  machining_price();
 	  $time_out_now=($time_hour*3600)+($time_min*60);
-	    $log -> logwork("$max--$begin_point-$stat_time_min-stat_time_min\n");	  
+	  $log -> log_work("$max--$begin_point-$stat_time_min-stat_time_min\n");	  
 		  if(($time_min%15==0) and $time_min<>$stat_time_min){
-		  $log -> logwork("***************************");
+		  $log -> log_work("***************************");
 		  break;
 		  }	  
 	  if ($begin_point>=$max)
 	  {
 	      $max=$begin_point;
-	      $log -> logwork("$max\n");
+	      $log -> log_work("$max\n");
 	      $sql="update $table_name set min15_point_max=$max order by id desc limit 1 ;";
-	      $log -> logwork($sql."\n");
+	      $log -> log_work($sql."\n");
 		      if ($conn->query($sql)=== TRUE)
 		     {
-		      $log ->logwork("max新纪录更新成功\n");
+		      $log ->log_work("max新纪录更新成功\n");
 		       } 
 		      else {
-		      $log -> logwork("max新纪录更新Error: " . $sql . $conn->error."\n");
+		      $log -> log_work("max新纪录更新Error: " . $sql . $conn->error."\n");
 		  }
   }
 	  if ($begin_point<=$min)
@@ -727,10 +727,10 @@ function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_
 	      $min=$begin_point; 
 	      $sql="update " .$table_name." set min15_point_min=$min order by id desc limit 1 ; ";
 		      if ($conn->query($sql) === TRUE) {
-		      $log -> logwork("min:新记录更新成功\n");
+		      $log -> log_work("min:新记录更新成功\n");
 		       } 
 		      else {
-		      $log -> logwork("min新纪录更新Error: " . $sql . $conn->error."\n");
+		      $log -> log_work("min新纪录更新Error: " . $sql . $conn->error."\n");
 		  }
   } 
 	  //更新买一，卖一实时价格  
