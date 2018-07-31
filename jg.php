@@ -34,12 +34,12 @@ while(1==1) {
 $log -> log_work("开始执行程序-------------->");      
 machining_price();
     if ($time_hour<9 or ($time_hour==9 and $time_min<30)) {
-      echo "comming mainwhile if--9\n";
+      $log -> log_work("comming mainwhile if--9\n");
     sleep_time();
-    }elseif ($time_hour=="11" and $time_min>="30") {
+    }elseif (($time_hour=="11" and $time_min>="30") or ($time_hour>="12" and $time_hour<"13")){
     sleep_time();     
     }elseif ($time_hour>="15") {
-      echo "3point!\n";
+      $log -> log_work("3point!\n");
       exit(0);    
     }
     
@@ -54,16 +54,17 @@ machining_price();
 $sql = "select id,stat_time_min from $table_name order by id desc limit 1;";    
     $result = $conn->query($sql);
     $row=$result->fetch_assoc();
-    echo "stat_time_min:$row[stat_time_min]\n";
+    $log -> log_work("stat_time_min:$row[stat_time_min]\n");
     $stat_time_min=$row[stat_time_min];
     if ($stat_time_min<>$time_min and ($time_min==0 or $time_min==15 or $time_min==30 or $time_min==45)){
-   echo "table:$table_name\n";
+       $time_out_begin=($time_hour*3600)+($time_min*60)+900;     
+   $log -> log_work("table:$table_name\n");
    $row[id]=$row[id]+1;
    $sql = "insert into $table_name (id,stat_date,stat_time_hour,stat_time_min,begin_point,min15_k,min15_d,min30_k,min30_d,min60_k,min60_d,min120_k,min120_d,kdjday_k,kdjday_d) VALUES ('$row[id]','$stat_date','$time_hour','$time_min','$begin_point',50,50,50,50,50,50,50,50,50,50);";    
    if ($conn->query($sql) === TRUE) {
-    echo "new inser into\n";
+    $log -> log_work("new inser into\n");
 } else {
-    echo "Error: " . $sql . $conn->error."\n";
+    $log -> log_work("Error: " . $sql . $conn->error."\n");
 }
    nine_count();     
     }
