@@ -516,7 +516,7 @@ if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<
 	$trade_id=table_id($conn,"trade_history");
 	$log -> log_work("trade_id:$trade_id");	   
 	//插入交易历史  
-	$sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$code','$stat_date','$time_hour','$time_min','0','0','$row[number]','$trade_type','$row[trade_buy_price]','$begin_point','0','$row[id]');";                                                                  
+	$sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id,history_make_money) values ('$trade_id','$code','$stat_date','$time_hour','$time_min','0','0','$row[number]','$trade_type','$row[trade_buy_price]','$begin_point','0','$row[id]',$row[history_make_money]);";                                                                  
 	$log -> log_work("$sql:cut_price sell 处理了！！！！\n");
 	$conn->query($sql);
 	//核销已经处理的前期订单，避免订单再次进入    
@@ -612,7 +612,7 @@ function sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat
 			  $trade_id=table_id($conn,"trade_history"); 
 			  $log -> log_work("trade_id:$trade_id\n");	   
 			  //插入交易历史  
-			  $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price','0','$connecttion_id');";                                                                  
+			  $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id,history_make_money) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price','0','$connecttion_id',$row[history_make_money]);";                                                                  
 			  $log -> log_work("插入交易指令".$sql."\n");
 			  $conn->query($sql);
 			  //核销已经处理的前期订单，避免订单再次进入
@@ -647,7 +647,7 @@ function huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$t
 			  $trade_id=table_id($conn,"trade_history"); 
 			  $log -> log_work("trade_id:".$trade_id);	   
 			  //插入交易历史  
-			  $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price','0','$connecttion_id');";                                                                  
+			  $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id,history_make_money) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price','0','$connecttion_id',$row[history_make_money]);";                                                                  
 			  $log -> log_work("插入交易指令".$sql."\n");
 			  $conn->query($sql);
 			  //核销已经处理的前期订单，避免订单再次进入
