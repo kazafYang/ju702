@@ -316,7 +316,7 @@ function analyse () {
       $pieces = explode(",", $str);
       $type1=$pieces[0];$type2=$pieces[1];$type3=$pieces[2];$type4=$pieces[3];$type5=$pieces[4];$type6=$pieces[5];$type7=$pieces[6];$type8=$pieces[7];$type9=$pieces[8];$type10=$pieces[9];$type11=$pieces[10];
       $type21=$pieces[11];$type22=$pieces[12];$type23=$pieces[13];$type24=$pieces[14];$type25=$pieces[15];$type26=$pieces[16];$type27=$pieces[17];$type28=$pieces[18];
-      echo $type1.$type2.$type3.$type4.$type5.$type6.$type7.$type8."trade_bate\n";
+      $log -> log_work($type1.$type2.$type3.$type4.$type5.$type6.$type7.$type8."trade_bate\n");
       mysqli_free_result($result);  //释放结果集
       //判断当日数据是否已经存在
       $row=result_select("select count(*) from hive_number where code='$trade_code' and stat_date='$trade_stat_date';");	
