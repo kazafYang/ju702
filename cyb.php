@@ -27,7 +27,7 @@ while(1==1) {
     sleep_time();    
     }elseif ($time_hour>="15") {
       $log -> log_work("3point!\n");  
-      //exit(0);    
+      exit(0);    
     }
       
     $sql = "select id,stat_time_min from $table_name order by id desc limit 1;";    
@@ -35,7 +35,7 @@ while(1==1) {
     $row=$result->fetch_assoc();
     $log -> log_work("stat_time_min:$row[stat_time_min]\n");
     $stat_time_min=$row[stat_time_min];
-    if ($stat_time_min<>$time_min or ($time_min==0 or $time_min==15 or $time_min==30 or $time_min==45)){
+    if ($stat_time_min<>$time_min and ($time_min==0 or $time_min==15 or $time_min==30 or $time_min==45)){
    $log -> log_work("table:$table_name\n");    
    $time_out_begin=($time_hour*3600)+($time_min*60)+900;
         
