@@ -276,7 +276,7 @@ $result = $conn->query($sql);
            $conn->query($sql);
 	   }
 		else{
-		$log -> logwork("不符合条件不更新数据，请排查：begin_point:$begin_point~row[number]:$row[number]~row[trade_buy_price]:$row[trade_buy_price]");
+		$log -> log_work("不符合条件不更新数据，请排查：begin_point:$begin_point~row[number]:$row[number]~row[trade_buy_price]:$row[trade_buy_price]");
 		}    
 	}
  mysqli_free_result($result);  //释放结果集	  
