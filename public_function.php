@@ -705,16 +705,17 @@ function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_
 	  $log -> log_work("comming nine_count,开始执行~\n");
 	  machining_price();   
 	  $max=$begin_point;
-	  $min=$begin_point;
-	  $time_out_now=($time_hour*3600)+($time_min*60);  
+	  $min=$begin_point;  
 	  $sql="update $table_name set min15_point_max=$max,min15_point_min=$min order by id desc limit 1 ;";
-	  $conn->query($sql);  
-	  while( $time_out_now < $time_out_begin) {
-	  $log -> log_work("time_out_now:$time_out_now~time_out_begin:$time_out_begin\n");
+	  $conn->query($sql);
+	  $time_out_now=($time_hour*3600)+($time_min*60);
+	  while($time_out_now < $time_out_begin) {
+	  $time_out_now=($time_hour*3600)+($time_min*60);
+	  $log -> log_work("结束时间：".intval($time_out_now/3600)."：".($time_out_now%3600)/60."\n"); 	  
+	  $log -> log_work("开始nice_count循环开始：time_out_now:$time_out_now~time_out_begin:$time_out_begin\n");
 	  $row=result_select("select stat_time_min from $table_name order by id desc limit 1;");	  
 	  $stat_time_min=$row[0];	  
 	  machining_price();
-	  $time_out_now=($time_hour*3600)+($time_min*60);
 	  $log -> log_work("$max--$begin_point-$stat_time_min-stat_time_min\n");	  
 		  if(($time_min%15==0) and $time_min<>$stat_time_min){
 		  $log -> log_work("***************************");
