@@ -420,7 +420,7 @@ function analyse () {
        buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite);
       }  	  
   }    //日线超卖完成
-echo "回转sell开始\n";	  
+  $log -> log_work("回转sell开始\n");	  
   if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<80) and $useable_sell_number>1){
     //回转交易策略的位置,记录回转交易的标志是数据库字段status=2
 	//15分钟回转使用死叉交易卖出 switch
@@ -476,7 +476,7 @@ $log -> log_work("回转buy开始\n");
 	     $loser_price=round($loser_price,3);
        break;
        case 6:
-	     $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*1.5/100); //回转15分钟超买
+	     $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*1/100); //回转15分钟超买
 	     $loser_price=round($loser_price,3);
        break;
        case 7:
@@ -729,7 +729,7 @@ function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_
 	      $log -> log_work($sql."\n");
 		      if ($conn->query($sql)=== TRUE)
 		     {
-		      $log ->log_work("max新纪录更新成功\n");
+		      $log ->log_work("max新纪录更新成功");
 		       } 
 		      else {
 		      $log -> log_work("max新纪录更新Error: " . $sql . $conn->error."\n");
@@ -740,7 +740,7 @@ function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_
 	      $min=$begin_point; 
 	      $sql="update " .$table_name." set min15_point_min=$min order by id desc limit 1 ; ";
 		      if ($conn->query($sql) === TRUE) {
-		      $log -> log_work("min:新记录更新成功\n");
+		      $log -> log_work("min:新记录更新成功");
 		       } 
 		      else {
 		      $log -> log_work("min新纪录更新Error: " . $sql . $conn->error."\n");
