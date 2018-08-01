@@ -517,7 +517,7 @@ if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<
   //while($row=mysqli_fetch_array($result)){
   while($row){	  
    //故意将比例调高到3.02避免cut_price因为四舍五入取整后造成判断失效的问题，也可以将取出来的数据也取整，但是个人感觉这样更简单一点	  
-   if($begin_point <= ($row[cut_price]-$row[cut_price]*1/100) and $row[cut_price] > ($row[trade_buy_price]+$row[trade_buy_price]*3.02/100) $row[trade_buy_price] <> "0" ){
+   if($begin_point <= ($row[cut_price]-$row[cut_price]*1/100) and $row[cut_price] > ($row[trade_buy_price]+$row[trade_buy_price]*3.02/100) and $row[trade_buy_price] <> "0" ){
 	$trade_type=10;
 	$log -> log_work ("cut_price开始".$row[id]."~".$row[cut_price]."~".$begin_point."~".$row[trade_buy_price]."~".$row[number]."\n");
 	$log -> log_work($code."~".$begin_point."~".$stat_date."\n");
