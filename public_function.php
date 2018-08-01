@@ -711,7 +711,7 @@ function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_
 	  $time_out_now=($time_hour*3600)+($time_min*60);
 	  while($time_out_now < $time_out_begin) {
 	  $time_out_now=($time_hour*3600)+($time_min*60);
-	  $log -> log_work("结束时间：".intval($time_out_now/3600)."：".($time_out_now%3600)/60."\n"); 	  
+	  $log -> log_work("结束时间：".intval($time_out_now/3600)."：".($time_out_now%3600)/60); 	  
 	  $log -> log_work("开始nice_count循环开始：time_out_now:$time_out_now~time_out_begin:$time_out_begin\n");
 	  $row=result_select("select stat_time_min from $table_name order by id desc limit 1;");	  
 	  $stat_time_min=$row[0];	  
