@@ -268,11 +268,16 @@ $result = $conn->query($sql);
              $conn->query($sql); 
            }
 	    //计算单笔交易的盈亏情况
+	   if($begin_point <> "0" and $row[number] <> "0" and $row[trade_buy_price] <> "0"){	    
 	   $history_make_money=(($begin_point-0.001)*$row[number]-$row[trade_buy_price]*$row[number])*100; 
 	   $history_make_money=round($history_make_money,3);
 	   $log -> log_work("history_make_money:$history_make_money~number:$row[number]~~trade_buy_price:$row[trade_buy_price]");	    
            $sql="update trade_history set history_make_money=$history_make_money where id=$row[id];";
-           $conn->query($sql);	   	    
+           $conn->query($sql);
+	   }
+		else{
+		$log -> logwork("不符合条件不更新数据，请排查：begin_point:$begin_point~row[number]:$row[number]~row[trade_buy_price]:$row[trade_buy_price]");
+		}    
 	}
  mysqli_free_result($result);  //释放结果集	  
 }
