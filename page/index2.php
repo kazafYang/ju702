@@ -24,26 +24,28 @@ if ($conn->connect_error) {
     	      switch ($select_date)
 	      {
 	       case "volvo":
-	       	      
-               $sql = "select * from trade_history where  stat_date='$stat_date' order by id desc;"; 
+	       $stat_date=date("Y-m-d");	      
+               $sql = "select * from trade_history where  stat_date='$stat_date' order by id desc;";
+	       $sql_count = "select sum(history_make_money) from trade_history where  stat_date='$stat_date' and trade_type>20;";		      
 	       break;
 	       case "saab":
 	       $stat_date=date("Y-m-d",strtotime("-7 day"));	      
                $sql = "select * from trade_history where  stat_date>='$stat_date' and stat_date<='$end_date' order by id desc;"; 
-
+               $sql_count = "select sum(history_make_money) from trade_history where  stat_date>='$stat_date' and stat_date<='$end_date' and trade_type>20;";	
 	       break;
 	       case "opel":
 	       $stat_date=date("Y-m-d",strtotime("-31 day"));
                $sql = "select * from trade_history where  stat_date>='$stat_date' and stat_date<='$end_date' order by id desc;"; 
-	       
+               $sql_count = "select sum(history_make_money) from trade_history where  stat_date>='$stat_date' and stat_date<='$end_date' and trade_type>20;";		       
 	       break;
 	       case "audi":
 	       $stat_date=date("Y-m-d",strtotime("-90 day"));
                $sql = "select * from trade_history where  stat_date>='$stat_date-90' and stat_date<='$end_date' order by id desc;"; 
-	      
+               $sql_count = "select sum(history_make_money) from trade_history where  stat_date>='$stat_date' and stat_date<='$end_date' and trade_type>20;";		      
 	       break;
 	       default:
                $sql = "select * from trade_history where  stat_date='$stat_date' order by id desc;"; 
+	       $sql_count = "select sum(history_make_money) from trade_history where  stat_date='$stat_date' and trade_type>20;";		      
 	       } 	
 	
     $sql = $sql;
@@ -54,6 +56,15 @@ if ($conn->connect_error) {
 	while($row=mysqli_fetch_array($result)){
 	echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[status].'</td><td>'.$row[vifi_status].'</td><td>'.$row[trade_type].'</td><td>'.$row[number].'</td><td>'.$row[trade_buy_price].'</td><td>'.$row[trade_sell_price].'</td><td>'.$row[cut_price].'</td><td>'.$row[history_make_money].'</td><td>'.$row[connecttion_id].'</td><td>'.$row[stat_date].'</td></tr>';
 	}
+	mysqli_free_result($result);  //释放结果集
+
+        $sql_count = $sql_count; 
+        $result = $conn->query($sql_count);
+	$row=mysqli_fetch_array($result);
+	echo '<table border="1"><tr><th>id</th></tr>';
+	echo '<tr><td>'.$row[0].'</td></tr>';
+	mysqli_free_result($result);  //释放结果集
+	$conn->close();
 ?>
 </body>
 </html>
