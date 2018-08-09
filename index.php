@@ -60,7 +60,7 @@ if ($conn->connect_error) {
     $sql = "select * from trade_history where trade_type>20 and vifi_status=0 order by id desc;"; //where status=0 and stat_date='$stat_date'
     //查询未交易订单
     $result = $conn->query($sql);
-	echo '<table border="1"><tr><th>id</th><th>code</th><th>status</th><th>vifi_status</th><th>trade_type</th><th>number</th><th>trade_buy_price</th><th>trade_sell_price</th><th>cut_price</th><th>history_make_money</th><th>操作</th><th>stat_date</th><</tr>';
+	echo '<table border="1"><tr><th>id</th><th>code</th><th>status</th><th>vifi_status</th><th>trade_type</th><th>number</th>><th>begin_point</th><th>trade_buy_price</th><th>trade_sell_price</th><th>cut_price</th><th>run_cut_price</th><th>history_make_money</th><th>操作</th><th>stat_date</th><</tr>';
 	while($row=mysqli_fetch_array($result)){
         $trade_price=machining_price($code=$row[code]);
 	//手动干预
@@ -69,7 +69,8 @@ if ($conn->connect_error) {
         $trade_update="&trade_update=update~trade_history~set~status=1,vifi_status=1,connecttion_id=$trade_id~where~id=$row[id];";
         //$trade_sql=$FUrl.$trade_update;
 	$FUrl_a="<a href=".$FUrl.$trade_update.">立即操作</a>";	
-	echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[status].'</td><td>'.$row[vifi_status].'</td><td>'.$row[trade_type].'</td><td>'.$row[number].'</td><td>'.$row[trade_buy_price].'</td><td>'.$row[trade_sell_price].'</td><td>'.$row[cut_price].'</td><td>'.$row[history_make_money].'</td><td>'."$FUrl_a".'</td><td>'.$row[stat_date].'</td></tr>';
+	$run_cut_price=$row[cut_price]-$row[cut_price]*1/100;	
+	echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[status].'</td><td>'.$row[vifi_status].'</td><td>'.$row[trade_type].'</td><td>'.$row[number].'</td><td>'.$row[$trade_price].'</td><td>'.$row[trade_buy_price].'</td><td>'.$row[trade_sell_price].'</td><td>'.$row[cut_price].'</td><td>'.$run_cut_price.'</td><td>'.$row[history_make_money].'</td><td>'."$FUrl_a".'</td><td>'.$row[stat_date].'</td></tr>';
 	}
 
     $sql = "select id,code,switched,sell_switched,buy_switched,stat_date,useable_money,total_money,make_money,total_number,useable_sell_number from hive_number order by id desc limit 8;"; 
