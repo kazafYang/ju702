@@ -70,7 +70,7 @@ if ($conn->connect_error) {
         //$trade_sql=$FUrl.$trade_update;
 	$FUrl_a="<a href=".$FUrl.$trade_update.">立即操作</a>";	
 	$run_cut_price=$row[cut_price]-$row[cut_price]*1/100;	
-	echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[status].'</td><td>'.$row[vifi_status].'</td><td>'.$row[trade_type].'</td><td>'.$row[number].'</td><td>'.$row[$trade_price].'</td><td>'.$row[trade_buy_price].'</td><td>'.$row[trade_sell_price].'</td><td>'.$row[cut_price].'</td><td>'.$run_cut_price.'</td><td>'.$row[history_make_money].'</td><td>'."$FUrl_a".'</td><td>'.$row[stat_date].'</td></tr>';
+	echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[status].'</td><td>'.$row[vifi_status].'</td><td>'.$row[trade_type].'</td><td>'.$row[number].'</td><td>'.$trade_price.'</td><td>'.$row[trade_buy_price].'</td><td>'.$row[trade_sell_price].'</td><td>'.$row[cut_price].'</td><td>'.$run_cut_price.'</td><td>'.$row[history_make_money].'</td><td>'."$FUrl_a".'</td><td>'.$row[stat_date].'</td></tr>';
 	}
 
     $sql = "select id,code,switched,sell_switched,buy_switched,stat_date,useable_money,total_money,make_money,total_number,useable_sell_number from hive_number order by id desc limit 8;"; 
