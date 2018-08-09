@@ -617,7 +617,7 @@ function sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat
 		   $connecttion_id=$row[id];
 		   $number=$row[number];   
 		   $log -> log_work("connecttion_id:$connecttion_id\n");
-		   if($begin_point>$row[trade_buy_price]){
+		   if($begin_point>$row[trade_buy_price] and $begin_point < ($row[trade_buy_price]+$row[trade_buy_price]*3/100)){
 			  $log -> log_work("达到条件触发卖出操作，$begin_point，$row[trade_buy_price]，$number\n"); 
 			  $trade_id=table_id($conn,"trade_history"); 
 			  $log -> log_work("trade_id:$trade_id\n");	   
@@ -654,7 +654,7 @@ function huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$t
 		   $number=$row[number];
 		   $cut_price=$trade_buy_price+$trade_buy_price*3/100;
 		   $log -> log_work("connecttion_id:"."$connecttion_id~$cut_price\n");
-		   if($begin_point>$row[trade_buy_price] and $huizhuan_sell_number==0){
+		   if($begin_point>$row[trade_buy_price] and $huizhuan_sell_number==0 and $begin_point < ($row[trade_buy_price]+$row[trade_buy_price]*3/100)){
 			  $log -> log_work("达到条件触发卖出操作$begin_point，$huizhuan_sell_number，$number，$row[trade_buy_price]\n"); 
 			  $trade_id=table_id($conn,"trade_history"); 
 			  $log -> log_work("trade_id:".$trade_id);	   
