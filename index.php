@@ -79,17 +79,17 @@ if ($conn->connect_error) {
 	echo '<table border="1"><tr><th>id</th><th>code</th><th>total_money</th><th>useable_money</th><th>total_number</th><th>useable_sell_number</th><th>make_money </th><th>switched</th><th>sell_switched</th><th>buy_switched</th><th>buy_action</th><th>sell_action</th><th>stat_date</th><</tr>';
 	while($row=mysqli_fetch_array($result)){
 	if($row[buy_switched]==0){
-		$FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~trade_history~set~buy_switched=1~where~id=$row[id]";
+		$FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~hive_number~set~buy_switched=1~where~id=$row[id]";
 		$FUrl_buy="<a href=".$FUrl.">打开buy</a>";
 	}else{
-		$FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~trade_history~set~buy_switched=0~where~id=$row[id]";
+		$FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~hive_number~set~buy_switched=0~where~id=$row[id]";
 		$FUrl_buy="<a href=".$FUrl.">关闭buy</a>";
 	}
 	if($row[sell_switched]==0){
-		$FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~trade_history~set~sell_switched=1~where~id=$row[id]";		
+		$FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~hive_number~set~sell_switched=1~where~id=$row[id]";		
 		$FUrl_sell="<a href=".$FUrl.">打开sell</a>";
 	}else{
-		$FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~trade_history~set~buy_switched=0~where~id=$row[id]";	
+		$FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~hive_number~set~buy_switched=0~where~id=$row[id]";	
 		$FUrl_sell="<a href=".$FUrl.">关闭sell</a>";
 	}		
 	echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[total_money].'</td><td>'.$row[useable_money].'</td><td>'.$row[total_number].'</td><td>'.$row[useable_sell_number].'</td><td>'.$row[make_money ].'</td><td>'.$row[switched].'</td><td>'.$row[sell_switched].'</td><td>'.$row[buy_switched].'</td><td>'.$FUrl_buy.'</td><td>'.$FUrl_sell.'</td><td>'.$row[stat_date].'</td></tr>';
