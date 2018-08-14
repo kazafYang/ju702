@@ -89,7 +89,7 @@ if ($conn->connect_error) {
 		$FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~hive_number~set~sell_switched=1~where~id=$row[id]";		
 		$FUrl_sell="<a href=".$FUrl.">打开sell</a>";
 	}else{
-		$FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~hive_number~set~buy_switched=0~where~id=$row[id]";	
+		$FUrl="http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/update.php?type=4&sql=update~hive_number~set~sell_switched=0~where~id=$row[id]";	
 		$FUrl_sell="<a href=".$FUrl.">关闭sell</a>";
 	}		
 	echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[total_money].'</td><td>'.$row[useable_money].'</td><td>'.$row[total_number].'</td><td>'.$row[useable_sell_number].'</td><td>'.$row[make_money ].'</td><td>'.$row[switched].'</td><td>'.$row[sell_switched].'</td><td>'.$row[buy_switched].'</td><td>'.$FUrl_buy.'</td><td>'.$FUrl_sell.'</td><td>'.$row[stat_date].'</td></tr>';
