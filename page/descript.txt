@@ -1,3 +1,8 @@
+新浪获取股票历史数据接口：以后可以通过这个接口在数据出现问题的时候，将这个接口用来补数据；
+https://blog.csdn.net/wqy161109/article/details/80052716
+设想一下，如果有了这个接口，我是否就只需要一个线上数据库是否就已经足够了呢？
+杜绝手动操作，这次就是一个很大的教训
+
 设置一个开关：t_switched=1 then
 sum（toal_sell）》A
 sum（total_buy）>B
