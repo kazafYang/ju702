@@ -4,10 +4,10 @@
 <body>
 <form action="" method="get">
 <select name="select_date">
-  <option value ="volvo">当日</option>
-  <option value ="saab">一周</option>
-  <option value="opel">一月</option>
-  <option value="audi">三月</option>
+  <option value ="volvo">今日订单</option>
+  <option value ="saab">一周订单</option>
+  <option value="opel">已核销订单</option>
+  <option value="audi">未核销订单</option>
 </select>
   <input type="submit" value="Submit" />
 </form>
@@ -35,17 +35,17 @@ if ($conn->connect_error) {
 	       break;
 	       case "opel":
 	       $stat_date=date("Y-m-d",strtotime("-31 day"));
-               $sql = "select * from trade_history where  stat_date>='$stat_date' and stat_date<='$end_date' order by id desc;"; 
-               $sql_count = "select sum(history_make_money) from trade_history where  stat_date>='$stat_date' and stat_date<='$end_date' and trade_type>20;";		       
+               $sql = "select * from trade_history where  trade_type>20 and status=1 and vifi_status=1 order by id desc;"; 
+               $sql_count = "select sum(history_make_money) from trade_history where  trade_type>20 and status=1 and vifi_status=1;";		       
 	       break;
 	       case "audi":
 	       $stat_date=date("Y-m-d",strtotime("-90 day"));
-               $sql = "select * from trade_history where  stat_date>='$stat_date-90' and stat_date<='$end_date' order by id desc;"; 
-               $sql_count = "select sum(history_make_money) from trade_history where  stat_date>='$stat_date' and stat_date<='$end_date' and trade_type>20;";		      
+               $sql = "select * from trade_history where  trade_type>20 and status=1 and vifi_status=0 order by id desc;"; 
+               $sql_count = "select sum(history_make_money) from trade_history where trade_type>20;";		      
 	       break;
 	       default:
-               $sql = "select * from trade_history where  stat_date='$stat_date' order by id desc;"; 
-	       $sql_count = "select sum(history_make_money) from trade_history where  stat_date='$stat_date' and trade_type>20;";		      
+               $sql = "select * from trade_history order by id desc;"; 
+	       $sql_count = "select sum(history_make_money) from trade_history where trade_type>20;";		      
 	       } 	
 	
     $sql = $sql;
