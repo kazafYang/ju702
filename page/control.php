@@ -4,9 +4,9 @@
         $ret = rtrim($ret, "\r\n");                                                                                                                                           
      //   echo "test:".$ret;                                                                                                                                                    
         if($ret == 8) {                                                                                                                                                        
-        echo "sussess!";                                                                                                                                                      
+        echo "200";                                                                                                                                                      
         }                                                                                                                                                                     
         else{                                                                                                                                                                 
-        echo "fail";                                                                                                                                                          
+        echo "404";                                                                                                                                                          
             }                                                                                                                                                             
 ?>
