@@ -95,19 +95,11 @@ if ($conn->connect_error) {
 	echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[total_money].'</td><td>'.$row[useable_money].'</td><td>'.$row[total_number].'</td><td>'.$row[useable_sell_number].'</td><td>'.$row[make_money ].'</td><td>'.$row[switched].'</td><td>'.$row[sell_switched].'</td><td>'.$row[buy_switched].'</td><td>'.$FUrl_buy.'</td><td>'.$FUrl_sell.'</td><td>'.$row[stat_date].'</td></tr>';
 	}
 
-      jincheng();
-       function jincheng(){
        date_default_timezone_set('PRC');
-       $hour= date("H"); 	       
-      // do {	          
-        $n2_url='http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/control.php'; 
-        $n2_html = file_get_contents($n2_url);
-	//} while ($n2_html != "fail" or $n2_html != "sussess!");       
-        echo "&#25235;&#21462;&#31243;&#24207;&#36816;&#34892;&#24773;&#20917;&#65306;".$n2_html."<p>" ;
-        echo "buy:type>20,sell:type<20\n";
-}	
+       $hour= date("H"); 	
+	
 $table_name=array("point_number","point_number_sz","point_number_sz100","point_number_zxb","point_number_hs","point_number_zq","point_number_jg","point_number_yh");                
-	echo '<table border="1"><tr><th>id</th><th>code</th><th>kdjday_k</th><th>kdjday_d</th><th>min15_k</th><th>min15_d</th><th>min30_k</th><th>min30_d</th><th>min60_k</th><th>min60_d</th><th>min120_k</th><th>min120_d</th><th>stat_date</th><</tr>';
+	echo '<table border="1"><tr><th>id</th><th>code</th><th>趋势</th><th>kdjday_k</th><th>kdjday_d</th><th>min15_k</th><th>min15_d</th><th>min30_k</th><th>min30_d</th><th>min60_k</th><th>min60_d</th><th>min120_k</th><th>min120_d</th><th>stat_date</th><</tr>';
 	foreach ($table_name as $value)                                                                                                                                                     
 {    
     $sql = "SELECT id,code,min15_k,min15_d,min15_j,min30_k,min30_d,min30_j,min60_k,min60_d,min60_j,min120_k,min120_d,kdjday_k,kdjday_d,kdjday_j,cci,stat_date FROM $value order by id desc limit 1";                                                                  
@@ -120,8 +112,17 @@ $table_name=array("point_number","point_number_sz","point_number_sz100","point_n
     $row[cci]=round($row[cci],2);$row[min120_k]=round($row[min120_k],2);$row[min120_d]=round($row[min120_d],2);	
     $sellinfo=$sellinfo."<br>";
     $buyinfo=$buyinfo."<br>";
+    if($row[kdjday_k]>=80 or $row[kdjday_d]>=80){
+       $qushi="变盘风险关闭buy";   
+    }elseif($row[kdjday_k]<80 and $row[kdjday_k]>=60) or ($row[kdjday_d]<80 and $row[kdjday_d]>=60){
+       $qushi="趋势向下?开启sell";
+    }elseif($row[kdjday_k]<60 and $row[kdjday_k]>=20) or ($row[kdjday_d]<60 and $row[kdjday_d]>=20){
+       $qushi="风险不大，高抛低吸";
+    }elseif($row[kdjday_k]<20 or $row[kdjday_d]<20){
+       $qushi="1/3介入待趋势明朗";
+    }
     $showinfo=$showinfo.",".$row[id].",".$row[code].",15mk:".$row[min15_k].",15md:".$row[min15_d].",15mj：".$row[min15_j].",30mk：".$row[min30_k].",30md：".$row[min30_d].",30mj：".$row[min30_j].",60mK：".$row[min60_k].",60md：".$row[min60_d].",60mj：".$row[min60_j].",dayk：".$row[kdjday_k].",dayd：".$row[kdjday_d].",dayj：".$row[kdjday_j].",cci：".$row[cci]."<br>";                         
-   echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$row[kdjday_k].'</td><td>'.$row[kdjday_d].'</td><td>'.$row[min15_k].'</td><td>'.$row[min15_d].'</td><td>'.$row[min30_k].'</td><td>'.$row[min30_d].'</td><td>'.$row[min60_k].'</td><td>'.$row[min60_d].'</td><td>'.$row[min120_k].'</td><td>'.$row[min120_d].'</td><td>'.$row[stat_date].'</td></tr>';
+   echo '<tr><td>'.$row[id].'</td><td>'.$row[code].'</td><td>'.$qushi.'</td><td>'.$row[kdjday_k].'</td><td>'.$row[kdjday_d].'</td><td>'.$row[min15_k].'</td><td>'.$row[min15_d].'</td><td>'.$row[min30_k].'</td><td>'.$row[min30_d].'</td><td>'.$row[min60_k].'</td><td>'.$row[min60_d].'</td><td>'.$row[min120_k].'</td><td>'.$row[min120_d].'</td><td>'.$row[stat_date].'</td></tr>';
 
 	}                            	
 
