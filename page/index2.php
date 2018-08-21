@@ -15,6 +15,18 @@
 include 'config_inc.php';
 $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);
 date_default_timezone_set('PRC');
+	
+jincheng();
+function jincheng(){
+	date_default_timezone_set('PRC');
+	$hour= date("H"); 	       
+	// do {	          
+	$n2_url='http://ju70-ju70.193b.starter-ca-central-1.openshiftapps.com/page/control.php'; 
+	$n2_html = file_get_contents($n2_url);
+	//} while ($n2_html != "fail" or $n2_html != "sussess!");       
+	echo "&#25235;&#21462;&#31243;&#24207;&#36816;&#34892;&#24773;&#20917;&#65306;".$n2_html."<p>" ;
+	echo "buy:type>20,sell:type<20\n";
+}
 // Check connection
 if ($conn->connect_error) {
     die("defult: " . $conn->connect_error);
