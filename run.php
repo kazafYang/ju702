@@ -11,11 +11,11 @@
         $ret = shell_exec("$cmd");
         $ret = rtrim($ret, "\r\n");
         if($ret == 8) {
-        echo "find sussess!";
+        echo "启动成功!";
         exit(0);
         }
       else{
-      echo "启动失败，请再次尝试！";
+      echo "启动失败，请再次尝试！".$ret;
       }
   
    }
