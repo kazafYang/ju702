@@ -114,9 +114,9 @@ $table_name=array("point_number","point_number_sz","point_number_sz100","point_n
     $buyinfo=$buyinfo."<br>";
     if($row[kdjday_k]>=80 or $row[kdjday_d]>=80){
        $qushi="变盘风险关闭buy";   
-    }elseif($row[kdjday_k]<80 and $row[kdjday_k]>=60) or ($row[kdjday_d]<80 and $row[kdjday_d]>=60){
+    }elseif(($row[kdjday_k]<80 and $row[kdjday_k]>=60) or ($row[kdjday_d]<80 and $row[kdjday_d]>=60)){
        $qushi="趋势向下?开启sell";
-    }elseif($row[kdjday_k]<60 and $row[kdjday_k]>=20) or ($row[kdjday_d]<60 and $row[kdjday_d]>=20){
+    }elseif(($row[kdjday_k]<60 and $row[kdjday_k]>=20) or ($row[kdjday_d]<60 and $row[kdjday_d]>=20)){
        $qushi="风险不大，高抛低吸";
     }elseif($row[kdjday_k]<20 or $row[kdjday_d]<20){
        $qushi="1/3介入待趋势明朗";
