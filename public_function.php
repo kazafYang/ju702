@@ -455,7 +455,7 @@ function analyse () {
 	 //回转买入开始 
 	//回转60分钟买入
 $log -> log_work("回转buy开始\n");	  
- if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<80) and $useable_money>1000 and $buy_switched==1){	  
+ if((($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<80)) and $useable_money>1000 and $buy_switched==1){	  
       $log ->log_work("huizhuan_buy:60mink=$trade_min60_k,60mind=$trade_min60_d,dayk:$trade_day_k,dayd=$trade_day_d\n");	  
       if (($trade_min60_k <20 or $trade_min60_d <20) and ($trade_day_k<65 and $trade_day_d<60)){
        $log -> log_work("回转买入开始:60mink=$trade_min60_k,60mind=$trade_min60_d,dayk:$trade_day_k,dayd=$trade_day_d\n");	      
