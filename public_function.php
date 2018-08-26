@@ -675,7 +675,7 @@ function huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$t
 	 //######################################################################## 
 }
 function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite) {
-      global $useable_money,$log;;
+      global $useable_money,$log;
       $log -> log_work("coming buy_action~~~~".$trade_bite."\n");
       $number=11/$trade_buy_price*$trade_bite;
       $number=round($number);
