@@ -2,7 +2,7 @@
 include 'config_inc.php';
 include 'common/logs.php';
 $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);
-      $stat_date='2018-08-24';
+      $stat_date='2018-08-27';
       $table_name="point_number";
       $kdjday_k=30;$kdjday_d=29;	
       $runoob = new Decide($kdjday_k,$kdjday_d);
@@ -27,7 +27,7 @@ class Decide {
      //当前进度是，已经可以将历史数据拿回来解析了，也可以通过数据库查库的操作，预计至少还需要一周的时间才能写的完的	  
      global $conn,$log,$table_name,$stat_date;
      $log -> log_work("开启决策室");
-	$json = file_get_contents("http://money.finance.sina.com.cn/quotes_service/api/json_v2.php/CN_MarketData.getKLineData?symbol=sz159915&scale=60&ma=5&datalen=2");
+	$json = file_get_contents("http://money.finance.sina.com.cn/quotes_service/api/json_v2.php/CN_MarketData.getKLineData?symbol=sz159915&scale=60&ma=5&datalen=10");
         $json = str_replace('day','"day"',$json);
 	$json = str_replace('open','"open"',$json); 
 	$json = str_replace('high','"high"',$json);
@@ -39,12 +39,21 @@ class Decide {
 	echo $json."\n";  
 	//$json = '[{"day":"2018-08-24 14:00:00","open":"1.380","high":"1.394","low":"1.379","close":"1.389","volume":"106915552",ma_price20:1.377,ma_"volume"20:174191587},{"day":"2018-08-24 15:00:00","open":"1.390","high":"1.391","low":"1.381","close":"1.382","volume":"71922914",ma_price20:1.378,ma_"volume"20:165794292}]'  
 	$students= json_decode($json, true);//得到的是 array	  
-	echo gettype($students);  
 	for($i=0;$i<count($students);$i++){
+	if(strpos($students[$i]['day'],'15:00:00') !== false){
+            echo $students[$i]['day']."~\n";		
+	    $row=result_select("select count(*) from day_point where stat_date='".$students[$i]['day']."';");
+	    if($row[0] == 0){
+		echo $students[$i]['open']."@\n";    
+	    	$sql = "insert into day_point (open_price,high_price,low_price,close_price,stat_date)values (" . $students[$i]['open'] . "," . $students[$i]['high'] .",".$students[$i]['low'].",".$students[$i]['close'].",'".$students[$i]['day']."');";                                                                  
+	        $log -> log_work($sql."插入day_point\n");	      
+	        $conn->query($sql);      
+	    }
         echo "姓名：".$students[$i]['day']."&nbsp;&nbsp;&nbsp;年 龄：".$students[$i]['open'];
         }
+	}
 	$kdjday_k=$this->url;  
-	$row=result_select("select id from $table_name where stat_date<'2018-08-24' and stat_time_hour=14 and stat_time_min=45 and kdjday_k>=$kdjday_k-5 and kdjday_k<=$kdjday_k+5 order by id desc limit 1;");
+	$row=result_select("select id from $table_name where stat_date<'$stat_date' and stat_time_hour=14 and stat_time_min=45 and kdjday_k>=$kdjday_k-5 and kdjday_k<=$kdjday_k+5 order by id desc limit 1;");
 	$status=$row[id];     
 	return $status;      
   }
