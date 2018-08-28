@@ -22,35 +22,41 @@ class Decide {
   function setUrl($par){
      $this->url = $par;
   }
-  
+  #这个方法主要是统计day_point中的数据，看看近些天的涨跌幅情况；
   function getDecide(){
-     //当前进度是，已经可以将历史数据拿回来解析了，也可以通过数据库查库的操作，预计至少还需要一周的时间才能写的完的	  
      global $conn,$log,$table_name,$stat_date;
      $log -> log_work("开启决策室");
-	$json = file_get_contents("http://money.finance.sina.com.cn/quotes_service/api/json_v2.php/CN_MarketData.getKLineData?symbol=sz159915&scale=60&ma=5&datalen=10");
+	$json = file_get_contents("http://money.finance.sina.com.cn/quotes_service/api/json_v2.php/CN_MarketData.getKLineData?symbol=sz159915&scale=60&ma=15&datalen=1024");
         $json = str_replace('day','"day"',$json);
 	$json = str_replace('open','"open"',$json); 
 	$json = str_replace('high','"high"',$json);
 	$json = str_replace('low','"low"',$json);
 	$json = str_replace('close','"close"',$json);
-	$json = str_replace('ma_volume5','"ma_volume5"',$json);   
+	$json = str_replace('ma_volume15','"ma_volume15"',$json);   
 	$json = str_replace('volume:','"volume":',$json); 
-	$json = str_replace('ma_price5','"ma_price5"',$json);
-	echo $json."\n";  
+	$json = str_replace('ma_price15','"ma_price15"',$json);
 	//$json = '[{"day":"2018-08-24 14:00:00","open":"1.380","high":"1.394","low":"1.379","close":"1.389","volume":"106915552",ma_price20:1.377,ma_"volume"20:174191587},{"day":"2018-08-24 15:00:00","open":"1.390","high":"1.391","low":"1.381","close":"1.382","volume":"71922914",ma_price20:1.378,ma_"volume"20:165794292}]'  
-	$students= json_decode($json, true);//得到的是 array	  
+	$students= json_decode($json, true);//得到的是 array
 	for($i=0;$i<count($students);$i++){
 	if(strpos($students[$i]['day'],'15:00:00') !== false){
-            echo $students[$i]['day']."~\n";		
 	    $row=result_select("select count(*) from day_point where stat_date='".$students[$i]['day']."';");
 	    if($row[0] == 0){
-		echo $students[$i]['open']."@\n";    
-	    	$sql = "insert into day_point (open_price,high_price,low_price,close_price,stat_date)values (" . $students[$i]['open'] . "," . $students[$i]['high'] .",".$students[$i]['low'].",".$students[$i]['close'].",'".$students[$i]['day']."');";                                                                  
+		$row_make_bite=result_select("select * from day_point order by id desc limit 1;");
+		$make_bite= $students[$i]['close'] - $row_make_bite[close_price];  
+	    	$sql = "insert into day_point (open_price,high_price,low_price,close_price,make_bite,stat_date)values (" . $students[$i]['open'] . "," . $students[$i]['high'] .",".$students[$i]['low'].",".$students[$i]['close'].",".$make_bite.",'".$students[$i]['day']."');";                                                                  
 	        $log -> log_work($sql."插入day_point\n");	      
 	        $conn->query($sql);      
 	    }
-        echo "姓名：".$students[$i]['day']."&nbsp;&nbsp;&nbsp;年 龄：".$students[$i]['open'];
-        }
+     	   else{
+		$row_make_bite=result_select("select * from day_point where stat_date<'".$students[$i]['day']."' order by id desc limit 1;");
+		$make_bite= $students[$i]['close'] - $row_make_bite[close_price]; 
+		$make_bite = round($make_bite,3);   
+		echo  $students[$i]['close']."~".$row_make_bite[close_price]."~".$make_bite;  
+	    	$sql = "update day_point set open_price=".$students[$i]['open'].",high_price=".$students[$i]['high'].",low_price=".$students[$i]['low'].",close_price=".$students[$i]['close'].",make_bite=$make_bite where stat_date='".$students[$i]['day']."';";                                                                  
+	        $log -> log_work($sql."插入day_point\n");	      
+	        $conn->query($sql);  
+	   } 
+	}
 	}
 	$kdjday_k=$this->url;  
 	$row=result_select("select id from $table_name where stat_date<'$stat_date' and stat_time_hour=14 and stat_time_min=45 and kdjday_k>=$kdjday_k-5 and kdjday_k<=$kdjday_k+5 order by id desc limit 1;");
