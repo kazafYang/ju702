@@ -43,6 +43,7 @@ class Decide {
 	    if($row[0] == 0){
 		$row_make_bite=result_select("select * from day_point order by id desc limit 1;");
 		$make_bite= $students[$i]['close'] - $row_make_bite[close_price];  
+		$make_bite = round($make_bite,3);       
 	    	$sql = "insert into day_point (open_price,high_price,low_price,close_price,make_bite,stat_date)values (" . $students[$i]['open'] . "," . $students[$i]['high'] .",".$students[$i]['low'].",".$students[$i]['close'].",".$make_bite.",'".$students[$i]['day']."');";                                                                  
 	        $log -> log_work($sql."插入day_point\n");	      
 	        $conn->query($sql);      
@@ -64,8 +65,11 @@ class Decide {
 	return $status;      
   }
   	
-  function setTitle($par){
-     $this->title = $par;
+  function day_kdj($par){
+  //获取今日kdj数据
+   $row=result_select("select stat_date from $table_name where stat_date<'$stat_date' and stat_time_hour=14 and stat_time_min=45 and kdjday_k>=$kdjday_k-5 and kdjday_k<=$kdjday_k+5 order by id desc limit 1;");
+   
+   $row=result_select("select count(*) from day_point where stat_date like '2018-08-27%';");
   }
   
   function getTitle(){
