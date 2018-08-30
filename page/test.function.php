@@ -6,13 +6,15 @@ $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_
       $table_name="point_number";
       $kdjday_k=30;$kdjday_d=29;	
       $runoob = new Decide($kdjday_k,$kdjday_d);
-      $a=$runoob->getDecide();  
+      $a=$runoob->getDecide();
+      $b=$runoob->day_kdj($kdjday_k);	
       echo $a;
 //定义决策类
 class Decide {	
   /* 成员变量 */
   var $url;
   var $title;
+  var $stat_date;	
 
   function __construct( $par1, $par2 ) {
     $this->url = $par1;
@@ -62,29 +64,31 @@ class Decide {
 	        $conn->query($sql);  
 	   } 
 	}
-	}
-	$kdjday_k=$this->url;  
-	$row=result_select("select id from $table_name where stat_date<'$stat_date' and stat_time_hour=14 and stat_time_min=45 and kdjday_k>=$kdjday_k-5 and kdjday_k<=$kdjday_k+5 order by id desc limit 1;");
-	$status=$row[id];     
-	return $status;      
+	}  
   }
   	
-  function day_kdj($par){
+  function day_kdj($kdjday_k){
+  global $stat_date,$table_name,$conn;	  
+  echo "comming";	  
   //获取今日kdj数据
   //$row=result_select("select count(*) from day_point where stat_date like '2018-08-27%';");
-  $row=result_select("select stat_date from $table_name where stat_date<'$stat_date' and stat_time_hour=14 and stat_time_min=45 and kdjday_k>=$kdjday_k-5 and kdjday_k<=$kdjday_k+5 order by id desc limit 1;"); 	  
-  while($row=mysqli_fetch_array($result)){
-  
-  $row=result_select("select sum(make_bite) from day_point where stat_date>='$row[stat_date]-7' and stat_date<=$stat_date';");	  
-  }	  
-   $row=result_select("select stat_date from $table_name where stat_date<'$stat_date' and stat_time_hour=14 and stat_time_min=45 and kdjday_k>=$kdjday_k-5 and kdjday_k<=$kdjday_k+5 order by id desc limit 1;");
-   
+  $sql="select stat_date from $table_name where stat_date<'$stat_date' and stat_time_hour=14 and stat_time_min=45 and kdjday_k>=$kdjday_k-10 and kdjday_k<=$kdjday_k+10 order by id desc limit 5;"; 	  
+  $result = $conn->query($sql);
+ while($row=mysqli_fetch_array($result)){
+ echo $row[stat_date]."\n";
+  $stat_date=strtotime("$row[stat_date] +2 day");
+  $stat_date=date("Y-m-d 15:00:00",$stat_date);	 
+  $row=result_select("select sum(make_bite) from day_point where stat_date>='$row[stat_date]' and stat_date<='$stat_date';");
+  echo "计算结果：$row[0]\n";	 
   }
+ mysqli_free_result($result);  //释放结果集		  
+}	  
   
   function getTitle(){
      echo $this->title . PHP_EOL;
   }
-}
+}  //类结束位置
+
   function machining_price () 
   {  
   global $log, $stat_date,$time_hour,$time_min,$time_second,$begin_point,$code,$buy_one_price,$sell_one_price;
