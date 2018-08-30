@@ -42,18 +42,22 @@ class Decide {
 	    $row=result_select("select count(*) from day_point where stat_date='".$students[$i]['day']."';");
 	    if($row[0] == 0){
 		$row_make_bite=result_select("select * from day_point order by id desc limit 1;");
-		$make_bite= $students[$i]['close'] - $row_make_bite[close_price];  
-		$make_bite = round($make_bite,3);       
-	    	$sql = "insert into day_point (open_price,high_price,low_price,close_price,make_bite,stat_date)values (" . $students[$i]['open'] . "," . $students[$i]['high'] .",".$students[$i]['low'].",".$students[$i]['close'].",".$make_bite.",'".$students[$i]['day']."');";                                                                  
+		$make_point= $students[$i]['close'] - $row_make_bite[close_price];   
+		$make_point = round($make_point,3);      
+		$make_bite=$make_point/$row_make_bite[close_price]*100;
+		$make_bite = round($make_bite,2);         
+	    	$sql = "insert into day_point (open_price,high_price,low_price,close_price,$make_point,make_bite,stat_date)values (" . $students[$i]['open'] . "," . $students[$i]['high'] .",".$students[$i]['low'].",".$students[$i]['close'].",".$make_point.",".$make_bite.",'".$students[$i]['day']."');";                                                                  
 	        $log -> log_work($sql."插入day_point\n");	      
 	        $conn->query($sql);      
 	    }
      	   else{
 		$row_make_bite=result_select("select * from day_point where stat_date<'".$students[$i]['day']."' order by id desc limit 1;");
-		$make_bite= $students[$i]['close'] - $row_make_bite[close_price]; 
-		$make_bite = round($make_bite,3);   
+		$make_point= $students[$i]['close'] - $row_make_bite[close_price];   
+		$make_point = round($make_point,3);      
+		$make_bite=$make_point/$row_make_bite[close_price]*100;
+		$make_bite = round($make_bite,2);  
 		echo  $students[$i]['close']."~".$row_make_bite[close_price]."~".$make_bite;  
-	    	$sql = "update day_point set open_price=".$students[$i]['open'].",high_price=".$students[$i]['high'].",low_price=".$students[$i]['low'].",close_price=".$students[$i]['close'].",make_bite=$make_bite where stat_date='".$students[$i]['day']."';";                                                                  
+	    	$sql = "update day_point set open_price=".$students[$i]['open'].",high_price=".$students[$i]['high'].",low_price=".$students[$i]['low'].",close_price=".$students[$i]['close'].",make_point=$make_point,make_bite=$make_bite where stat_date='".$students[$i]['day']."';";                                                                  
 	        $log -> log_work($sql."插入day_point\n");	      
 	        $conn->query($sql);  
 	   } 
