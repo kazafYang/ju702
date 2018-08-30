@@ -71,7 +71,7 @@ class Decide {
   $row=result_select("select stat_date from $table_name where stat_date<'$stat_date' and stat_time_hour=14 and stat_time_min=45 and kdjday_k>=$kdjday_k-5 and kdjday_k<=$kdjday_k+5 order by id desc limit 1;"); 	  
   while($row=mysqli_fetch_array($result)){
   
-  $row=result_select("select * from day_point where stat_date>='$row[stat_date]' and stat_date<=$stat_date'+5");	  
+  $row=result_select("select sum(make_bite) from day_point where stat_date>='$row[stat_date]-7' and stat_date<=$stat_date';");	  
   }	  
    $row=result_select("select stat_date from $table_name where stat_date<'$stat_date' and stat_time_hour=14 and stat_time_min=45 and kdjday_k>=$kdjday_k-5 and kdjday_k<=$kdjday_k+5 order by id desc limit 1;");
    
