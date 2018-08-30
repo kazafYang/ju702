@@ -76,15 +76,18 @@ class Decide {
   $result = $conn->query($sql);
  while($row=mysqli_fetch_array($result)){
  echo $row[stat_date]."\n";
-  $stat_date=strtotime("$row[stat_date] +2 day");
-  $stat_date=date("Y-m-d 15:00:00",$stat_date);	 
-  $row=result_select("select sum(make_bite) from day_point where stat_date>='$row[stat_date]' and stat_date<='$stat_date';");
+    $stat_date=$row[stat_date]." 15:00:00";	 
+  //$stat_date=strtotime("$row[stat_date] +2 day");
+  //$stat_date=date("Y-m-d 15:00:00",$row[stat_date]);	 
+  $row=result_select("select sum(make_bite) from day_point where id IN (select x.id from ( select id from day_point where stat_date>='$stat_date' order by id asc LIMIT 2) as x);");
+  //$row=result_select("select sum(make_bite) from day_point where stat_date>='$row[stat_date]' and stat_date<='$stat_date';");	 
   echo "计算结果：$row[0]\n";	 
   }
  mysqli_free_result($result);  //释放结果集		  
 }	  
   
   function getTitle(){
+     #获取今日cci数据	  
      echo $this->title . PHP_EOL;
   }
 }  //类结束位置
