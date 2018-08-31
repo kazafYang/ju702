@@ -9,6 +9,7 @@ $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_
       $a=$runoob->getDecide();
       $b=$runoob->day_kdj($kdjday_k,$kdjday_d);	
       echo $a;
+      $runoob->get_getDecide($b);
 //定义决策类
 class Decide {	
   /* 成员变量 */
@@ -87,12 +88,21 @@ $result = $conn->query($sql);
   $total_bite=$total_bite+$row[0];
   echo "总计计算结果：$total_bite\n";	 
   }
- mysqli_free_result($result);  //释放结果集		  
+ mysqli_free_result($result);  //释放结果集	
+ return $total_bite;	  
 }	  
   
-  function getTitle(){
+  function get_getDecide($total_bite){
      #获取今日cci数据	  
-     echo $this->title . PHP_EOL;
+     if($total_bite>1){
+     echo "total_bite>1";
+     }
+     elseif($total_bite>0 and $total_bite<1){
+     echo "total_bite>0 <1";
+     }
+     else{
+     echo "total_bite<0";
+     }	  
   }
 }  //类结束位置
 
