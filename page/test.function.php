@@ -4,10 +4,10 @@ include 'common/logs.php';
 $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);
       $stat_date='2018-08-27';
       $table_name="point_number";
-      $kdjday_k=30;$kdjday_d=29;	
+      $kdjday_k=63;$kdjday_d=43;	
       $runoob = new Decide($kdjday_k,$kdjday_d);
       $a=$runoob->getDecide();
-      $b=$runoob->day_kdj($kdjday_k);	
+      $b=$runoob->day_kdj($kdjday_k,$kdjday_d);	
       echo $a;
 //定义决策类
 class Decide {	
@@ -67,21 +67,25 @@ class Decide {
 	}  
   }
   	
-  function day_kdj($kdjday_k){
+  function day_kdj($kdjday_k,$kdjday_d){
   global $stat_date,$table_name,$conn;	  
   echo "comming";	  
   //获取今日kdj数据
   //$row=result_select("select count(*) from day_point where stat_date like '2018-08-27%';");
-  $sql="select stat_date from $table_name where stat_date<'$stat_date' and stat_time_hour=14 and stat_time_min=45 and kdjday_k>=$kdjday_k-10 and kdjday_k<=$kdjday_k+10 order by id desc limit 5;"; 	  
-  $result = $conn->query($sql);
+  $sql="select stat_date from $table_name where stat_date<'$stat_date' and stat_time_hour=14 and stat_time_min=45 and kdjday_k>=$kdjday_k-10 and kdjday_k<=$kdjday_k+10 and kdjday_k>=$kdjday_d-10 and kdjday_d<=$kdjday_k+10 order by id desc limit 5;"; 	  
+echo $sql."\n";  
+$result = $conn->query($sql);	  
  while($row=mysqli_fetch_array($result)){
+ echo "数组长度：".count($row)."\n";	 
  echo $row[stat_date]."\n";
     $stat_date=$row[stat_date]." 15:00:00";	 
   //$stat_date=strtotime("$row[stat_date] +2 day");
   //$stat_date=date("Y-m-d 15:00:00",$row[stat_date]);	 
   $row=result_select("select sum(make_bite) from day_point where id IN (select x.id from ( select id from day_point where stat_date>='$stat_date' order by id asc LIMIT 2) as x);");
   //$row=result_select("select sum(make_bite) from day_point where stat_date>='$row[stat_date]' and stat_date<='$stat_date';");	 
-  echo "计算结果：$row[0]\n";	 
+  echo "计算结果：$row[0]\n";
+  $total_bite=$total_bite+$row[0];
+  echo "总计计算结果：$total_bite\n";	 
   }
  mysqli_free_result($result);  //释放结果集		  
 }	  
