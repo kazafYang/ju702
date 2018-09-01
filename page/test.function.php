@@ -5,28 +5,28 @@ $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_
       $stat_date='2018-08-27';
       $table_name="point_number";
       $kdjday_k=63;$kdjday_d=43;	
-      $runoob = new Decide($kdjday_k,$kdjday_d);
-      $a=$runoob->getDecide();
-      $b=$runoob->day_kdj($kdjday_k,$kdjday_d);	
-      echo $a;
-      $runoob->get_getDecide($b);
+      $runoob = new Decide();
+      $a=$runoob->Runday_Point();
+      $b=$runoob->setkdj($kdjday_k,$kdjday_d);	
+      echo $runoob->Get_Decide($b)."前面是状态\n";
+
 //定义决策类
 class Decide {	
   /* 成员变量 */
-  var $url;
-  var $title;
-  var $stat_date;	
-
-  function __construct( $par1, $par2 ) {
-    $this->url = $par1;
-    $this->title = $par2;
-  }
+  public $stat_date;	
+  public $kdjday_k;
+  public $kdjday_d;
+  public $Decide_buy_status;	
+//  function __construct( $par1, $par2 ) {
+//    $this->url = $par1;
+//    $this->title = $par2;
+//  }
   /* 成员函数 */
-  function setUrl($par){
-     $this->url = $par;
+  function setkdj($kdyday_k,$kdjday_d){
+     $this->day_kdj($kdyday_k,$kdyday_d);
   }
   #这个方法主要是统计day_point中的数据，看看近些天的涨跌幅情况；
-  function getDecide(){
+  function Runday_Point(){
      global $conn,$log,$table_name,$stat_date;
      $log -> log_work("开启决策室");
 	$json = file_get_contents("http://money.finance.sina.com.cn/quotes_service/api/json_v2.php/CN_MarketData.getKLineData?symbol=sz159915&scale=60&ma=15&datalen=1024");
@@ -61,7 +61,7 @@ class Decide {
 		$make_bite = round($make_bite,2);  
 		echo  $students[$i]['close']."~".$row_make_bite[close_price]."~".$make_bite;  
 	    	$sql = "update day_point set open_price=".$students[$i]['open'].",high_price=".$students[$i]['high'].",low_price=".$students[$i]['low'].",close_price=".$students[$i]['close'].",make_point=$make_point,make_bite=$make_bite where stat_date='".$students[$i]['day']."';";                                                                  
-	        $log -> log_work($sql."插入day_point\n");	      
+	        $log -> log_work($sql."更新day_point\n");	      
 	        $conn->query($sql);  
 	   } 
 	}
@@ -92,17 +92,18 @@ $result = $conn->query($sql);
  return $total_bite;	  
 }	  
   
-  function get_getDecide($total_bite){
+  function Get_Decide($total_bite){
      #获取今日cci数据	  
-     if($total_bite>1){
-     echo "total_bite>1";
+     if($total_bite>0){
+     $Decide_buy_status=1;
      }
-     elseif($total_bite>0 and $total_bite<1){
-     echo "total_bite>0 <1";
-     }
+     //elseif($total_bite>0 and $total_bite<1){
+     //echo "total_bite>0 <1";
+     //}
      else{
-     echo "total_bite<0";
-     }	  
+     $Decide_buy_status=0;
+     }
+     return $Decide_buy_status;	  
   }
 }  //类结束位置
 
