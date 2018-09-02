@@ -78,14 +78,12 @@ class Decide {
 echo $sql."\n";  
 $result = $conn->query($sql);	  
  while($row=mysqli_fetch_array($result)){
- echo "数组长度：".count($row)."\n";	 
- echo $row[stat_date]."\n";
+    print_r($row);	 
     $stat_date=$row[stat_date]." 15:00:00";	 
   //$stat_date=strtotime("$row[stat_date] +2 day");
   //$stat_date=date("Y-m-d 15:00:00",$row[stat_date]);	 
   $row=result_select("select sum(make_bite) from day_point where id IN (select x.id from ( select id from day_point where stat_date>='$stat_date' order by id asc LIMIT 2) as x);");
   //$row=result_select("select sum(make_bite) from day_point where stat_date>='$row[stat_date]' and stat_date<='$stat_date';");	 
-  echo "计算结果：$row[0]\n";
   $total_bite=$total_bite+$row[0];
   echo "总计计算结果：$total_bite\n";	 
   }
@@ -109,21 +107,20 @@ $result = $conn->query($sql);
 
   function cci($cci){
   global $stat_date,$table_name,$conn;	  
-  echo "comming";	  
+  echo "comming\n";	  
   //获取今日kdj数据
   //$row=result_select("select count(*) from day_point where stat_date like '2018-08-27%';");
-  $sql="select stat_date from $table_name where stat_date<'$stat_date' and stat_time_hour=14 and stat_time_min=45 and $cci>=$cci-10 and $cci<=$cci+10 order by id desc limit 5;"; 	  
+  $sql="select stat_date from $table_name where stat_date<'$stat_date' and stat_time_hour=14 and stat_time_min=45 and cci>=$cci-10 and cci<=$cci+10 order by id desc limit 5;"; 	  
 echo $sql."\n";  
 $result = $conn->query($sql);	  
  while($row=mysqli_fetch_array($result)){
- echo "数组长度：".count($row)."\n";	 
- echo $row[stat_date]."\n";
+     print_r($row);	 
     $stat_date=$row[stat_date]." 15:00:00";	 
   //$stat_date=strtotime("$row[stat_date] +2 day");
   //$stat_date=date("Y-m-d 15:00:00",$row[stat_date]);	 
   $row=result_select("select sum(make_bite) from day_point where id IN (select x.id from ( select id from day_point where stat_date>='$stat_date' order by id asc LIMIT 2) as x);");
   //$row=result_select("select sum(make_bite) from day_point where stat_date>='$row[stat_date]' and stat_date<='$stat_date';");	 
-  echo "计算结果：$row[0]\n";
+  //echo "计算结果：$row[0]\n";
   $total_bite=$total_bite+$row[0];
   echo "总计cci计算结果：$total_bite\n";	 
   }
