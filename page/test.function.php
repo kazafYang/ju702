@@ -4,10 +4,10 @@ include 'common/logs.php';
 $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);
       $stat_date='2018-08-27';
       $table_name="point_number";
-      $kdjday_k=63;$kdjday_d=43;	
+      $kdjday_k=63;$kdjday_d=43;$cci=-83;	
       $runoob = new Decide();
       $a=$runoob->Runday_Point();
-      $b=$runoob->setkdj($kdjday_k,$kdjday_d);	
+      $b=$runoob->setkdj($kdjday_k,$kdjday_d,$cci);	
       echo $runoob->Get_Decide($b)."前面是状态\n";
 
 //定义决策类
@@ -22,8 +22,9 @@ class Decide {
 //    $this->title = $par2;
 //  }
   /* 成员函数 */
-  function setkdj($kdyday_k,$kdjday_d){
+  function setkdj($kdyday_k,$kdjday_d,$cci){
      $this->day_kdj($kdyday_k,$kdyday_d);
+     $this->cci($cci);	  
   }
   #这个方法主要是统计day_point中的数据，看看近些天的涨跌幅情况；
   function Runday_Point(){
@@ -105,9 +106,31 @@ $result = $conn->query($sql);
      }
      return $Decide_buy_status;	  
   }
-  function Trend($total_bite){
-  //用于计算当前所在的趋势	  
+
+  function cci($cci){
+  global $stat_date,$table_name,$conn;	  
+  echo "comming";	  
+  //获取今日kdj数据
+  //$row=result_select("select count(*) from day_point where stat_date like '2018-08-27%';");
+  $sql="select stat_date from $table_name where stat_date<'$stat_date' and stat_time_hour=14 and stat_time_min=45 and $cci>=$cci-10 and $cci<=$cci+10 order by id desc limit 5;"; 	  
+echo $sql."\n";  
+$result = $conn->query($sql);	  
+ while($row=mysqli_fetch_array($result)){
+ echo "数组长度：".count($row)."\n";	 
+ echo $row[stat_date]."\n";
+    $stat_date=$row[stat_date]." 15:00:00";	 
+  //$stat_date=strtotime("$row[stat_date] +2 day");
+  //$stat_date=date("Y-m-d 15:00:00",$row[stat_date]);	 
+  $row=result_select("select sum(make_bite) from day_point where id IN (select x.id from ( select id from day_point where stat_date>='$stat_date' order by id asc LIMIT 2) as x);");
+  //$row=result_select("select sum(make_bite) from day_point where stat_date>='$row[stat_date]' and stat_date<='$stat_date';");	 
+  echo "计算结果：$row[0]\n";
+  $total_bite=$total_bite+$row[0];
+  echo "总计cci计算结果：$total_bite\n";	 
   }
+ mysqli_free_result($result);  //释放结果集	
+ return $total_bite;	  
+}	
+	
 }  //类结束位置 trend
 
   function machining_price () 
