@@ -50,7 +50,7 @@ class Decide {
 		$make_point = round($make_point,3);      
 		$make_bite=$make_point/$row_make_bite[close_price]*100;
 		$make_bite = round($make_bite,2);         
-	    	$sql = "insert into day_point (open_price,high_price,low_price,close_price,$make_point,make_bite,stat_date)values (" . $students[$i]['open'] . "," . $students[$i]['high'] .",".$students[$i]['low'].",".$students[$i]['close'].",".$make_point.",".$make_bite.",'".$students[$i]['day']."');";                                                                  
+	    	$sql = "insert into day_point (open_price,high_price,low_price,close_price,make_point,make_bite,stat_date)values (" . $students[$i]['open'] . "," . $students[$i]['high'] .",".$students[$i]['low'].",".$students[$i]['close'].",".$make_point.",".$make_bite.",'".$students[$i]['day']."');";                                                                  
 	        $log -> log_work($sql."插入day_point\n");	      
 	        $conn->query($sql);      
 	    }
@@ -75,8 +75,8 @@ class Decide {
   //获取今日kdj数据
   //$row=result_select("select count(*) from day_point where stat_date like '2018-08-27%';");
   $sql="select stat_date from $table_name where stat_date<'$stat_date' and stat_time_hour=14 and stat_time_min=45 and kdjday_k>=$kdjday_k-10 and kdjday_k<=$kdjday_k+10 and kdjday_k>=$kdjday_d-10 and kdjday_d<=$kdjday_k+10 order by id desc limit 5;"; 	  
-echo $sql."\n";  
-$result = $conn->query($sql);	  
+  echo $sql."\n";  
+  $result = $conn->query($sql);	  
  while($row=mysqli_fetch_array($result)){
     print_r($row);	 
     $stat_date=$row[stat_date]." 15:00:00";	 
