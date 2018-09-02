@@ -105,7 +105,10 @@ $result = $conn->query($sql);
      }
      return $Decide_buy_status;	  
   }
-}  //类结束位置
+  function Trend($total_bite){
+  //用于计算当前所在的趋势	  
+  }
+}  //类结束位置 trend
 
   function machining_price () 
   {  
