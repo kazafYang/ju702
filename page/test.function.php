@@ -83,21 +83,29 @@ class Decide {
   //$stat_date=date("Y-m-d 15:00:00",$row[stat_date]);
   $row_a=result_select("select count(*) from day_point where stat_date='$stat_date';");	 
    if($row_a[0]==1){
-  $row=result_select("select make_bite from day_point where id IN (select x.id from ( select id from day_point where stat_date>='$stat_date' order by id asc LIMIT 2) as x);");
-  //$row=result_select("select sum(make_bite) from day_point where stat_date>='$row[stat_date]' and stat_date<='$stat_date';");	 
-  print_r($row);
-  for($i==0;$i<=count($row);$i++){	   
-  echo count($row)."\n";	   
-  echo $row[0]."~".$row[1]."\n";
-  }	  
+  $row=result_select("select sum(make_bite) from day_point where id IN (select x.id from ( select id from day_point where stat_date>='$stat_date' order by id asc LIMIT 2) as x);");	   
+  $row_fast=result_select("select make_bite from day_point where id IN (select x.id from ( select id from day_point where stat_date='$stat_date' order by id asc LIMIT 1) as x);");
+  $row_last=result_select("select make_bite from day_point where id IN (select x.id from ( select id from day_point where stat_date>'$stat_date' order by id asc LIMIT 1) as x);");
+  echo $row_fast[0]."~".$row_last[0]."\n";
   $total_bite=$total_bite+$row[0];
-  echo "总计计算结果：$total_bite\n";	 
+  echo "总计计算结果：$total_bite\n";
+  if($row_fast[0]>=0 and $row_last[0]>=0){
+  echo "今明两天天气好\n";
+  $number=$number+2;	  
+  }elseif($row_fast[0]>=0 or $row_last[0]>=0){
+  echo "今明两天有一天天气好\n";
+  $number=$number+1;	  
+  }else{
+  echo "今明两天天气不好\n";
+  $number=$number+0;
   }
- }	 
+ }
+	 }
+ echo $number."number\n";	 
  mysqli_free_result($result);  //释放结果集	
- return $total_bite;	  
-}	  
-  
+ return $number;	  
+  }
+//这里还需要修改一下  
   function Get_Decide($total_bite){
      #获取今日cci数据	  
      if($total_bite>0){
