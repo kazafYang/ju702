@@ -77,15 +77,19 @@ class Decide {
   $sql="select stat_date from $table_name where stat_date<'$stat_date' and stat_time_hour=14 and stat_time_min=45 and kdjday_k>=$kdjday_k-2.5 and kdjday_k<=$kdjday_k+2.5 and kdjday_d>=$kdjday_d-2.5 and kdjday_d<=$kdjday_k+2.5 order by id desc;"; 	  
   echo $sql."\n";  
   $result = $conn->query($sql);	  
- while($row=mysqli_fetch_array($result)){
-    print_r($row);	 
+ while($row=mysqli_fetch_array($result)){	 
     $stat_date=$row[stat_date]." 15:00:00";	 
   //$stat_date=strtotime("$row[stat_date] +2 day");
   //$stat_date=date("Y-m-d 15:00:00",$row[stat_date]);
   $row_a=result_select("select count(*) from day_point where stat_date='$stat_date';");	 
    if($row_a[0]==1){
-  $row=result_select("select sum(make_bite) from day_point where id IN (select x.id from ( select id from day_point where stat_date>='$stat_date' order by id asc LIMIT 2) as x);");
+  $row=result_select("select make_bite from day_point where id IN (select x.id from ( select id from day_point where stat_date>='$stat_date' order by id asc LIMIT 2) as x);");
   //$row=result_select("select sum(make_bite) from day_point where stat_date>='$row[stat_date]' and stat_date<='$stat_date';");	 
+  print_r($row);
+  for($i==0;$i<=count($row);$i++){	   
+  echo count($row)."\n";	   
+  echo $row[0]."~".$row[1]."\n";
+  }	  
   $total_bite=$total_bite+$row[0];
   echo "总计计算结果：$total_bite\n";	 
   }
