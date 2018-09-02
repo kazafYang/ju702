@@ -74,19 +74,22 @@ class Decide {
   echo "comming";	  
   //获取今日kdj数据
   //$row=result_select("select count(*) from day_point where stat_date like '2018-08-27%';");
-  $sql="select stat_date from $table_name where stat_date<'$stat_date' and stat_time_hour=14 and stat_time_min=45 and kdjday_k>=$kdjday_k-10 and kdjday_k<=$kdjday_k+10 and kdjday_k>=$kdjday_d-10 and kdjday_d<=$kdjday_k+10 order by id desc limit 5;"; 	  
+  $sql="select stat_date from $table_name where stat_date<'$stat_date' and stat_time_hour=14 and stat_time_min=45 and kdjday_k>=$kdjday_k-2.5 and kdjday_k<=$kdjday_k+2.5 and kdjday_d>=$kdjday_d-2.5 and kdjday_d<=$kdjday_k+2.5 order by id desc;"; 	  
   echo $sql."\n";  
   $result = $conn->query($sql);	  
  while($row=mysqli_fetch_array($result)){
     print_r($row);	 
     $stat_date=$row[stat_date]." 15:00:00";	 
   //$stat_date=strtotime("$row[stat_date] +2 day");
-  //$stat_date=date("Y-m-d 15:00:00",$row[stat_date]);	 
+  //$stat_date=date("Y-m-d 15:00:00",$row[stat_date]);
+  $row_a=result_select("select count(*) from day_point where stat_date='$stat_date';");	 
+   if($row_a[0]==1){
   $row=result_select("select sum(make_bite) from day_point where id IN (select x.id from ( select id from day_point where stat_date>='$stat_date' order by id asc LIMIT 2) as x);");
   //$row=result_select("select sum(make_bite) from day_point where stat_date>='$row[stat_date]' and stat_date<='$stat_date';");	 
   $total_bite=$total_bite+$row[0];
   echo "总计计算结果：$total_bite\n";	 
   }
+ }	 
  mysqli_free_result($result);  //释放结果集	
  return $total_bite;	  
 }	  
@@ -117,13 +120,16 @@ $result = $conn->query($sql);
      print_r($row);	 
     $stat_date=$row[stat_date]." 15:00:00";	 
   //$stat_date=strtotime("$row[stat_date] +2 day");
-  //$stat_date=date("Y-m-d 15:00:00",$row[stat_date]);	 
+  //$stat_date=date("Y-m-d 15:00:00",$row[stat_date]);
+    $row_a=result_select("select count(*) from day_point where stat_date='$stat_date';");	 
+  if($row_a==1){	 
   $row=result_select("select sum(make_bite) from day_point where id IN (select x.id from ( select id from day_point where stat_date>='$stat_date' order by id asc LIMIT 2) as x);");
   //$row=result_select("select sum(make_bite) from day_point where stat_date>='$row[stat_date]' and stat_date<='$stat_date';");	 
   //echo "计算结果：$row[0]\n";
-  $total_bite=$total_bite+$row[0];
+  $total_bite=$total_bite+$row[0];	  
   echo "总计cci计算结果：$total_bite\n";	 
   }
+	 }
  mysqli_free_result($result);  //释放结果集	
  return $total_bite;	  
 }	
