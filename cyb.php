@@ -1,7 +1,7 @@
 <?php
 include 'config_inc.php';
-include 'public_function.php';
 include 'common/logs.php';
+include 'public_function.php';
 $table_name="point_number";
 $code="159915";
 $begin_point="";
@@ -26,7 +26,8 @@ while(1==1) {
     }elseif (($time_hour=="11" and $time_min>="30") or ($time_hour>="12" and $time_hour<"13")){
     sleep_time();    
     }elseif ($time_hour>="15") {
-      $log -> log_work("3point!\n");  
+      $log -> log_work("3point!\n");
+      $a=$runoob->Runday_Point();  
       exit(0);    
     }
       
