@@ -103,7 +103,7 @@ class Decide {
 	 }
  echo $number."number\n";	 
  mysqli_free_result($result);  //释放结果集	
- return $number;	  
+ return $total_bite;	  
   }
 //这里还需要修改一下  
   function Get_Decide($total_bite){
