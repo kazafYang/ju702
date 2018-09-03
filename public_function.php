@@ -53,7 +53,7 @@ class Decide {
 		$make_point = round($make_point,3);      
 		$make_bite=$make_point/$row_make_bite[close_price]*100;
 		$make_bite = round($make_bite,2);  
-		$log -> log_work("$students[$i]['close']~$row_make_bite[close_price]~$make_bite");  
+		$log -> log_work($students[$i]['close']."~$row_make_bite[close_price]~$make_bite");  
 	    	$sql = "update day_point set open_price=".$students[$i]['open'].",high_price=".$students[$i]['high'].",low_price=".$students[$i]['low'].",close_price=".$students[$i]['close'].",make_point=$make_point,make_bite=$make_bite where stat_date='".$students[$i]['day']."';";                                                                  
 	        $log -> log_work($sql."更新day_point\n");	      
 	        $conn->query($sql);  
@@ -81,6 +81,10 @@ class Decide {
   $row_fast=result_select("select make_bite from day_point where id IN (select x.id from ( select id from day_point where stat_date='$stat_date' order by id asc LIMIT 1) as x);");
   $row_last=result_select("select make_bite from day_point where id IN (select x.id from ( select id from day_point where stat_date>'$stat_date' order by id asc LIMIT 1) as x);");
   $log ->log_work($row_fast[0]."~".$row_last[0]."\n");
+  $stat_date_day=date("Y-m-d")." 15:00:00";	   
+  $sql = "update day_point set forecast_today=$row_fast[make_bite],forecast_tomorrow=$row_last[make_bite] where stat_date='$stat_date_day';";
+  $log ->log_work("开始更新预测的值：$sql\n");
+  $conn->query($sql);	   
   $total_bite=$total_bite+$row[0];
   $log ->log_work("总计计算结果：$total_bite\n");
   if($row_fast[0]>=0 and $row_last[0]>=0){
@@ -534,8 +538,8 @@ function analyse () {
       }    
     } //日线超买完成
     //buy,买入开关限制，限制可用金额不足的情况，和标的开关关闭的情况，关闭 switch=0；
-  //if($useable_money>1000 and $buy_switched==1 and $trade_day_k < 20 and $trade_day_d < 20){
-  if(1==1){
+  if($useable_money>1000 and $buy_switched==1 and $trade_day_k < 20 and $trade_day_d < 20){
+  //if(1==1){
 	echo "comming日线超卖开始 switch-buy~~$buy_switched~~~day-$trade_day_k-kdj~~$trade_day_d~~$useable_money"."\n"; 
 	  //15分钟条件严格一点
     if ($trade_min15_k <=15 or $trade_min15_d <=20){
