@@ -1,8 +1,8 @@
 <?php
-      $runoob = new Decide();
-      $a=$runoob->Runday_Point();
-      $b=$runoob->setkdj($kdjday_k,$kdjday_d,$cci);	
-      echo $runoob->Get_Decide($b)."前面是状态\n";
+include 'config_inc.php';
+$conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);
+$runoob = new Decide();	
+
 //定义决策类
 class Decide {	
   /* 成员变量 */
@@ -63,11 +63,11 @@ class Decide {
   }
   	
   function day_kdj($kdjday_k,$kdjday_d){
-  global $stat_date,$table_name,$conn,$log;	  
+  global $stat_date,$table_name,$conn,$log,$kdjday_k,$kdjday_d;	  
   $log -> log_work("查找历史相似day_kdj数据收集更新");	  
   //获取今日kdj数据
   //$row=result_select("select count(*) from day_point where stat_date like '2018-08-27%';");
-  $sql="select stat_date,kdjday_k,kdjday_d from $table_name where stat_date<'$stat_date' and stat_time_hour=14 and stat_time_min=45 and kdjday_k>=$kdjday_k-2.5 and kdjday_k<=$kdjday_k+2.5 and kdjday_d>=$kdjday_d-2.5 and kdjday_d<=$kdjday_k+2.5 order by id desc;"; 	  
+  $sql="select stat_date,kdjday_k,kdjday_d from $table_name where stat_date<'$stat_date' and stat_time_hour=14 and stat_time_min=45 and kdjday_k>=$kdjday_k-2.5 and kdjday_k<=$kdjday_k+2.5 and kdjday_d>=$kdjday_d-2.5 and kdjday_d<=$kdjday_d+2.5 order by id desc;"; 	  
   $log -> log_work("$sql\n");    		   
   $result = $conn->query($sql);	  
  while($row=mysqli_fetch_array($result)){
@@ -117,7 +117,7 @@ class Decide {
   }
 
   function cci($cci){
-  global $stat_date,$table_name,$conn,$log;	  
+  global $stat_date,$table_name,$conn,$log,$cci;	  
   $log -> log_work("进入cci分析\n");	  
   //获取今日kdj数据
   //$row=result_select("select count(*) from day_point where stat_date like '2018-08-27%';");
@@ -332,7 +332,7 @@ function sleep_time () {
   }
 	  //day kdj
   function kdjday () {
-  global $log, $begin_point,$conn,$table_name,$stat_date;
+  global $log, $begin_point,$conn,$table_name,$stat_date,$kdjday_k,$kdjday_d;
   machining_price();
   $row=result_select("select max(min15_point_max) from (select * from $table_name order by id desc limit 144) as a;");	  
   $min15_point_max=$row[0];
@@ -534,8 +534,8 @@ function analyse () {
       }    
     } //日线超买完成
     //buy,买入开关限制，限制可用金额不足的情况，和标的开关关闭的情况，关闭 switch=0；
-  if($useable_money>1000 and $buy_switched==1 and $trade_day_k < 20 and $trade_day_d < 20){
-  //if($useable_money>10 and $buy_switched==1 and ($trade_day_k <= 90 and $trade_day_d <= 90)){
+  //if($useable_money>1000 and $buy_switched==1 and $trade_day_k < 20 and $trade_day_d < 20){
+  if(1==1){
 	echo "comming日线超卖开始 switch-buy~~$buy_switched~~~day-$trade_day_k-kdj~~$trade_day_d~~$useable_money"."\n"; 
 	  //15分钟条件严格一点
     if ($trade_min15_k <=15 or $trade_min15_d <=20){
@@ -820,8 +820,10 @@ function huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$t
 	 //######################################################################## 
 }
 function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite) {
-      global $useable_money,$log;
+      global $useable_money,$log,$runoob,$kdjday_k,$kdjday_d,$cci;	
       $log -> log_work("coming buy_action~~~~".$trade_bite."\n");
+      $b=$runoob->setkdj($kdjday_k,$kdjday_d,$cci);	
+      echo $runoob->Get_Decide($b)."前面是状态\n";   	
       $number=11/$trade_buy_price*$trade_bite;
       $number=round($number);
       //每次发出指令以前都判断一下当前是否有足额可用资金	
@@ -829,7 +831,7 @@ function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_
       $useable_money=$row[useable_money];	
       //$sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=$trade_type;";
       $row=result_select("select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and trade_type=$trade_type;");
-      $log -> log_work("$useable_money~~~~~~$number~~~~$trade_buy_price\n");  
+      $log -> log_work("$useable_money~~~~~~$number~~~~$trade_buy_price\n");  	
       if($row[0]==0 and $useable_money>=($number*100*$trade_buy_price)){
       //if($row[0]==0 or $useable_money>=($number*100*$trade_buy_price)){	      
 	      $log -> log_work("达到条件触发买入操作，useable_money:$useable_money，row[0]:$row[0]，number:$number，$trade_buy_price\n");
@@ -900,7 +902,7 @@ function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_
 	  two_hour();	  
 	  kdjday();
 	  test_cut_price();		  
-	  analyse();  
+	  analyse();
 	  cci();
 	  $log -> log_work("本次程序执行完成------------------------->\n");	  
 	  } 
