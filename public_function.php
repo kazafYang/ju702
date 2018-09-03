@@ -1,4 +1,149 @@
 <?php
+      $runoob = new Decide();
+      $a=$runoob->Runday_Point();
+      $b=$runoob->setkdj($kdjday_k,$kdjday_d,$cci);	
+      echo $runoob->Get_Decide($b)."前面是状态\n";
+//定义决策类
+class Decide {	
+  /* 成员变量 */
+  public $stat_date;	
+  public $kdjday_k;
+  public $kdjday_d;
+  public $Decide_buy_status;	
+//  function __construct( $par1, $par2 ) {
+//    $this->url = $par1;
+//    $this->title = $par2;
+//  }
+  /* 成员函数 */
+  function setkdj($kdyday_k,$kdjday_d,$cci){
+     $this->day_kdj($kdyday_k,$kdyday_d);
+     $this->cci($cci);	  
+  }
+  #这个方法主要是统计day_point中的数据，看看近些天的涨跌幅情况；
+  function Runday_Point(){
+     global $conn,$log,$table_name,$stat_date;
+     $log -> log_work("开启day_point数据收集更新");
+	$json = file_get_contents("http://money.finance.sina.com.cn/quotes_service/api/json_v2.php/CN_MarketData.getKLineData?symbol=sz159915&scale=60&ma=15&datalen=1024");
+        $json = str_replace('day','"day"',$json);
+	$json = str_replace('open','"open"',$json); 
+	$json = str_replace('high','"high"',$json);
+	$json = str_replace('low','"low"',$json);
+	$json = str_replace('close','"close"',$json);
+	$json = str_replace('ma_volume15','"ma_volume15"',$json);   
+	$json = str_replace('volume:','"volume":',$json); 
+	$json = str_replace('ma_price15','"ma_price15"',$json);
+	//$json = '[{"day":"2018-08-24 14:00:00","open":"1.380","high":"1.394","low":"1.379","close":"1.389","volume":"106915552",ma_price20:1.377,ma_"volume"20:174191587},{"day":"2018-08-24 15:00:00","open":"1.390","high":"1.391","low":"1.381","close":"1.382","volume":"71922914",ma_price20:1.378,ma_"volume"20:165794292}]'  
+	$students= json_decode($json, true);//得到的是 array
+	for($i=0;$i<count($students);$i++){
+	if(strpos($students[$i]['day'],'15:00:00') !== false){
+	    $row=result_select("select count(*) from day_point where stat_date='".$students[$i]['day']."';");
+	    if($row[0] == 0){
+		$row_make_bite=result_select("select * from day_point order by id desc limit 1;");
+		$make_point= $students[$i]['close'] - $row_make_bite[close_price];   
+		$make_point = round($make_point,3);      
+		$make_bite=$make_point/$row_make_bite[close_price]*100;
+		$make_bite = round($make_bite,2);         
+	    	$sql = "insert into day_point (open_price,high_price,low_price,close_price,make_point,make_bite,stat_date)values (" . $students[$i]['open'] . "," . $students[$i]['high'] .",".$students[$i]['low'].",".$students[$i]['close'].",".$make_point.",".$make_bite.",'".$students[$i]['day']."');";                                                                  
+	        $log -> log_work($sql."插入day_point\n");	      
+	        $conn->query($sql);      
+	    }
+     	   else{
+		$row_make_bite=result_select("select * from day_point where stat_date<'".$students[$i]['day']."' order by id desc limit 1;");
+		$make_point= $students[$i]['close'] - $row_make_bite[close_price];   
+		$make_point = round($make_point,3);      
+		$make_bite=$make_point/$row_make_bite[close_price]*100;
+		$make_bite = round($make_bite,2);  
+		$log -> log_work("$students[$i]['close']~$row_make_bite[close_price]~$make_bite");  
+	    	$sql = "update day_point set open_price=".$students[$i]['open'].",high_price=".$students[$i]['high'].",low_price=".$students[$i]['low'].",close_price=".$students[$i]['close'].",make_point=$make_point,make_bite=$make_bite where stat_date='".$students[$i]['day']."';";                                                                  
+	        $log -> log_work($sql."更新day_point\n");	      
+	        $conn->query($sql);  
+	   } 
+	}
+	}  
+  }
+  	
+  function day_kdj($kdjday_k,$kdjday_d){
+  global $stat_date,$table_name,$conn,$log;	  
+  $log -> log_work("查找历史相似day_kdj数据收集更新");	  
+  //获取今日kdj数据
+  //$row=result_select("select count(*) from day_point where stat_date like '2018-08-27%';");
+  $sql="select stat_date,kdjday_k,kdjday_d from $table_name where stat_date<'$stat_date' and stat_time_hour=14 and stat_time_min=45 and kdjday_k>=$kdjday_k-2.5 and kdjday_k<=$kdjday_k+2.5 and kdjday_d>=$kdjday_d-2.5 and kdjday_d<=$kdjday_k+2.5 order by id desc;"; 	  
+  $log -> log_work("$sql\n");    		   
+  $result = $conn->query($sql);	  
+ while($row=mysqli_fetch_array($result)){
+    $log -> log_work("查找到的日期：$row[stat_date]~查找到的k值：$row[kdjday_k]~查找到的D值：$row[kdjday_d]\n");	 
+    $stat_date=$row[stat_date]." 15:00:00";	 
+  //$stat_date=strtotime("$row[stat_date] +2 day");
+  //$stat_date=date("Y-m-d 15:00:00",$row[stat_date]);
+  $row_a=result_select("select count(*) from day_point where stat_date='$stat_date';");	 
+   if($row_a[0]==1){
+  $row=result_select("select sum(make_bite) from day_point where id IN (select x.id from ( select id from day_point where stat_date>='$stat_date' order by id asc LIMIT 2) as x);");	   
+  $row_fast=result_select("select make_bite from day_point where id IN (select x.id from ( select id from day_point where stat_date='$stat_date' order by id asc LIMIT 1) as x);");
+  $row_last=result_select("select make_bite from day_point where id IN (select x.id from ( select id from day_point where stat_date>'$stat_date' order by id asc LIMIT 1) as x);");
+  $log ->log_work($row_fast[0]."~".$row_last[0]."\n");
+  $total_bite=$total_bite+$row[0];
+  $log ->log_work("总计计算结果：$total_bite\n");
+  if($row_fast[0]>=0 and $row_last[0]>=0){
+   $log ->log_work("今明两天天气好\n");
+  $number=$number+2;	  
+  }elseif($row_fast[0]>=0 or $row_last[0]>=0){
+   $log ->log_work("今明两天有一天天气好\n");
+  $number=$number+1;	  
+  }else{
+   $log ->log_work("今明两天天气不好\n");
+  $number=$number+0;
+  }
+ }
+	 }
+ $log ->log_work($number."number\n");	 
+ mysqli_free_result($result);  //释放结果集	
+ return $total_bite;	  
+  }
+//这里还需要修改一下  
+  function Get_Decide($total_bite){
+     global $log;	  
+     $log ->log_work("获取数据分析结果\n");	  
+     #获取今日cci数据	  
+     if($total_bite>0){
+     $Decide_buy_status=1;
+     }
+     //elseif($total_bite>0 and $total_bite<1){
+     //echo "total_bite>0 <1";
+     //}
+     else{
+     $Decide_buy_status=0;
+     }
+     return $Decide_buy_status;	  
+  }
+
+  function cci($cci){
+  global $stat_date,$table_name,$conn,$log;	  
+  $log -> log_work("进入cci分析\n");	  
+  //获取今日kdj数据
+  //$row=result_select("select count(*) from day_point where stat_date like '2018-08-27%';");
+  $sql="select stat_date from $table_name where stat_date<'$stat_date' and stat_time_hour=14 and stat_time_min=45 and cci>=$cci-10 and cci<=$cci+10 order by id desc limit 5;"; 	  
+$log -> log_work($sql."\n");  
+$result = $conn->query($sql);	  
+ while($row=mysqli_fetch_array($result)){
+     print_r($row);	 
+    $stat_date=$row[stat_date]." 15:00:00";	 
+  //$stat_date=strtotime("$row[stat_date] +2 day");
+  //$stat_date=date("Y-m-d 15:00:00",$row[stat_date]);
+    $row_a=result_select("select count(*) from day_point where stat_date='$stat_date';");	 
+  if($row_a==1){	 
+  $row=result_select("select sum(make_bite) from day_point where id IN (select x.id from ( select id from day_point where stat_date>='$stat_date' order by id asc LIMIT 2) as x);");
+  //$row=result_select("select sum(make_bite) from day_point where stat_date>='$row[stat_date]' and stat_date<='$stat_date';");	 
+  //echo "计算结果：$row[0]\n";
+  $total_bite=$total_bite+$row[0];	  
+  $log -> log_work("总计cci计算结果：$total_bite\n");	 
+  }
+	 }
+ mysqli_free_result($result);  //释放结果集	
+ return $total_bite;	  
+}	
+	
+}  //类结束位置 trend
+
   function machining_price () 
   {  
   global $log, $stat_date,$time_hour,$time_min,$time_second,$begin_point,$code,$buy_one_price,$sell_one_price;
