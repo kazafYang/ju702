@@ -1,9 +1,13 @@
 <?php
 class db{
-  public function __construct()
-    {
-        
-        
+  public $db_config; 	
+  public function __construct(){
+      $db = new DB_Config_Inc();
+      $db_config=$db -> get_db_config();
+      $mysql_server_name=$db_config['mysql_server_name'];	  
+      $mysql_username=$db_config['mysql_username'];
+      $mysql_password=$db_config['mysql_password'];
+      $mysql_database=$db_config['mysql_database'];	  
     }
 	
    public function get_select($sql){
