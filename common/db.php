@@ -1,5 +1,12 @@
 <?php
-class db{	
+class db{
+
+   function __construct() {
+	$this->db = new DB_Config_Inc; 
+	$this->conn = $this->db->get_db_config();    
+	$this->log = new logs(); 
+}
+/*构造方法	 */
    public function get_select($sql){
 	$conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);  
 	$log = new logs();   
@@ -11,12 +18,12 @@ class db{
 }
 
     public function get_id($table_name) {  
-	$db = new DB_Config_Inc; 
-	$conn = $db->get_db_config();    
-	$log = new logs();       
+	//$db = new DB_Config_Inc; 
+	//$conn = $db->get_db_config();    
+	//$log = new logs();       
 	$sql = "select id from $table_name order by id desc limit 1;"; //where status=0 and stat_date='$stat_date'
-	$log -> log_work("查询下一个插入数据的id，sql语句为：$sql\n");
-	$result = $conn->query($sql);
+	$this->log -> log_work("查询下一个插入数据的id，sql语句为：$sql\n");
+	$result = $this->conn->query($sql);
 	$row = $result->fetch_assoc();
 	return $row[id]+1;
 	mysqli_free_result($result);  //释放结果集		  
