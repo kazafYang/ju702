@@ -1,7 +1,7 @@
 <?php
 include 'common/logs1.php';
 include 'common/machining_price.php';
-include 'db_config_inc.php';
+include 'common/db_config_inc.php';
 include 'common/db.php';
 
 $runoob = new MachiningPrice();
