@@ -1,9 +1,12 @@
 <?php
 class db{
-  public $db_config; 	
+  public $mysql_server_name; 
+  public $mysql_username;
+  public $mysql_password;
+  public $mysql_database;
   public function __construct(){
       $db = new DB_Config_Inc();
-      $db_config=$db -> get_db_config();
+      $db_config=$db->get_db_config();
       $mysql_server_name=$db_config['mysql_server_name'];	  
       $mysql_username=$db_config['mysql_username'];
       $mysql_password=$db_config['mysql_password'];
@@ -21,6 +24,13 @@ class db{
 }
 
     public function get_id($table_name) {
+	$db = new DB_Config_Inc();
+	$db_config=$db->get_db_config();
+	$mysql_server_name=$db_config['mysql_server_name'];	  
+	$mysql_username=$db_config['mysql_username'];
+	$mysql_password=$db_config['mysql_password'];
+	$mysql_database=$db_config['mysql_database'];    
+	echo "get_id".$mysql_server_name."\n";    
 	$conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);  
 	$log = new logs(); 	    
 	$sql = "select id from $table_name order by id desc limit 1;"; //where status=0 and stat_date='$stat_date'
