@@ -8,10 +8,8 @@ class db{
 }
 /*构造方法	 */
    public function get_select($sql){
-	$conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);  
-	$log = new logs();   
-	$log -> log_work("result_select函数执行的sql：$sql\n");
-	$result = $conn->query($sql);
+	$this -> log -> log_work("result_select函数执行的sql：$sql\n");
+	$result = $this -> conn->query($sql);
 	$row=mysqli_fetch_array($result);
 	return $row;
 	mysqli_free_result($result);  //释放结果集
