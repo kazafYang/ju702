@@ -3,6 +3,7 @@ include 'common/logs1.php';
 include 'common/machining_price.php';
 include 'common/db_config_inc.php';
 include 'common/db.php';
+include 'common/kdj.php';
 
 class Runner{
   public $config = array();
@@ -18,7 +19,7 @@ $aa=new Runner();
 $aa->get_config();
 //echo $aa->get_config()['table_name'];
 //echo $bb['table_name']."\n";
-
+$bb=new kdj();
 $runoob = new MachiningPrice();
 $data=$runoob->get_machining_price();
 echo $data['time_hour'];
