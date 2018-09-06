@@ -1,6 +1,5 @@
 <?php
 class DB_Config_Inc{
-    var $data = array();
     
     public function get_db_config(){
         $data['mysql_server_name'] = 'mysql.ju70.svc';
