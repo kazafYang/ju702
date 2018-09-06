@@ -5,9 +5,8 @@ class Kdj {
 	$this->db = new DB_Config_Inc; 
 	$this->conn = $this->db->get_db_config();    
 	$this->log = new logs();
-  $this->MachiningPrice= new MachiningPrice();
-  $this->begin_point=$this->MachiningPrice->get_machining_price();  
-    
+	$this->MachiningPrice= new MachiningPrice();
+	$this->begin_point=$this->MachiningPrice->get_machining_price();    
 }
   function kdjfifteen () {
     global $log,$begin_point,$conn,$table_name;
