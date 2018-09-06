@@ -1,7 +1,10 @@
+<?php
 class MachiningPrice{
   var $data = array();
-  function get_machining_price () 
-  {  
+  var $code;
+  function get_machining_price () {
+  $code=159915;   
+  $log=new logs();  
   $log -> log_work("comming machining_price");  
   if ($code<500000) {
   $url='http://hq.sinajs.cn/list=sz'.$code; 
@@ -24,3 +27,4 @@ class MachiningPrice{
   return $data;  
   }
 }
+?>
