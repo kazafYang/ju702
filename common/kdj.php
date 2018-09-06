@@ -18,7 +18,7 @@ class Kdj {
 	$this->begin_point=$this->MachiningPrice->get_machining_price();    
 }
   function kdjfifteen () {
-    global $log,$begin_point,$conn,$table_name;
+    //global $log,$begin_point,$conn,$table_name;
     machining_price();
     $row=get_select("select max(min15_point_max) from (select * from $table_name order by id desc limit 9) as a;");	  
     $min15_point_max=$row[0];
