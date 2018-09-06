@@ -1,16 +1,15 @@
-include 'config_inc.php';
+<?php
 class Kdj {
-  public $conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);
 
   function kdjfifteen () {
     global $log,$begin_point,$conn,$table_name;
     machining_price();
-    $row=result_select("select max(min15_point_max) from (select * from $table_name order by id desc limit 9) as a;");	  
+    $row=get_select("select max(min15_point_max) from (select * from $table_name order by id desc limit 9) as a;");	  
     $min15_point_max=$row[0];
-    $row=result_select("select min(min15_point_min) from (select * from $table_name order by id desc limit 9) as a;");	  
+    $row=get_select("select min(min15_point_min) from (select * from $table_name order by id desc limit 9) as a;");	  
     $min15_point_min=$row[0];
     $log -> log_work("min15_point_min:$min15_point_min");
-    $row=result_select("select min15_k,min15_d from $table_name order by id  desc  limit 1,1;");	  
+    $row=get_select("select min15_k,min15_d from $table_name order by id  desc  limit 1,1;");	  
     $min15_k=$row[min15_k];   
     $min15_d=$row[min15_d];
     $log -> log_work("begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~min15_k:$min15_k~min15_d:$min15_d\n");                      
@@ -32,17 +31,17 @@ class Kdj {
   function kdjthirty () {
     global $log, $begin_point,$conn,$table_name,$time_hour,$time_min;
     machining_price();
-    $row=result_select("select max(min15_point_max) from (select * from $table_name order by id desc limit 18) as a;");
+    $row=get_select("select max(min15_point_max) from (select * from $table_name order by id desc limit 18) as a;");
     $min15_point_max=$row[0];
-    $row=result_select("select min(min15_point_min) from (select * from $table_name order by id desc limit 18) as a;");	  
+    $row=get_select("select min(min15_point_min) from (select * from $table_name order by id desc limit 18) as a;");	  
     $min15_point_min=$row[0];
     if (($time_hour==9 and $time_min==30) or ($time_hour==10 and $time_min==0) or ($time_hour==10 and $time_min==30) or ($time_hour==11 and $time_min==0) or ($time_hour==13 and $time_min==0) or ($time_hour==13 and $time_min==30) or ($time_hour==14 and $time_min==0)) {
-      $row=result_select("select min30_k,min30_d from $table_name order by id  desc  limit 1,1;");	  
+      $row=get_select("select min30_k,min30_d from $table_name order by id  desc  limit 1,1;");	  
       $min30_k=$row[min30_k]; 
       $min30_d=$row[min30_d];
     }
     else {
-      $row=result_select("select min30_k,min30_d from $table_name order by id  desc  limit 2,1;");	  
+      $row=get_select("select min30_k,min30_d from $table_name order by id  desc  limit 2,1;");	  
       $min30_k=$row[min30_k]; 
       $min30_d=$row[min30_d];
     }  
@@ -65,17 +64,17 @@ class Kdj {
   function kdjsixty () {
     global $log, $begin_point,$conn,$table_name,$time_hour,$time_min;
   machining_price();
-  $row=result_select("select max(min15_point_max) from (select * from $table_name order by id desc limit 18) as a;");
+  $row=get_select("select max(min15_point_max) from (select * from $table_name order by id desc limit 18) as a;");
   $min15_point_max=$row[0];
-  $row=result_select("select min(min15_point_min) from (select * from $table_name order by id desc limit 18) as a;");	  
+  $row=get_select("select min(min15_point_min) from (select * from $table_name order by id desc limit 18) as a;");	  
   $min15_point_min=$row[0];
   if (($time_hour==9 and $time_min==30) or ($time_hour==10 and $time_min==0) or ($time_hour==10 and $time_min==30) or ($time_hour==11 and $time_min==0) or ($time_hour==13 and $time_min==0) or ($time_hour==13 and $time_min==30) or ($time_hour==14 and $time_min==0)) {
-  $row=result_select("select min30_k,min30_d from $table_name order by id  desc  limit 1,1;");	  
+  $row=get_select("select min30_k,min30_d from $table_name order by id  desc  limit 1,1;");	  
   $min30_k=$row[min30_k]; 
   $min30_d=$row[min30_d];
   }
   else {
-  $row=result_select("select min30_k,min30_d from $table_name order by id  desc  limit 2,1;");	  
+  $row=get_select("select min30_k,min30_d from $table_name order by id  desc  limit 2,1;");	  
   $min30_k=$row[min30_k]; 
   $min30_d=$row[min30_d];
   }  
@@ -98,28 +97,28 @@ class Kdj {
     global $log, $begin_point,$conn,$table_name,$time_hour,$time_min;
     $log -> log_work("comming kdjsixty");		  
     machining_price();
-    $row=result_select("select max(min15_point_max) from (select * from $table_name order by id desc limit 36) as a;");	  
+    $row=get_select("select max(min15_point_max) from (select * from $table_name order by id desc limit 36) as a;");	  
     $min15_point_max=$row[0];
-    $row=result_select("select min(min15_point_min) from (select * from $table_name order by id desc limit 36) as a;");	  
+    $row=get_select("select min(min15_point_min) from (select * from $table_name order by id desc limit 36) as a;");	  
     $min15_point_min=$row[0];
     $log -> log_work("time_hour:$time_hour\n");
     if (($time_hour==9 and $time_min==30) or ($time_hour==10 and $time_min==30) or ($time_hour==13 and $time_min==0) or ($time_hour==14 and $time_min==0)) {
-      $row=result_select("select min60_k,min60_d from $table_name order by id  desc  limit 1,1;");	  
+      $row=get_select("select min60_k,min60_d from $table_name order by id  desc  limit 1,1;");	  
       $min60_k=$row[min60_k];
       $min60_d=$row[min60_d];
     }
     elseif (($time_hour==9 and $time_min==45) or ($time_hour==10 and $time_min==45) or ($time_hour==13 and $time_min==15) or ($time_hour==14 and $time_min==15)) {
-      $row=result_select("select min60_k,min60_d from $table_name order by id  desc  limit 2,1;");	  
+      $row=get_select("select min60_k,min60_d from $table_name order by id  desc  limit 2,1;");	  
       $min60_k=$row[min60_k];
       $min60_d=$row[min60_d];
     }
     elseif(($time_hour==10 and $time_min==0) or ($time_hour==11 and $time_min==0) or ($time_hour==13 and $time_min==30) or ($time_hour==14 and $time_min==30)) {
-      $row=result_select("select min60_k,min60_d from $table_name order by id  desc  limit 3,1;");	  
+      $row=get_select("select min60_k,min60_d from $table_name order by id  desc  limit 3,1;");	  
       $min60_k=$row[min60_k];
       $min60_d=$row[min60_d];
     }
     else{
-      $row=result_select("select min60_k,min60_d from $table_name order by id  desc  limit 4,1;");	  
+      $row=get_select("select min60_k,min60_d from $table_name order by id  desc  limit 4,1;");	  
       $min60_k=$row[min60_k];
       $min60_d=$row[min60_d];
     }
@@ -143,17 +142,17 @@ class Kdj {
     global $log, $begin_point,$conn,$table_name,$stat_date,$time_hour,$time_min;
     $log -> log_work("comming two_hour");		   
     machining_price();
-    $row=result_select("select max(min15_point_max) from (select * from $table_name order by id desc limit 72) as a;");	   
+    $row=get_select("select max(min15_point_max) from (select * from $table_name order by id desc limit 72) as a;");	   
     $min15_point_max=$row[0];
-    $row=result_select("select min(min15_point_min) from (select * from $table_name order by id desc limit 72) as a;");	   
+    $row=get_select("select min(min15_point_min) from (select * from $table_name order by id desc limit 72) as a;");	   
     $min15_point_min=$row[0];
     if ($time_hour<13) {
-    $row=result_select("select min120_k,min120_d from $table_name where stat_date<'$stat_date' order by id  desc  limit 0,1;");	  
+    $row=get_select("select min120_k,min120_d from $table_name where stat_date<'$stat_date' order by id  desc  limit 0,1;");	  
     $min120_k=$row[min120_k];
     $min120_d=$row[min120_d];
     }
     elseif ($time_hour>=13) {
-    $row=result_select("select min120_k,min120_d from $table_name where stat_time_hour='11' and stat_time_min='15' order by id  desc  limit 1;");	  
+    $row=get_select("select min120_k,min120_d from $table_name where stat_time_hour='11' and stat_time_min='15' order by id  desc  limit 1;");	  
     $min120_k=$row[min120_k];
     $min120_d=$row[min120_d];
     }
@@ -176,11 +175,11 @@ class Kdj {
   function kdjday () {
   global $log, $begin_point,$conn,$table_name,$stat_date,$kdjday_k,$kdjday_d;
   machining_price();
-  $row=result_select("select max(min15_point_max) from (select * from $table_name order by id desc limit 144) as a;");	  
+  $row=get_select("select max(min15_point_max) from (select * from $table_name order by id desc limit 144) as a;");	  
   $min15_point_max=$row[0];
-  $row=result_select("select min(min15_point_min) from (select * from $table_name order by id desc limit 144) as a;");	  
+  $row=get_select("select min(min15_point_min) from (select * from $table_name order by id desc limit 144) as a;");	  
   $min15_point_min=$row[0];
-  $row=result_select("select kdjday_k,kdjday_d from $table_name where stat_date<'$stat_date' order by id desc limit 1;");	  
+  $row=get_select("select kdjday_k,kdjday_d from $table_name where stat_date<'$stat_date' order by id desc limit 1;");	  
   $kdjday_k=$row[kdjday_k]; 
   $kdjday_d=$row[kdjday_d];
   $log -> log_work("begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~kdjday_k:$kdjday_k~kdjday_d:$kdjday_d\n");                       
@@ -200,3 +199,4 @@ class Kdj {
   }
 
 }
+?>
