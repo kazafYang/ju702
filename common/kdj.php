@@ -2,9 +2,18 @@
 class Kdj {
   
   function __construct() {
-	$this->db = new DB_Config_Inc; 
-	$this->conn = $this->db->get_db_config();    
+	//获取code，table_name配置信息
+	$this->Runner=new Runner();
+	$this->table_name=$this->Runner->get_config()['table_name'];
+	echo "初始化：".$this->table_name=$this->Runner->get_config()['table_name']."\n";
+	echo "初始化：".$this->table_name=$this->Runner->get_config()['code']."\n";  
+	$this->code=$this->Runner->get_config()['code'];	
+	//获取db配置信息  
+	$this->db = new DB_Config_Inc(); 
+	$this->conn = $this->db->get_db_config();
+	//初始化log对象  
 	$this->log = new logs();
+	//获取实时数据  
 	$this->MachiningPrice= new MachiningPrice();
 	$this->begin_point=$this->MachiningPrice->get_machining_price();    
 }
@@ -68,38 +77,6 @@ class Kdj {
     }  
   }
 
-  function kdjsixty () {
-    global $log, $begin_point,$conn,$table_name,$time_hour,$time_min;
-  machining_price();
-  $row=get_select("select max(min15_point_max) from (select * from $table_name order by id desc limit 18) as a;");
-  $min15_point_max=$row[0];
-  $row=get_select("select min(min15_point_min) from (select * from $table_name order by id desc limit 18) as a;");	  
-  $min15_point_min=$row[0];
-  if (($time_hour==9 and $time_min==30) or ($time_hour==10 and $time_min==0) or ($time_hour==10 and $time_min==30) or ($time_hour==11 and $time_min==0) or ($time_hour==13 and $time_min==0) or ($time_hour==13 and $time_min==30) or ($time_hour==14 and $time_min==0)) {
-  $row=get_select("select min30_k,min30_d from $table_name order by id  desc  limit 1,1;");	  
-  $min30_k=$row[min30_k]; 
-  $min30_d=$row[min30_d];
-  }
-  else {
-  $row=get_select("select min30_k,min30_d from $table_name order by id  desc  limit 2,1;");	  
-  $min30_k=$row[min30_k]; 
-  $min30_d=$row[min30_d];
-  }  
-  $log -> log_work("begin_point:$begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~min30_k:$min30_k~min30_d:$min30_d\n");                       
-  $rsv=($begin_point-$min15_point_min)/($min15_point_max-$min15_point_min)*100;
-  $k=2/3*$min30_k+1/3*$rsv;
-  $d=2/3*$min30_d+1/3*$k;
-  $j=3*$k-2*$d;
-  $log -> log_work("30kdj:$k,$d,$j\n");	  
-  $sql="update $table_name set min30_k='$k' , min30_d='$d' , min30_j='$j' order by id desc limit 1 ; ";
-     if ($conn->query($sql) === TRUE) 
-     {
-      $log -> log_work("30kdjupdate:success\n");
-       } 
-    else {
-      $log -> log_work("maxError: " . $sql . $conn->error."\n");
-  }  
-  }  
   function kdjsixty () {	  
     global $log, $begin_point,$conn,$table_name,$time_hour,$time_min;
     $log -> log_work("comming kdjsixty");		  
