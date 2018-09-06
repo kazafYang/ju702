@@ -1,6 +1,5 @@
 <?php
-class db{
-	
+class db{	
    public function get_select($sql){
 	$conn = new mysqli($mysql_server_name, $mysql_username, $mysql_password, $mysql_database);  
 	$log = new logs();   
