@@ -2,8 +2,8 @@
 class db{
 
    function __construct() {
-	$this->db = new DB_Config_Inc; 
-	$this->conn = $this->db->get_db_config();    
+	$this->db_config = new DB_Config_Inc; 
+	$this->conn = $this->db_config->get_db_config();    
 	$this->log = new logs(); 
 }
 /*构造方法	 */
