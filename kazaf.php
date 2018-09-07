@@ -20,6 +20,7 @@ $aa->get_config();
 //echo $aa->get_config()['table_name'];
 //echo $bb['table_name']."\n";
 $bb=new kdj();
+$bb->get_kdjfifteen();
 $runoob = new MachiningPrice();
 $data=$runoob->get_machining_price();
 echo $data['time_hour'];
