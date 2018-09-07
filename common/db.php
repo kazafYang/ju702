@@ -15,10 +15,7 @@ class db{
 	mysqli_free_result($result);  //释放结果集
 }
 
-    public function get_id($table_name) {  
-	//$db = new DB_Config_Inc; 
-	//$conn = $db->get_db_config();    
-	//$log = new logs();       
+    public function get_id($table_name) {   
 	$sql = "select id from $table_name order by id desc limit 1;"; //where status=0 and stat_date='$stat_date'
 	$this->log -> log_work("查询下一个插入数据的id，sql语句为：$sql\n");
 	$result = $this->conn->query($sql);
