@@ -6,22 +6,26 @@ class Kdj {
 	$this->Runner=new Runner();
 	$this->table_name=$this->Runner->get_config()['table_name'];
 	echo "初始化：".$this->table_name=$this->Runner->get_config()['table_name']."\n";
-	echo "初始化：".$this->table_name=$this->Runner->get_config()['code']."\n";  
+	echo "初始化：".$this->code=$this->Runner->get_config()['code']."\n";  
 	$this->code=$this->Runner->get_config()['code'];	
 	//获取db配置信息  
-	$this->db = new DB_Config_Inc(); 
-	$this->conn = $this->db->get_db_config();
+	$this->db_config = new DB_Config_Inc(); 
+	$this->conn = $this->db_config->get_db_config();
+	//获取db操作信息
+	$this->db = new db();  
 	//初始化log对象  
 	$this->log = new logs();
 	//获取实时数据  
 	$this->MachiningPrice= new MachiningPrice();
-	$this->begin_point=$this->MachiningPrice->get_machining_price();    
+	$this->begin_point=$this->MachiningPrice->get_machining_price()['begin_point'];
+	//测试代码，测试方法调用  
 }
-  function kdjfifteen () {
+  function get_kdjfifteen () {
     //global $log,$begin_point,$conn,$table_name;
-    machining_price();
-    $row=get_select("select max(min15_point_max) from (select * from $table_name order by id desc limit 9) as a;");	  
+    //get_machining_price();
+    $row=$this->db->get_select("select max(min15_point_max) from (select * from $this->table_name order by id desc limit 9) as a;");	  
     $min15_point_max=$row[0];
+    echo "test:$min15_point_max\n";	  
     $row=get_select("select min(min15_point_min) from (select * from $table_name order by id desc limit 9) as a;");	  
     $min15_point_min=$row[0];
     $log -> log_work("min15_point_min:$min15_point_min");
