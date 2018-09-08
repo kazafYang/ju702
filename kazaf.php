@@ -20,12 +20,12 @@ $aa->get_config();
 //echo $aa->get_config()['table_name'];
 //echo $bb['table_name']."\n";
 $bb=new kdj();
-//$bb->$get_kdjfifteen();
+$bb->set_kdjtwohour();
 $runoob = new MachiningPrice();
 $data=$runoob->get_machining_price();
 echo $data['time_hour'];
 $db=new db();
-$db->get_kdjfifteen();
+//$db->get_kdjfifteen();
 echo ($db->get_id($aa->get_config()['table_name']));
 echo "结束\n";
 ?>
