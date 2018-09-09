@@ -17,11 +17,12 @@ class Kdj {
 	$this->log = new logs();
 	//获取实时数据  
 	$this->MachiningPrice= new MachiningPrice();
-	$this->begin_point=$this->MachiningPrice->get_machining_price()['begin_point'];
-	$this->stat_date=$this->MachiningPrice->get_machining_price()['stat_date'];  
+	//$this->begin_point=$this->MachiningPrice->get_machining_price()['begin_point'];
+	//$this->stat_date=$this->MachiningPrice->get_machining_price()['stat_date'];  
 	//测试代码，测试方法调用  
 }
   function set_kdjfifteen () {
+    $data=$this->MachiningPrice->get_machining_price();	  
     $row=$this->db->get_select("select max(min15_point_max) from (select * from $this->table_name order by id desc limit 9) as a;");	  
     $min15_point_max=$row[0];
     echo "test:$min15_point_max\n";	  
@@ -31,8 +32,8 @@ class Kdj {
     $row=$this->db->get_select("select min15_k,min15_d from $this->table_name order by id  desc  limit 1,1;");	  
     $min15_k=$row[min15_k];   
     $min15_d=$row[min15_d];
-    $this->log -> log_work("begin_point:$this->begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~min15_k:$min15_k~min15_d:$min15_d\n");                      
-    $rsv=($this->begin_point-$min15_point_min)/($min15_point_max-$min15_point_min)*100;  
+    $this->log -> log_work("begin_point:$data[begin_point]~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~min15_k:$min15_k~min15_d:$min15_d\n");                      
+    $rsv=($data[begin_point]-$min15_point_min)/($min15_point_max-$min15_point_min)*100;  
     $this->log -> log_work("rsv:$rsv");
     $k=2/3*$min15_k+1/3*$rsv;
     $d=2/3*$min15_d+1/3*$k;
@@ -51,6 +52,7 @@ class Kdj {
   }
 
   function set_kdjthirty () {
+    $data=$this->MachiningPrice->get_machining_price();		  
     $row=$this->db->get_select("select max(min15_point_max) from (select * from $this->table_name order by id desc limit 18) as a;");
     $min15_point_max=$row[0];
     $row=$this->db->get_select("select min(min15_point_min) from (select * from $this->table_name order by id desc limit 18) as a;");	  
@@ -65,8 +67,8 @@ class Kdj {
       $min30_k=$row[min30_k]; 
       $min30_d=$row[min30_d];
     }  
-    $this ->log -> log_work("begin_point:$this->begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~min30_k:$min30_k~min30_d:$min30_d\n");                       
-    $rsv=($this->begin_point-$min15_point_min)/($min15_point_max-$min15_point_min)*100;
+    $this ->log -> log_work("begin_point:$data[begin_point]~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~min30_k:$min30_k~min30_d:$min30_d\n");                       
+    $rsv=($data[begin_point]-$min15_point_min)/($min15_point_max-$min15_point_min)*100;
     $k=2/3*$min30_k+1/3*$rsv;
     $d=2/3*$min30_d+1/3*$k;
     $j=3*$k-2*$d;
@@ -81,7 +83,8 @@ class Kdj {
     }  
   }
 
-  function set_kdjsixty () {	  
+  function set_kdjsixty () {
+    $data=$this->MachiningPrice->get_machining_price();		  
     $this->log-> log_work("comming kdjsixty");		  
     $row=$this -> db -> get_select("select max(min15_point_max) from (select * from $this->table_name order by id desc limit 36) as a;");	  
     $min15_point_max=$row[0];
@@ -108,8 +111,8 @@ class Kdj {
       $min60_k=$row[min60_k];
       $min60_d=$row[min60_d];
     }
-    $this->log -> log_work("begin_point:$this->begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~min60_k:$min60_k~min60_d:$min60_d\n");   
-    $rsv=($this->begin_point-$min15_point_min)/($min15_point_max-$min15_point_min)*100;
+    $this->log -> log_work("begin_point:$data[begin_point]~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~min60_k:$min60_k~min60_d:$min60_d\n");   
+    $rsv=($data[begin_point]-$min15_point_min)/($min15_point_max-$min15_point_min)*100;
     $k=2/3*$min60_k+1/3*$rsv;
     $d=2/3*$min60_d+1/3*$k;
     $j=3*$k-2*$d;
@@ -125,6 +128,7 @@ class Kdj {
   }
 
   function set_kdjtwohour () {
+    $data=$this->MachiningPrice->get_machining_price();		  
     $this->log -> log_work("comming two_hour");		   
     $row=$this->db->get_select("select max(min15_point_max) from (select * from $this->table_name order by id desc limit 72) as a;");	   
     $min15_point_max=$row[0];
@@ -140,8 +144,8 @@ class Kdj {
     $min120_k=$row[min120_k];
     $min120_d=$row[min120_d];
     }
-    $this->log -> log_work("begin_point:$this->begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~\n");   
-    $rsv=($this->begin_point-$min15_point_min)/($min15_point_max-$min15_point_min)*100;
+    $this->log -> log_work("begin_point:$data[begin_point]~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~\n");   
+    $rsv=($data[begin_point]-$min15_point_min)/($min15_point_max-$min15_point_min)*100;
     $k=2/3*$min120_k+1/3*$rsv;
     $d=2/3*$min120_d+1/3*$k;
     $j=3*$k-2*$d;
@@ -157,6 +161,7 @@ class Kdj {
   }
 
   function set_kdjday () {
+  $data=$this->MachiningPrice->get_machining_price();		  
   $row=$this->db->get_select("select max(min15_point_max) from (select * from $this->table_name order by id desc limit 144) as a;");	  
   $min15_point_max=$row[0];
   $row=$this->db->get_select("select min(min15_point_min) from (select * from $this->table_name order by id desc limit 144) as a;");	  
@@ -164,8 +169,8 @@ class Kdj {
   $row=$this->db->get_select("select kdjday_k,kdjday_d from $this->table_name where stat_date<'$this->stat_date' order by id desc limit 1;");	  
   $kdjday_k=$row[kdjday_k]; 
   $kdjday_d=$row[kdjday_d];
-  $this->log -> log_work("begin_point:$this->begin_point~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~kdjday_k:$kdjday_k~kdjday_d:$kdjday_d\n");                       
-  $rsv=($this->begin_point-$min15_point_min)/($min15_point_max-$min15_point_min)*100;
+  $this->log -> log_work("begin_point:$data[begin_point]~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~kdjday_k:$kdjday_k~kdjday_d:$kdjday_d\n");                       
+  $rsv=($data[begin_point]-$min15_point_min)/($min15_point_max-$min15_point_min)*100;
   $k=2/3*$kdjday_k+1/3*$rsv;
   $d=2/3*$kdjday_d+1/3*$k;
   $j=3*$k-2*$d;
