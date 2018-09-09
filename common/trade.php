@@ -18,11 +18,15 @@ class Trade{
 	//获取实时数据  
 	$this->MachiningPrice= new MachiningPrice();
 	$this->begin_point=$this->MachiningPrice->get_machining_price()['begin_point'];
-	$this->stat_date=$this->MachiningPrice->get_machining_price()['stat_date'];  
+	$this->buy_one_price=$this->MachiningPrice->get_machining_price()['buy_one_price'];
+	$this->sell_one_price=$this->MachiningPrice->get_machining_price()['sell_one_price'];  
+	$this->stat_date=$this->MachiningPrice->get_machining_price()['stat_date'];
+	$this->time_hour=$this->MachiningPrice->get_machining_price()['time_hour']; 
+	$this->time_min=$this->MachiningPrice->get_machining_price()['time_min'];   
 	//测试代码，测试方法调用  
 }
 	
-function sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price) {
+function sell_action($trade_type) {
 	  $this->log -> log_work("comming sell_action\n");
 	  $sql="select * from trade_history where code=$this->code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$this->stat_date' order by id asc;";
 	  //$row=result_select("select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$stat_date' order by id asc;");
@@ -35,10 +39,10 @@ function sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat
 		   $this->log -> log_work("connecttion_id:$connecttion_id\n");
 		   if($begin_point>$row[trade_buy_price] and $row[cut_price] < ($row[trade_buy_price]+$row[trade_buy_price]*3.02/100)){
 			  $this->log -> log_work("达到条件触发卖出操作，$begin_point，$row[trade_buy_price]，$number,$row[cut_price]\n"); 
-			  $trade_id=table_id($conn,"trade_history"); 
+			  $trade_id=$this->db->get_id("trade_history"); 
 			  $this->log -> log_work("trade_id:$trade_id\n");	   
 			  //插入交易历史  
-			  $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id,history_make_money) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price','0','$connecttion_id',$row[history_make_money]);";                                                                  
+			  $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id,history_make_money) values ('$trade_id','$this->code','$this->stat_date','$this->time_hour','$this->time_min','0','0','$number','$trade_type','$this->buy_one_price','$this->sell_one_price','0','$connecttion_id',$row[history_make_money]);";                                                                  
 			  $this->log -> log_work("插入交易指令".$sql."\n");
 			  $this->conn->query($sql);
 			  //核销已经处理的前期订单，避免订单再次进入
@@ -55,24 +59,23 @@ function sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat
 }
 function huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price) {
       //####################################################################### 
-	global $log;
-	  $log -> log_work("comming huizhuan_sell_action\n");
-	  $row=result_select("select count(*) from trade_history where code=$code and vifi_status=1 and status=1 and trade_type<20 and stat_date='$stat_date' and stat_time_hour='$trade_time_hour';");
+	  $this->log -> log_work("comming huizhuan_sell_action\n");
+	  $row=$this->db->get_select("select count(*) from trade_history where code=$this->code and vifi_status=1 and status=1 and trade_type<20 and stat_date='$stat_date' and stat_time_hour='$trade_time_hour';");
 	  $huizhuan_sell_number=$row[0];
 	
-	  $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$stat_date' order by id asc;";
+	  $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$this->stat_date' order by id asc;";
 	  //$row=result_select("select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$stat_date' order by id asc;");
 	  //$log -> log_work($sql."\n");
-	  $result = $conn->query($sql);
+	  $result = $this->conn->query($sql);
 	  while($row=mysqli_fetch_array($result)){
 	  //while($row){	  
 		   $connecttion_id=$row[id];
 		   $number=$row[number];
 		   $cut_price=$trade_buy_price+$trade_buy_price*3/100;
-		   $log -> log_work("connecttion_id:"."$connecttion_id~$cut_price\n");
-		   if($begin_point>$row[trade_buy_price] and $huizhuan_sell_number==0 and $row[cut_price] < ($row[trade_buy_price]+$row[trade_buy_price]*3.02/100)){
-			  $log -> log_work("达到条件触发卖出操作$begin_point，$huizhuan_sell_number，$number，$row[trade_buy_price],$row[cut_price]\n"); 
-			  $trade_id=table_id($conn,"trade_history"); 
+		   $this->log -> log_work("connecttion_id:"."$connecttion_id~$cut_price\n");
+		   if($this->begin_point>$row[trade_buy_price] and $huizhuan_sell_number==0 and $row[cut_price] < ($row[trade_buy_price]+$row[trade_buy_price]*3.02/100)){
+			  $this->log -> log_work("达到条件触发卖出操作$begin_point，$huizhuan_sell_number，$number，$row[trade_buy_price],$row[cut_price]\n"); 
+			  $trade_id=$this->db->get_id("trade_history"); 
 			  $log -> log_work("trade_id:".$trade_id);	   
 			  //插入交易历史  
 			  $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id,history_make_money) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price','0','$connecttion_id',$row[history_make_money]);";                                                                  
@@ -84,7 +87,7 @@ function huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$t
 			  $conn->query($sql);
 		   }
 		   else{
-			  $log -> log_work("未达到条件不能触发回转卖出操作$begin_point，$huizhuan_sell_number，$number，$row[trade_buy_price]\n"); 
+			  $log -> log_work("未达到条件不能触发回转卖出操作$this->begin_point，$huizhuan_sell_number，$number，$row[trade_buy_price]\n"); 
 	                } 
 	  }
 	   mysqli_free_result($result);  //循环结束释放结果集  
