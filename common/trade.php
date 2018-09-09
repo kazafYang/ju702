@@ -1,34 +1,53 @@
 <?php
 class Trade{
 
+  function __construct() {
+	//获取code，table_name配置信息
+	$this->Runner=new Runner();
+	$this->table_name=$this->Runner->get_config()['table_name'];
+	echo "初始化：".$this->table_name=$this->Runner->get_config()['table_name']."\n";
+	echo "初始化：".$this->code=$this->Runner->get_config()['code']."\n";  
+	$this->code=$this->Runner->get_config()['code'];	
+	//获取db配置信息  
+	$this->db_config = new DB_Config_Inc(); 
+	$this->conn = $this->db_config->get_db_config();
+	//获取db操作信息
+	$this->db = new db();  
+	//初始化log对象  
+	$this->log = new logs();
+	//获取实时数据  
+	$this->MachiningPrice= new MachiningPrice();
+	$this->begin_point=$this->MachiningPrice->get_machining_price()['begin_point'];
+	$this->stat_date=$this->MachiningPrice->get_machining_price()['stat_date'];  
+	//测试代码，测试方法调用  
+}
+	
 function sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price) {
-	  //mysqli_free_result($result);  //释放结果集
-	  global $log;
-	  $log -> log_work("comming sell_action\n");
-	  $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$stat_date' order by id asc;";
+	  $this->log -> log_work("comming sell_action\n");
+	  $sql="select * from trade_history where code=$this->code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$this->stat_date' order by id asc;";
 	  //$row=result_select("select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$stat_date' order by id asc;");
 	  //$log -> log_work("$sql\n");
-	  $result = $conn->query($sql);
+	  $result = $this->conn->query($sql);
 	  while($row=mysqli_fetch_array($result)){
 	  //while($row){	  
 		   $connecttion_id=$row[id];
 		   $number=$row[number];   
-		   $log -> log_work("connecttion_id:$connecttion_id\n");
+		   $this->log -> log_work("connecttion_id:$connecttion_id\n");
 		   if($begin_point>$row[trade_buy_price] and $row[cut_price] < ($row[trade_buy_price]+$row[trade_buy_price]*3.02/100)){
-			  $log -> log_work("达到条件触发卖出操作，$begin_point，$row[trade_buy_price]，$number,$row[cut_price]\n"); 
+			  $this->log -> log_work("达到条件触发卖出操作，$begin_point，$row[trade_buy_price]，$number,$row[cut_price]\n"); 
 			  $trade_id=table_id($conn,"trade_history"); 
-			  $log -> log_work("trade_id:$trade_id\n");	   
+			  $this->log -> log_work("trade_id:$trade_id\n");	   
 			  //插入交易历史  
 			  $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id,history_make_money) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price','0','$connecttion_id',$row[history_make_money]);";                                                                  
-			  $log -> log_work("插入交易指令".$sql."\n");
-			  $conn->query($sql);
+			  $this->log -> log_work("插入交易指令".$sql."\n");
+			  $this->conn->query($sql);
 			  //核销已经处理的前期订单，避免订单再次进入
 			  $sql = "update trade_history set connecttion_id='$trade_id',vifi_status='1' where id='$connecttion_id';";
-			  $log -> log_work("核销已经处理的订单".$sql."\n");
-			  $conn->query($sql);
+			  $this->log -> log_work("核销已经处理的订单".$sql."\n");
+			  $this->conn->query($sql);
 		   }
 		   else{
-			  $log -> log_work("未达到条件不能触发卖出操作，$begin_point，$row[trade_buy_price]，$number\n"); 
+			  $this->log -> log_work("未达到条件不能触发卖出操作，$this->begin_point，$row[trade_buy_price]，$number\n"); 
 	                }		  	  
 	  }
 	   mysqli_free_result($result);  //循环结束释放结果集  
