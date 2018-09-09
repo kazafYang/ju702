@@ -57,7 +57,7 @@ function sell_action($trade_type) {
 	   mysqli_free_result($result);  //循环结束释放结果集  
 	 //######################################################################## 
 }
-function huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price) {
+function huizhuan_sell_action($trade_type) {
       //####################################################################### 
 	  $this->log -> log_work("comming huizhuan_sell_action\n");
 	  $row=$this->db->get_select("select count(*) from trade_history where code=$this->code and vifi_status=1 and status=1 and trade_type<20 and stat_date='$stat_date' and stat_time_hour='$trade_time_hour';");
@@ -76,61 +76,60 @@ function huizhuan_sell_action($code,$trade_code,$conn,$begin_point,$stat_date,$t
 		   if($this->begin_point>$row[trade_buy_price] and $huizhuan_sell_number==0 and $row[cut_price] < ($row[trade_buy_price]+$row[trade_buy_price]*3.02/100)){
 			  $this->log -> log_work("达到条件触发卖出操作$begin_point，$huizhuan_sell_number，$number，$row[trade_buy_price],$row[cut_price]\n"); 
 			  $trade_id=$this->db->get_id("trade_history"); 
-			  $log -> log_work("trade_id:".$trade_id);	   
+			  $this->log -> log_work("trade_id:".$trade_id);	   
 			  //插入交易历史  
-			  $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id,history_make_money) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price','0','$connecttion_id',$row[history_make_money]);";                                                                  
-			  $log -> log_work("插入交易指令".$sql."\n");
-			  $conn->query($sql);
+			  $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id,history_make_money) values ('$trade_id','$this->code','$this->stat_date','$this->time_hour','$this->time_min','0','0','$number','$trade_type','$this->buy_one_price','$this->sell_one_price','0','$connecttion_id',$row[history_make_money]);";                                                                  
+			  $this->log -> log_work("插入交易指令".$sql."\n");
+			  $this->conn->query($sql);
 			  //核销已经处理的前期订单，避免订单再次进入
 			  $sql = "update trade_history set connecttion_id='$trade_id',vifi_status='1' where id='$connecttion_id';";
 			  $log -> log_work("核销已经处理的订单".$sql."\n");
-			  $conn->query($sql);
+			  $this->conn->query($sql);
 		   }
 		   else{
-			  $log -> log_work("未达到条件不能触发回转卖出操作$this->begin_point，$huizhuan_sell_number，$number，$row[trade_buy_price]\n"); 
+			  $this->log -> log_work("未达到条件不能触发回转卖出操作$this->begin_point，$huizhuan_sell_number，$number，$row[trade_buy_price]\n"); 
 	                } 
 	  }
 	   mysqli_free_result($result);  //循环结束释放结果集  
 	 //######################################################################## 
 }
-function buy_action($code,$trade_code,$conn,$begin_point,$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite) {
-      global $useable_money,$log,$runoob,$kdjday_k,$kdjday_d,$cci;	
-      $log -> log_work("coming buy_action~~~~".$trade_bite."\n");
-      $b=$runoob->setkdj($kdjday_k,$kdjday_d,$cci);	
-      echo $runoob->Get_Decide($b)."前面是状态\n";   	
+function buy_action($trade_type) {
+      $this->log -> log_work("coming buy_action~~~~".$trade_bite."\n");
+      //$b=$runoob->setkdj($kdjday_k,$kdjday_d,$cci);	
+      //echo $runoob->Get_Decide($b)."前面是状态\n";   	
       $number=11/$trade_buy_price*$trade_bite;
       $number=round($number);
       //每次发出指令以前都判断一下当前是否有足额可用资金	
-      $row=result_select("select useable_money from hive_number where code='$trade_code' order by stat_date desc limit 1;");
+      $row=$this->db->get_select("select useable_money from hive_number where code='$this->code' order by stat_date desc limit 1;");
       $useable_money=$row[useable_money];	
       //$sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=$trade_type;";
-      $row=result_select("select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and trade_type=$trade_type;");
+      $row=$this->db->get_select("select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and trade_type=$trade_type;");
       $log -> log_work("$useable_money~~~~~~$number~~~~$trade_buy_price\n");
       if(($trade_type==5 or $trade_type==6 or $trade_type==7 or $trade_type==8 or $trade_type==9) and ($useable_money>=($number*100*$trade_buy_price))){
-	      $log -> log_work("回转达到条件触发买入操作，useable_money:$useable_money，row[0]:$row[0]，number:$number，$trade_buy_price\n");
-	      $trade_id=table_id($conn,"trade_history");
+	      $this->log -> log_work("回转达到条件触发买入操作，useable_money:$useable_money，row[0]:$row[0]，number:$number，$trade_buy_price\n");
+	      $trade_id=$this->db->get_id("trade_history");
 	      $cut_price=$trade_buy_price+($trade_buy_price*3/100);
-	      $log -> log_work("cut_price:$cut_price\n");
+	      $this->log -> log_work("cut_price:$cut_price\n");
 	      //$cut_price=round($cut_price,3);
-	      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price','$cut_price','0');";
-	      $log -> log_work("buy_action交易指令".$sql."\n");
-	      $conn->query($sql);
+	      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$this->code','$this->stat_date','$this->time_hour','$this->time_min','0','0','$number','$trade_type','$this->buy_one_price','$this->sell_one_price','$cut_price','0');";
+	      $this->log -> log_work("buy_action交易指令".$sql."\n");
+	      $this->conn->query($sql);
       }else{
-		$log -> log_work("回转未达到条件不能触发买入操作，$useable_money，$row[0]，$number，$trade_buy_price\n"); 
+		$this->log -> log_work("回转未达到条件不能触发买入操作，$useable_money，$row[0]，$number，$trade_buy_price\n"); 
       }	
       if(($trade_type!=5 and $trade_type!=6 and $trade_type!=7 and $trade_type!=8 and $trade_type!=9) and $row[0]==0 and $useable_money>=($number*100*$trade_buy_price)){
       //if($row[0]==0 or $useable_money>=($number*100*$trade_buy_price)){	      
-	      $log -> log_work("非回转达到条件触发买入操作，useable_money:$useable_money，row[0]:$row[0]，number:$number，$trade_buy_price\n");
-	      $trade_id=table_id($conn,"trade_history");
+	      $this->log -> log_work("非回转达到条件触发买入操作，useable_money:$useable_money，row[0]:$row[0]，number:$number，$trade_buy_price\n");
+	      $trade_id=$this->db->get_id("trade_history");
 	      $cut_price=$trade_buy_price+($trade_buy_price*3/100);
-	      $log -> log_work("cut_price:$cut_price\n");
+	      $this->log -> log_work("cut_price:$cut_price\n");
 	      //$cut_price=round($cut_price,3);
-	      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$trade_buy_price','$trade_sell_price','$cut_price','0');";
-	      $log -> log_work("buy_action交易指令".$sql."\n");
-	      $conn->query($sql);
+	      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$this->code','$this->stat_date','$this->time_hour','$this->time_min','0','0','$number','$trade_type','$this->buy_one_price','$this->sell_one_price','$cut_price','0');";
+	      $this->log -> log_work("buy_action交易指令".$sql."\n");
+	      $this->conn->query($sql);
 	      }
 	else{
-		$log -> log_work("非回转未达到条件不能触发买入操作，$useable_money，$row[0]，$number，$trade_buy_price\n"); 
+		$this->log -> log_work("非回转未达到条件不能触发买入操作，$useable_money，$row[0]，$number，$trade_buy_price\n"); 
 	    }
 }
 }
