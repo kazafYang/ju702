@@ -10,9 +10,11 @@ class Runner{
   
     function __construct() {
 	//获取code，table_name配置信息
-	$this->Runner=new Runner();
-	$this->table_name=$this->Runner->get_config()['table_name'];
-	$this->code=$this->Runner->get_config()['code'];	
+	//$this->Runner=new Runner();
+	//$this->table_name=$this->Runner->get_config()['table_name'];
+	//$this->code=$this->Runner->get_config()['code'];	
+	  $this->table_name=$this->get_config()['table_name'];
+	  $this->code=$this->get_config()['code'];
 	//获取db配置信息  
 	$this->db_config = new DB_Config_Inc(); 
 	$this->conn = $this->db_config->get_db_config();
@@ -37,15 +39,15 @@ class Runner{
   return $config;  
   }
   
-  function sleep_time () {
+  public function sleep_time () {
 	$this->log -> log_work("comming sleep_time\n");
 	while(($this->time_hour==9 and $this->time_min<30) or ($this->time_hour<13 and $this->time_hour>=11) or $this->time_hour<9) {
   }
+  }	  
   
-}
-  
-#code begin
-$Runner=new Runner();
+ public function run () {	
+ #code begin
+//Runner=new Runner();
 while(1==1) {
     $this->log -> log_work("开始执行程序-------------->");    
     if ($this->time_hour<9 or ($this->time_hour==9 and $this->time_min<30)) {
@@ -83,5 +85,11 @@ while(1==1) {
          }
       } 
 $this->conn->close();
-  
+ }	 
+}
+
+
+$Runner=new Runner();
+$Runner->run();
+	
 ?>
