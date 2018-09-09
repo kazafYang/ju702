@@ -1,61 +1,85 @@
 <?php
- function nine_count () {
-	  global $log,$stat_time_min,$time_hour,$time_min,$time_second,$begin_point, $table_name,$time_out_begin,$conn,$buy_one_price,$sell_one_price;
-	  $log -> log_work("comming nine_count,开始执行~\n");
-	  machining_price();   
-	  $max=$begin_point;
-	  $min=$begin_point;  
-	  $sql="update $table_name set min15_point_max=$max,min15_point_min=$min order by id desc limit 1 ;";
-	  $conn->query($sql);
-	  $time_out_now=($time_hour*3600)+($time_min*60);
+class Nine_Count{
+	
+  function __construct() {
+	//获取code，table_name配置信息
+	$this->Runner=new Runner();
+	$this->table_name=$this->Runner->get_config()['table_name'];
+	echo "初始化：".$this->table_name=$this->Runner->get_config()['table_name']."\n";
+	echo "初始化：".$this->code=$this->Runner->get_config()['code']."\n";  
+	$this->code=$this->Runner->get_config()['code'];	
+	//获取db配置信息  
+	$this->db_config = new DB_Config_Inc(); 
+	$this->conn = $this->db_config->get_db_config();
+	//获取db操作信息
+	$this->db = new db();  
+	//初始化log对象  
+	$this->log = new logs();
+	//获取实时数据  
+	$this->MachiningPrice= new MachiningPrice();
+	$this->begin_point=$this->MachiningPrice->get_machining_price()['begin_point'];
+	$this->stat_date=$this->MachiningPrice->get_machining_price()['stat_date'];
+	//初始化kdj
+	$this->kdj=new Kdj();   
+	//测试代码，测试方法调用  
+}	
+	
+ function nine_count ($time_out_begin) {
+	  $this->log -> log_work("comming nine_count,开始执行~\n");
+	  $max=$this->begin_point;
+	  $min=$this->begin_point;  
+	  $sql="update $this->table_name set min15_point_max=$max,min15_point_min=$min order by id desc limit 1 ;";
+	  $this->conn->query($sql);
+	  $time_out_now=($this->time_hour*3600)+($this->time_min*60);
 	  while($time_out_now < $time_out_begin) {
-	  $time_out_now=($time_hour*3600)+($time_min*60);
-	  $log -> log_work("结束时间：".intval($time_out_now/3600)."：".($time_out_now%3600)/60); 	  
-	  $log -> log_work("开始nice_count循环开始：time_out_now:$time_out_now~time_out_begin:$time_out_begin\n");
-	  $row=result_select("select stat_time_min from $table_name order by id desc limit 1;");	  
+	  $time_out_now=($this->time_hour*3600)+($this->time_min*60);
+	  $this->log -> log_work("结束时间：".intval($time_out_now/3600)."：".($time_out_now%3600)/60); 	  
+	  $this->log -> log_work("开始nice_count循环开始：time_out_now:$time_out_now~time_out_begin:$time_out_begin\n");
+	  $row=result_select("select stat_time_min from $this->table_name order by id desc limit 1;");	  
 	  $stat_time_min=$row[0];	  
 	  machining_price();
-	  $log -> log_work("$max--$begin_point-$stat_time_min-stat_time_min\n");	  
-		  if(($time_min%15==0) and $time_min<>$stat_time_min){
-		  $log -> log_work("***************************");
+	  $log -> log_work("$max--$this->begin_point-$stat_time_min-stat_time_min\n");	  
+		  if(($this->time_min%15==0) and $this->time_min<>$stat_time_min){
+		  $this->log -> log_work("***************************");
 		  break;
 		  }	  
-	  if ($begin_point>=$max)
+	  if ($this->begin_point>=$max)
 	  {
-	      $max=$begin_point;
-	      $log -> log_work("$max\n");
-	      $sql="update $table_name set min15_point_max=$max order by id desc limit 1 ;";
-	      $log -> log_work($sql."\n");
-		      if ($conn->query($sql)=== TRUE)
+	      $max=$this->begin_point;
+	      $this->log -> log_work("$max\n");
+	      $sql="update $this->table_name set min15_point_max=$max order by id desc limit 1 ;";
+	      $this->log -> log_work($sql."\n");
+		      if ($this->conn->query($sql)=== TRUE)
 		     {
-		      $log ->log_work("max新纪录更新成功");
+		      $this->log ->log_work("max新纪录更新成功");
 		       } 
 		      else {
-		      $log -> log_work("max新纪录更新Error: " . $sql . $conn->error."\n");
+		      $this->log -> log_work("max新纪录更新Error: " . $sql . $this->conn->error."\n");
 		  }
   }
-	  if ($begin_point<=$min)
+	  if ($this->begin_point<=$min)
 	  {
-	      $min=$begin_point; 
-	      $sql="update " .$table_name." set min15_point_min=$min order by id desc limit 1 ; ";
-		      if ($conn->query($sql) === TRUE) {
-		      $log -> log_work("min:新记录更新成功");
+	      $min=$this->begin_point; 
+	      $sql="update " .$this->table_name." set min15_point_min=$min order by id desc limit 1 ; ";
+		      if ($this->conn->query($sql) === TRUE) {
+		      $this->log -> log_work("min:新记录更新成功");
 		       } 
 		      else {
-		      $log -> log_work("min新纪录更新Error: " . $sql . $conn->error."\n");
+		      $this->log -> log_work("min新纪录更新Error: " . $sql . $this->conn->error."\n");
 		  }
   } 
 	  //更新买一，卖一实时价格  
-	  $sql="update $table_name set now_price=$begin_point,buy_one_price=$buy_one_price,sell_one_price=$sell_one_price order by id desc limit 1 ;";
-	  $conn->query($sql);
-	  kdjfifteen(); #begin:kdj
-	  kdjthirty();
-	  kdjsixty(); 
-	  two_hour();	  
-	  kdjday();
-	  test_cut_price();		  
-	  analyse();
-	  cci();
-	  $log -> log_work("本次程序执行完成------------------------->\n");	  
+	  $sql="update $this->table_name set now_price=$this->begin_point,buy_one_price=$this->buy_one_price,sell_one_price=$this->sell_one_price order by id desc limit 1 ;";
+	  $this->conn->query($sql);
+	  $this->kdj->set_kdjfifteen(); #begin:kdj
+	  $this->kdj->set_kdjthirty();
+	  $this->kdj->set_kdjsixty(); 
+	  $this->kdj->set_kdjtwohour();	  
+	  $this->kdj->set_kdjday();
+	  //test_cut_price();		  
+	  //analyse();
+	  //cci();
+	  $this->log -> log_work("本次程序执行完成------------------------->\n");	  
 	  } 
+ }	 
 ?>
