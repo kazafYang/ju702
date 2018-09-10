@@ -16,6 +16,14 @@ class db{
 	$this->conn->close();   
 }
 	
+   public function get_resultselect($sql){
+	$this -> log -> log_work("get_resultselect函数执行的sql：$sql\n");
+	$result = $this -> conn->query($sql);
+	return $result;
+	mysqli_free_result($result);  //释放结果集
+	$this->conn->close();   
+}
+	
    public function set_update($sql){
 	$this -> log -> log_work("set_update函数执行的sql：$sql\n");
 	if ($this->conn->query($sql) === TRUE) {
