@@ -4,7 +4,11 @@ include 'common/machining_price.php';
 include 'common/db_config_inc.php';
 include 'common/db.php';
 include 'common/kdj.php';
+include 'common/analyse.php';
+include 'common/trade.php.php';
 include 'common/nine_count.php';
+
+
 
 class Runner{
 	
@@ -27,12 +31,6 @@ class Runner{
 	$this->log = new logs();
 	//获取实时数据  
 	$this->MachiningPrice= new MachiningPrice();
-	//$this->begin_point=$this->MachiningPrice->get_machining_price()['begin_point'];
-	//$this->buy_one_price=$this->MachiningPrice->get_machining_price()['buy_one_price'];
-	//$this->sell_one_price=$this->MachiningPrice->get_machining_price()['sell_one_price'];  
-	//$this->stat_date=$this->MachiningPrice->get_machining_price()['stat_date'];
-	//$this->time_hour=$this->MachiningPrice->get_machining_price()['time_hour']; 
-	//$this->time_min=$this->MachiningPrice->get_machining_price()['time_min'];
 	//初始化九期大小值判断
 	//$this->nine_count = new Nine_Count();    
 	//测试代码，测试方法调用  
