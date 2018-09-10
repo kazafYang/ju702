@@ -5,12 +5,7 @@ class Nine_Count{
 	//获取code，table_name配置信息
 	$this->Runner=new Runner();
 	$this->table_name=$this->Runner->get_config()['table_name'];
-	//echo "初始化：".$this->table_name=$this->Runner->get_config()['table_name']."\n";
-	//echo "初始化：".$this->code=$this->Runner->get_config()['code']."\n";  
 	$this->code=$this->Runner->get_config()['code'];	
-	//获取db配置信息  
-	$this->db_config = new DB_Config_Inc(); 
-	$this->conn = $this->db_config->get_db_config();
 	//获取db操作信息
 	$this->db = new db();  
 	//初始化log对象  
@@ -32,7 +27,7 @@ class Nine_Count{
 	  $max=$data['begin_point'];
 	  $min=$data['begin_point'];  
 	  $sql="update $this->table_name set min15_point_max=$max,min15_point_min=$min order by id desc limit 1 ;";
-	  $this->conn->query($sql);
+	  $this->db->set_update($sql);
 	  //$time_out_now=($this->time_hour*3600)+($this->time_min*60);
 	  while($time_out_now < $time_out_begin) {
 	  $data=$this->MachiningPrice->get_machining_price();	  
@@ -44,34 +39,23 @@ class Nine_Count{
 	  $row=$this->db->get_select("select stat_time_min from $this->table_name order by id desc limit 1;");	  
 	  $stat_time_min=$row[0];	  
 	  $this->log -> log_work("$max--$data[begin_point]-$stat_time_min-stat_time_min\n");	  
-		  if(($data[time_min]%15==0) and $data[time_min]<>$stat_time_min){
+	  if(($data[time_min]%15==0) and $data[time_min]<>$stat_time_min){
 		  $this->log -> log_work("***************************");
 		  break;
-		  }	  
+	  }	  
 	  if ($data[begin_point]>=$max)
 	  {
 	      $max=$data[begin_point];
 	      $this->log -> log_work("$max\n");
 	      $sql="update $this->table_name set min15_point_max=$max order by id desc limit 1 ;";
+	      $this->db->set_update($sql);	  
 	      $this->log -> log_work($sql."\n");
-		      if ($this->conn->query($sql)=== TRUE)
-		     {
-		      $this->log ->log_work("max新纪录更新成功");
-		       } 
-		      else {
-		      $this->log -> log_work("max新纪录更新Error: " . $sql . $this->conn->error."\n");
-		  }
   }
 	  if ($this->begin_point<=$min)
 	  {
 	      $min=$data[begin_point]; 
 	      $sql="update " .$this->table_name." set min15_point_min=$min order by id desc limit 1 ; ";
-		      if ($this->conn->query($sql) === TRUE) {
-		      $this->log -> log_work("min:新记录更新成功");
-		       } 
-		      else {
-		      $this->log -> log_work("min新纪录更新Error: " . $sql . $this->conn->error."\n");
-		  }
+	      $this->db->set_update($sql);	  
   } 
 	  //更新买一，卖一实时价格  
 	  $sql="update $this->table_name set now_price=$data[begin_point],buy_one_price=$data[buy_one_price],sell_one_price=$data[sell_one_price] order by id desc limit 1 ;";
