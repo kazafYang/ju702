@@ -13,7 +13,24 @@ class db{
 	$row=mysqli_fetch_array($result);
 	return $row;
 	mysqli_free_result($result);  //释放结果集
+	$this->conn->close();   
 }
+	
+   public function set_update($sql){
+	$this -> log -> log_work("set_update函数执行的sql：$sql\n");
+	$this->conn->query($sql);
+	$this->conn->close();
+   }
+
+   public function set_insert($sql){
+	$this -> log -> log_work("set_insert函数执行的sql：$sql\n");
+	if ($this->conn->query($sql) === TRUE) {
+		$this->log -> log_work("new inser into success $sql\n");    
+	} else {
+		$this->log -> log_work("Error: " . $sql . $this->conn->error."\n");   
+	}    
+	$this->conn->close();
+   }	
 
     public function get_id($table_name) {   
 	$sql = "select id from $table_name order by id desc limit 1;"; //where status=0 and stat_date='$stat_date'
@@ -21,7 +38,8 @@ class db{
 	$result = $this->conn->query($sql);
 	$row = $result->fetch_assoc();
 	return $row[id]+1;
-	mysqli_free_result($result);  //释放结果集		  
+	mysqli_free_result($result);  //释放结果集
+	$this->conn->close();    
 }
 
 }
