@@ -22,7 +22,9 @@ class Nine_Count{
 	//$this->time_hour=$this->MachiningPrice->get_machining_price()['time_hour'];
 	//$this->time_min=$this->MachiningPrice->get_machining_price()['time_min'];  
 	//初始化kdj
-	$this->kdj=new Kdj();   
+	$this->kdj=new Kdj();  
+	$this->trade= new Trade();
+	$this->analyse= new Analyse();  
 	//测试代码，测试方法调用  
 }	
 	
@@ -82,6 +84,7 @@ class Nine_Count{
 	  $this->kdj->set_kdjsixty(); 
 	  $this->kdj->set_kdjtwohour();	  
 	  $this->kdj->set_kdjday();
+	  $this->analyse->set_analyse();	  
 	  //test_cut_price();		  
 	  //analyse();
 	  //cci();
