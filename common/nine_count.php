@@ -5,8 +5,8 @@ class Nine_Count{
 	//获取code，table_name配置信息
 	$this->Runner=new Runner();
 	$this->table_name=$this->Runner->get_config()['table_name'];
-	echo "初始化：".$this->table_name=$this->Runner->get_config()['table_name']."\n";
-	echo "初始化：".$this->code=$this->Runner->get_config()['code']."\n";  
+	//echo "初始化：".$this->table_name=$this->Runner->get_config()['table_name']."\n";
+	//echo "初始化：".$this->code=$this->Runner->get_config()['code']."\n";  
 	$this->code=$this->Runner->get_config()['code'];	
 	//获取db配置信息  
 	$this->db_config = new DB_Config_Inc(); 
@@ -17,14 +17,11 @@ class Nine_Count{
 	$this->log = new logs();
 	//获取实时数据  
 	$this->MachiningPrice= new MachiningPrice();
-	//$this->begin_point=$this->MachiningPrice->get_machining_price()['begin_point'];
-	//$this->stat_date=$this->MachiningPrice->get_machining_price()['stat_date'];
-	//$this->time_hour=$this->MachiningPrice->get_machining_price()['time_hour'];
-	//$this->time_min=$this->MachiningPrice->get_machining_price()['time_min'];  
 	//初始化kdj
 	$this->kdj=new Kdj();  
 	$this->trade= new Trade();
-	$this->analyse= new Analyse();  
+	$this->analyse= new Analyse(); 
+	$this->cut_Price= new Cut_Price();  
 	//测试代码，测试方法调用  
 }	
 	
@@ -81,12 +78,11 @@ class Nine_Count{
 	  $this->conn->query($sql);
 	  $this->kdj->set_kdjfifteen(); #begin:kdj
 	  $this->kdj->set_kdjthirty();
-	  $this->kdj->set_kdjsixty(); 
-	  $this->kdj->set_kdjtwohour();	  
+	  $this->kdj->set_kdjsixty();
+	  $this->kdj->set_kdjtwohour();	 
 	  $this->kdj->set_kdjday();
-	  $this->analyse->set_analyse();	  
-	  //test_cut_price();		  
-	  //analyse();
+	  $this->cut_Price->test_cut_price();
+	  $this->analyse->set_analyse(); 	  
 	  //cci();
 	  $this->log -> log_work("本次程序执行完成------------------------->\n");	  
 	  } 
