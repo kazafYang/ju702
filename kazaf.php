@@ -18,24 +18,14 @@ class Runner{
   public $data= array();
 	
     function __construct() {
-	//获取code，table_name配置信息
-	//$this->Runner=new Runner();
-	//$this->table_name=$this->Runner->get_config()['table_name'];
-	//$this->code=$this->Runner->get_config()['code'];	
+	//获取code，table_name配置信息	
 	  $this->table_name=$this->get_config()['table_name'];
 	  $this->code=$this->get_config()['code'];
-	//获取db配置信息  
-	$this->db_config = new DB_Config_Inc(); 
-	$this->conn = $this->db_config->get_db_config();
-	//获取db操作信息
 	$this->db = new db();  
 	//初始化log对象  
 	$this->log = new logs();
 	//获取实时数据  
 	$this->MachiningPrice= new MachiningPrice();
-	//初始化九期大小值判断
-	//$this->nine_count = new Nine_Count();    
-	//测试代码，测试方法调用  
 }
   
   public function get_config(){
@@ -69,8 +59,7 @@ while(1==1) {
     }
       
     $sql = "select id,stat_time_min from $this->table_name order by id desc limit 1;";    
-    $result = $this->conn->query($sql);
-    $row=$result->fetch_assoc();
+    $this->db->get_select($sql);
     $this->log -> log_work("stat_time_min:$row[stat_time_min]\n");
     $stat_time_min=$row[stat_time_min];
         if ($stat_time_min<>$data[time_min] or ($data[time_min]==0 or $data[time_min]==15 or $data[time_min]==30 or $data[time_min]==45)){
@@ -83,16 +72,11 @@ while(1==1) {
            $this->log -> log_work("结束时间".(intval($time_out_begin/3600)).":".(($time_out_begin%3600)/60)."\n");
            $row[id]=$row[id]+1;   
            $sql = "insert into $this->table_name (id,stat_date,stat_time_hour,stat_time_min,begin_point,min15_k,min15_d,min30_k,min30_d,min60_k,min60_d,min120_k,min120_d,kdjday_k,kdjday_d) VALUES ('$row[id]','$data[stat_date]','$data[time_hour]','$data[time_min]','$data[begin_point]',50,50,50,50,50,50,50,50,50,50);";    
-               if ($this->conn->query($sql) === TRUE) {
-                    $this->log -> log_work("new inser into success $sql\n");    
-                } else {
-                    $this->log -> log_work("Error: " . $sql . $this->conn->error."\n");   
-                } 
+           $this->db->set_insert($sql);
 	     $nine = new Nine_Count();	
              $nine->nine_count($time_out_begin,$time_out_now);     
          }
       } 
-$this->conn->close();
  }	 
 }
 
