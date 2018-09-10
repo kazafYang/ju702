@@ -1,6 +1,8 @@
 <?php
 class Trade{
-
+	
+public $data= array();
+	
   function __construct() {
 	//获取code，table_name配置信息
 	$this->Runner=new Runner();
@@ -17,6 +19,7 @@ class Trade{
 	$this->log = new logs();
 	//获取实时数据  
 	$this->MachiningPrice= new MachiningPrice();
+	$data=$this->sell_action($trade_type);   
 	//$this->begin_point=$this->MachiningPrice->get_machining_price()['begin_point'];
 	//$this->buy_one_price=$this->MachiningPrice->get_machining_price()['buy_one_price'];
 	//$this->sell_one_price=$this->MachiningPrice->get_machining_price()['sell_one_price'];  
@@ -28,7 +31,7 @@ class Trade{
 	
 function sell_action($trade_type) {
 	  $data=$this->MachiningPrice->get_machining_price();
-	  $this->log -> log_work("comming sell_action\n");
+	  $this->log -> log_work("comming sell_action:$trade_type\n");
 	  $sql="select * from trade_history where code=$this->code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$data[stat_date]' order by id asc;";
 	  //$row=result_select("select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$stat_date' order by id asc;");
 	  //$log -> log_work("$sql\n");
@@ -52,7 +55,7 @@ function sell_action($trade_type) {
 			  $this->conn->query($sql);
 		   }
 		   else{
-			  $this->log -> log_work("未达到条件不能触发卖出操作，$this->begin_point，$row[trade_buy_price]，$number\n"); 
+			  $this->log -> log_work("未达到条件不能触发卖出操作，$data[begin_point]，$row[trade_buy_price]，$number\n"); 
 	                }		  	  
 	  }
 	   mysqli_free_result($result);  //循环结束释放结果集  
