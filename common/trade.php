@@ -18,14 +18,7 @@ public $data= array();
 	//初始化log对象  
 	$this->log = new logs();
 	//获取实时数据  
-	$this->MachiningPrice= new MachiningPrice();
-	$data=$this->sell_action($trade_type);   
-	//$this->begin_point=$this->MachiningPrice->get_machining_price()['begin_point'];
-	//$this->buy_one_price=$this->MachiningPrice->get_machining_price()['buy_one_price'];
-	//$this->sell_one_price=$this->MachiningPrice->get_machining_price()['sell_one_price'];  
-	//$this->stat_date=$this->MachiningPrice->get_machining_price()['stat_date'];
-	//$this->time_hour=$this->MachiningPrice->get_machining_price()['time_hour']; 
-	//$this->time_min=$this->MachiningPrice->get_machining_price()['time_min'];   
+	$this->MachiningPrice= new MachiningPrice(); 
 	//测试代码，测试方法调用  
 }
 	
