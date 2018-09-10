@@ -19,7 +19,7 @@ function __construct() {
 	$this->MachiningPrice= new MachiningPrice();
 }
 	
-function analyse () {	
+function set_analyse () {	
       $this->log -> log_work("comming analyse\n");
       //五日十日均线数据计算	
       $row=$this->db->get_select("select avg(now_price) from (select now_price from $this->table_name order by id desc limit 0,80) as a;");	
