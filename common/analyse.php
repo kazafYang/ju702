@@ -18,7 +18,7 @@ function __construct() {
 	//获取实时数据  
 	$this->MachiningPrice= new MachiningPrice();
 	$this->trade= new Trade();
-	$this->trade->sell_action("6");
+	//$this->trade->sell_action("6");
 }
 	
 function set_analyse () {	
