@@ -17,7 +17,7 @@ function __construct() {
 	$this->log = new logs();
 	//获取实时数据  
 	$this->MachiningPrice= new MachiningPrice();
-	$this->cut_Price= new Cut_Price();
+	//$this->cut_Price= new Cut_Price();
 }
 
 function test_cut_price() { 	
