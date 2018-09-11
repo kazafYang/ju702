@@ -1,9 +1,11 @@
 <?php
 class db{
 
-   function __construct() {
+	function __construct() {
+   //public function set_db(){
 	$this->db_config = new DB_Config_Inc; 
-	$this->conn = $this->db_config->get_db_config();    
+	$this->conn = $this->db_config->get_db_config();
+	//$this->db = new db();   
 	$this->log = new logs(); 
 }
 /*构造方法	 */
@@ -13,7 +15,6 @@ class db{
 	$row=mysqli_fetch_array($result);
 	return $row;
 	mysqli_free_result($result);  //释放结果集
-	$this->conn->close();   
 }
 	
    public function get_resultselect($sql){
@@ -21,7 +22,6 @@ class db{
 	$result = $this -> conn->query($sql);
 	return $result;
 	mysqli_free_result($result);  //释放结果集
-	$this->conn->close();   
 }
 	
    public function set_update($sql){
@@ -32,7 +32,6 @@ class db{
 	else {
 		$this->log -> log_work("新纪录更新Error: " . $sql . $this->conn->error."\n");
 	}   
-	$this->conn->close();
    }
 
    public function set_insert($sql){
@@ -42,7 +41,6 @@ class db{
 	} else {
 		$this->log -> log_work("Error: " . $sql . $this->conn->error."\n");   
 	}    
-	$this->conn->close();
    }	
 
     public function get_id($table_name) {   
@@ -52,7 +50,6 @@ class db{
 	$row = $result->fetch_assoc();
 	return $row[id]+1;
 	mysqli_free_result($result);  //释放结果集
-	$this->conn->close();    
 }
 
 }
