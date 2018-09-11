@@ -59,7 +59,7 @@ class Nine_Count{
   } 
 	  //更新买一，卖一实时价格  
 	  $sql="update $this->table_name set now_price=$data[begin_point],buy_one_price=$data[buy_one_price],sell_one_price=$data[sell_one_price] order by id desc limit 1 ;";
-	  $this->conn->query($sql);
+	  $this->db->set_update($sql);
 	  $this->kdj->set_kdjfifteen(); #begin:kdj
 	  $this->kdj->set_kdjthirty();
 	  $this->kdj->set_kdjsixty();
