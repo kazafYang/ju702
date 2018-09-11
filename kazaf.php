@@ -59,7 +59,7 @@ while(1==1) {
     }
       
     $sql = "select id,stat_time_min from $this->table_name order by id desc limit 1;";    
-    $this->db->get_select($sql);
+    $row=$this->db->get_select($sql);
     $this->log -> log_work("stat_time_min:$row[stat_time_min]\n");
     $stat_time_min=$row[stat_time_min];
         if ($stat_time_min<>$data[time_min] or ($data[time_min]==0 or $data[time_min]==15 or $data[time_min]==30 or $data[time_min]==45)){
