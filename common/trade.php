@@ -58,7 +58,7 @@ function huizhuan_sell_action($trade_type) {
 	  $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$data[stat_date]' order by id asc;";
 	  //$row=result_select("select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$stat_date' order by id asc;");
 	  //$log -> log_work($sql."\n");
-	  $result = $this->conn->query($sql);
+	  $result = $this->db->set_resultselect($sql);
 	  while($row=mysqli_fetch_array($result)){
 	  //while($row){	  
 		   $connecttion_id=$row[id];
@@ -72,11 +72,11 @@ function huizhuan_sell_action($trade_type) {
 			  //插入交易历史  
 			  $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id,history_make_money) values ('$trade_id','$this->code','$data[stat_date]','$data[time_hour]','$data[time_min]','0','0','$number','$trade_type','$data[buy_one_price]','$data[sell_one_price]','0','$connecttion_id',$row[history_make_money]);";                                                                  
 			  $this->log -> log_work("插入交易指令".$sql."\n");
-			  $this->conn->query($sql);
+			  $this->db->set_insert($sql);
 			  //核销已经处理的前期订单，避免订单再次进入
 			  $sql = "update trade_history set connecttion_id='$trade_id',vifi_status='1' where id='$connecttion_id';";
 			  $log -> log_work("核销已经处理的订单".$sql."\n");
-			  $this->conn->query($sql);
+			  $this->db->set_update($sql);
 		   }
 		   else{
 			  $this->log -> log_work("未达到条件不能触发回转卖出操作$this->begin_point，$huizhuan_sell_number，$number，$row[trade_buy_price]\n"); 
@@ -106,7 +106,7 @@ function buy_action($trade_type) {
 	      //$cut_price=round($cut_price,3);
 	      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$this->code','$data[stat_date]','$data[time_hour]','$data[time_min]','0','0','$number','$trade_type','$data[buy_one_price]','$data[sell_one_price]','$cut_price','0');";
 	      $this->log -> log_work("buy_action交易指令".$sql."\n");
-	      $this->conn->query($sql);
+	      $this->db->set_insert($sql);
       }else{
 		$this->log -> log_work("回转未达到条件不能触发买入操作，$useable_money，$row[0]，$number，$trade_buy_price\n"); 
       }	
@@ -119,7 +119,7 @@ function buy_action($trade_type) {
 	      //$cut_price=round($cut_price,3);
 	      $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$this->code','$data[stat_date]','$data[time_hour]','$data[time_min]','0','0','$number','$trade_type','$data[buy_one_price]','$data[sell_one_price]','$cut_price','0');";
 	      $this->log -> log_work("buy_action交易指令".$sql."\n");
-	      $this->conn->query($sql);
+	      $this->db->set_insert($sql);
 	      }
 	else{
 		$this->log -> log_work("非回转未达到条件不能触发买入操作，$useable_money，$row[0]，$number，$trade_buy_price\n"); 
