@@ -31,22 +31,19 @@ $result = $this->conn->query($sql);
            if($data[begin_point]>$row[cut_price]){
              $sql="update trade_history set cut_price=$data[begin_point] where id=$row[id];";
              $this->conn->query($sql);
-	     $this->conn->close();	   
            }
 	    //计算单笔交易的盈亏情况
 	   if($data[begin_point] <> "0" and $row[number] <> "0" and $row[trade_buy_price] <> "0"){	    
 	   $history_make_money=(($data[begin_point]-0.001)*$row[number]-$row[trade_buy_price]*$row[number])*100; 
 	   $history_make_money=round($history_make_money,3);
-	   $this->log -> log_work("history_make_money:$history_make_money~number:$row[number]~~trade_buy_price:$row[trade_buy_price]");	    
+	   $this->log -> log_work("history_make_money:$history_make_money~number:$row[number]~trade_buy_price:$row[trade_buy_price]");	    
            $sql="update trade_history set history_make_money=$history_make_money where id=$row[id];";
            $this->conn->query($sql);
 	   }
-		else{
+	   else{
 		$this->log -> log_work("不符合条件不更新数据，请排查：begin_point:$data[begin_point]~row[number]:$row[number]~row[trade_buy_price]:$row[trade_buy_price]");
 		} 
-	$this->conn->close();	    
 	}
- mysqli_free_result($result);  //释放结果集	  
 }
 }
 ?>
