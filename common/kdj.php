@@ -46,7 +46,7 @@ class Kdj {
     $min15_point_max=$row[0];
     $row=$this->db->get_select("select min(min15_point_min) from (select * from $this->table_name order by id desc limit 18) as a;");	  
     $min15_point_min=$row[0];
-    if (($time_hour==9 and $time_min==30) or ($time_hour==10 and $time_min==0) or ($time_hour==10 and $time_min==30) or ($time_hour==11 and $time_min==0) or ($time_hour==13 and $time_min==0) or ($time_hour==13 and $time_min==30) or ($time_hour==14 and $time_min==0)) {
+    if (($data[time_hour]==9 and $data[time_min]==30) or ($data[time_hour]==10 and $data[time_min]==0) or ($data[time_hour]==10 and $data[time_min]==30) or ($data[time_hour]==11 and $data[time_min]==0) or ($data[time_hour]==13 and $data[time_min]==0) or ($data[time_hour]==13 and $data[time_min]==30) or ($data[time_hour]==14 and $data[time_min]==0)) {
       $row=$this->db->get_select("select min30_k,min30_d from $this->table_name order by id  desc  limit 1,1;");	  
       $min30_k=$row[min30_k]; 
       $min30_d=$row[min30_d];
@@ -73,18 +73,18 @@ class Kdj {
     $min15_point_max=$row[0];
     $row=$this -> db -> get_select("select min(min15_point_min) from (select * from $this->table_name order by id desc limit 36) as a;");	  
     $min15_point_min=$row[0];
-    $this->log -> log_work("time_hour:$time_hour\n");
-    if (($time_hour==9 and $time_min==30) or ($time_hour==10 and $time_min==30) or ($time_hour==13 and $time_min==0) or ($time_hour==14 and $time_min==0)) {
+    $this->log -> log_work("time_hour:$data[time_hour]\n");
+    if (($data[time_hour]==9 and $data[time_min]==30) or ($data[time_hour]==10 and $data[time_min]==30) or ($data[time_hour]==13 and $data[time_min]==0) or ($data[time_hour]==14 and $data[time_min]==0)) {
       $row=$this->db->get_select("select min60_k,min60_d from $this->table_name order by id  desc  limit 1,1;");	  
       $min60_k=$row[min60_k];
       $min60_d=$row[min60_d];
     }
-    elseif (($time_hour==9 and $time_min==45) or ($time_hour==10 and $time_min==45) or ($time_hour==13 and $time_min==15) or ($time_hour==14 and $time_min==15)) {
+    elseif (($data[time_hour]==9 and $data[time_min]==45) or ($data[time_hour]==10 and $data[time_min]==45) or ($data[time_hour]==13 and $data[time_min]==15) or ($data[time_hour]==14 and $data[time_min]==15)) {
       $row=$this->db->get_select("select min60_k,min60_d from $this->table_name order by id  desc  limit 2,1;");	  
       $min60_k=$row[min60_k];
       $min60_d=$row[min60_d];
     }
-    elseif(($time_hour==10 and $time_min==0) or ($time_hour==11 and $time_min==0) or ($time_hour==13 and $time_min==30) or ($time_hour==14 and $time_min==30)) {
+    elseif(($data[time_hour]==10 and $data[time_min]==0) or ($data[time_hour]==11 and $data[time_min]==0) or ($data[time_hour]==13 and $data[time_min]==30) or ($data[time_hour]==14 and $data[time_min]==30)) {
       $row=$this->db->get_select("select min60_k,min60_d from $this->table_name order by id  desc  limit 3,1;");	  
       $min60_k=$row[min60_k];
       $min60_d=$row[min60_d];
@@ -111,12 +111,12 @@ class Kdj {
     $min15_point_max=$row[0];
     $row=$this->db->get_select("select min(min15_point_min) from (select * from $this->table_name order by id desc limit 72) as a;");	   
     $min15_point_min=$row[0];
-    if ($time_hour<13) {
+    if ($data[time_hour]<13) {
     $row=$this->db->get_select("select min120_k,min120_d from $this->table_name where stat_date<'$data[stat_date]' order by id  desc  limit 0,1;");	  
     $min120_k=$row[min120_k];
     $min120_d=$row[min120_d];
     }
-    elseif ($time_hour>=13) {
+    elseif ($data[time_hour]>=13) {
     $row=$this->db->get_select("select min120_k,min120_d from $this->table_name where stat_time_hour='11' and stat_time_min='15' order by id  desc  limit 1;");	  
     $min120_k=$row[min120_k];
     $min120_d=$row[min120_d];
