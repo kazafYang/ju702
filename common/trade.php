@@ -56,7 +56,7 @@ function huizhuan_sell_action($trade_type) {
 	  $sql="select * from trade_history where code=$this->code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$data[stat_date]' order by id asc;";
 	  //$row=result_select("select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$stat_date' order by id asc;");
 	  //$log -> log_work($sql."\n");
-	  $result = $this->db->set_resultselect($sql);
+	  $result = $this->db->get_resultselect($sql);
 	  while($row=mysqli_fetch_array($result)){
 	  //while($row){	  
 		   $connecttion_id=$row[id];
