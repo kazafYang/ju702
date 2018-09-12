@@ -6,9 +6,7 @@ public $data= array();
   function __construct() {
 	//获取code，table_name配置信息
 	$this->Runner=new Runner();
-	$this->table_name=$this->Runner->get_config()['table_name'];
-	echo "初始化：".$this->table_name=$this->Runner->get_config()['table_name']."\n";
-	echo "初始化：".$this->code=$this->Runner->get_config()['code']."\n";  
+	$this->table_name=$this->Runner->get_config()['table_name']; 
 	$this->code=$this->Runner->get_config()['code'];	
 	//获取db操作信息
 	$this->db = new db();  
