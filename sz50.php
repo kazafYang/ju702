@@ -29,8 +29,8 @@ class Runner{
 }
   
   public function get_config(){
-  $config['table_name']="point_number";
-  $config['code']="159915";  
+  $config['table_name']="point_number_sz";
+  $config['code']="510050";  
   return $config;  
   }
   
