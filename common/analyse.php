@@ -5,12 +5,7 @@ function __construct() {
 	//获取code，table_name配置信息
 	$this->Runner=new Runner();
 	$this->table_name=$this->Runner->get_config()['table_name'];
-	echo "初始化：".$this->table_name=$this->Runner->get_config()['table_name']."\n";
-	echo "初始化：".$this->code=$this->Runner->get_config()['code']."\n";  
 	$this->code=$this->Runner->get_config()['code'];	
-	//获取db配置信息  
-	$this->db_config = new DB_Config_Inc(); 
-	$this->conn = $this->db_config->get_db_config();
 	//获取db操作信息
 	$this->db = new db();  
 	//初始化log对象  
@@ -52,7 +47,7 @@ function set_analyse () {
       $str="";
       $switched=0; 	  
       $sql = "select bite as a from trade_bate  order by id asc ;";    
-      $result=mysqli_query($this->conn,$sql);
+      $result=$this->db->get_resultselect($sql);
       while ($row=mysqli_fetch_row($result))
     {
 	$a = sprintf("%s,%s",$row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],$row[7],$row[8],$row[9],$row[10],$row[11],$row[12],$row[13],$row[14],$row[15],$row[16],$row[17],$row[18]);
@@ -80,7 +75,7 @@ function set_analyse () {
 	      $cost_price=round($row[0],3);
 	      $sql = "insert into hive_number values ('$hive_number_id','$trade_code','$switched','$sell_switched','$buy_switched','$total_money','$useable_money','$total_number','$useable_sell_number','$total_sell_number','$market_value','$cost_price','$make_money','$trade_stat_date');";                                                                  
 	      $this->log -> log_work($sql."插入hive_number\n");	      
-	      $this->conn->query($sql);   
+	      $this->db->set_insert($sql);   
       } 
       else{
       //拿取hive_number的基础属性
@@ -243,7 +238,7 @@ $this->log -> log_work("回转buy开始\n");
        $trade_bite=$type26;	    
        buy_action($trade_type);  
        $sql = "update trade_history set status=2 where id=$loser_price_id;";                                                                  
-       $this->conn->query($sql);    
+       $this->db->set_update($sql);    
       }
  }
 $this->log -> log_work("cut_sell_开始\n");		  
@@ -252,7 +247,7 @@ if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<
   	
   $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$stat_date' order by id desc;";
   //$row=$this->db->get_select("select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$stat_date' order by id desc;");
-  $result = $this->conn->query($sql);
+  $result = $this->db->resultselect($sql);
   while($row=mysqli_fetch_array($result)){
   //while($row){	  
    //故意将比例调高到3.02避免cut_price因为四舍五入取整后造成判断失效的问题，也可以将取出来的数据也取整，但是个人感觉这样更简单一点	  
@@ -269,7 +264,7 @@ if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<
 	//核销已经处理的前期订单，避免订单再次进入    
 	$sql = "update trade_history set connecttion_id='$trade_id',vifi_status='1' where id='$row[id]';";
 	$this->log ->log_work("$sql~cut_price 核销订单sql\n");
-	$this->conn->query($sql);
+	$this->db->set_update($sql);
     }
     else{
          $this->log -> log_work("不符合cut_price函数条件，不执行!begin_point:$data[begin_point],cut_price:$row[cut_price],trade_buy_price:$row[trade_buy_price]");
