@@ -19,7 +19,6 @@ class Kdj {
     $data=$this->MachiningPrice->get_machining_price();	  
     $row=$this->db->get_select("select max(min15_point_max) from (select * from $this->table_name order by id desc limit 9) as a;");	  
     $min15_point_max=$row[0];
-    echo "test:$min15_point_max\n";	  
     $row=$this->db->get_select("select min(min15_point_min) from (select * from $this->table_name order by id desc limit 9) as a;");	  
     $min15_point_min=$row[0];
     $this->log -> log_work("min15_point_min:$min15_point_min");
@@ -28,7 +27,7 @@ class Kdj {
     $min15_d=$row[min15_d];
     $this->log -> log_work("begin_point:$data[begin_point]~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~min15_k:$min15_k~min15_d:$min15_d\n");                      
     $rsv=($data[begin_point]-$min15_point_min)/($min15_point_max-$min15_point_min)*100;  
-    $this->log -> log_work("rsv:$rsv");
+    $this->log -> log_work("rsv:$rsv:$data[begin_point]:$min15_point_min:$min15_point_max:$min15_point_min");
     $k=2/3*$min15_k+1/3*$rsv;
     $d=2/3*$min15_d+1/3*$k;
     $j=3*$k-2*$d;
