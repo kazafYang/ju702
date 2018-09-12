@@ -98,31 +98,32 @@ function set_analyse () {
       {
 	$this->log -> log_work("comming日线超买开始 daykdj-sell-15\n");
 	$trade_type=1;    
-	sell_action($trade_type);  		      
+	$this->trade->sell_action($trade_type);  		      
       } 
   //30min  
      if($trade_min30_k>=85 or $trade_min30_d>=80)	 
      {
 	$this->log -> log_work("comming daykdj-sell-30\n");
 	$trade_type=2;    
-	sell_action($trade_type);  		     
+	$this->trade->sell_action($trade_type);  		     
       } 
    //60分钟          
      if($trade_min60_k>=85 or $trade_min60_d>=80)
      {
 	$this->log -> log_work("comming daykdj-sell-60\n");
 	$trade_type=3;    
-	sell_action($trade_type);  		     
+	$this->trade->sell_action($trade_type);  		     
       }
 	    //120分钟          
      if($trade_min120_k>=85 or $trade_min120_d>=80)	 
      {
 	$this->log -> log_work("comming daykdj-sell-120\n");
 	$trade_type=4;    
-	sell_action($trade_type);  		     
+	$this->trade->sell_action($trade_type);  		     
       }    
     } //日线超买完成
     //buy,买入开关限制，限制可用金额不足的情况，和标的开关关闭的情况，关闭 switch=0；
+  //$useable_money=10000;	  
   if($useable_money>1000 and $buy_switched==1 and $trade_day_k < 20 and $trade_day_d < 20){
   //if(1==1){
 	echo "comming日线超卖开始 switch-buy~~$buy_switched~~~day-$trade_day_k-kdj~~$trade_day_d~~$useable_money"."\n"; 
@@ -132,26 +133,26 @@ function set_analyse () {
        $this->log -> log_work("comming switch-buy~~~~~day-kdj-min15~~$trade_min15_k~$trade_min15_d~"."\n"); 
        $trade_type=21; 
        $trade_bite=$type21;	    
-       buy_action($trade_type,$trade_bite);
+       $this->trade->buy_action($trade_type,$trade_bite);
       }  
     if ($trade_min30_k <=15 or $trade_min30_d <=20){
        $this->log -> log_work("comming switch-buy~~~~~day-kdj-min30~$trade_min30_k~$trade_min30_d~~"."\n"); 
        $trade_type=22; 
        $trade_bite=$type22;	    
-       buy_action($trade_type,$trade_bite);
+       $this->trade->buy_action($trade_type,$trade_bite);
       }   
     if ($trade_min60_k <=15 or $trade_min60_d <=20){ 
        $this->log -> log_work("comming switch-buy~~~~~day-kdj-min60~$trade_min60_k~$trade_min60_d~~"."\n"); 
        $trade_type=23; 
        $trade_bite=$type23;	    
-       buy_action($trade_type,$trade_bite);
+       $this->trade->buy_action($trade_type,$trade_bite);
       }
 	  //120日线超卖
       if ($trade_min120_k <=15 or $trade_min120_d <=20){
        $this->log -> log_work("comming switch-buy~~~~~day-kdj-min120~$trade_min120_k~$trade_min120_d~~"."\n"); 
        $trade_type=24; 
        $trade_bite=$type24;	    
-       buy_action($trade_type,$trade_bite);
+       $this->trade->buy_action($trade_type,$trade_bite);
       }  	  
   }    //日线超卖完成
   $this->log -> log_work("回转sell开始\n");	  
@@ -162,28 +163,28 @@ function set_analyse () {
     if(($trade_min15_k>=75 or $trade_min15_d >= 75) and $trade_min15_j < $trade_min15_k and $trade_min15_j < $trade_min15_d){
 	$this->log -> log_work("comming huizhuan-rel-sell~~dead~~$trade_min15_k~~~$trade_min15_d~$trade_min15_j~"."\n");
 	$trade_type=5;    
-	huizhuan_sell_action($trade_type);     
+	$this->trade->huizhuan_sell_action($trade_type);     
   }    
 	  //回转15分钟超买条件
        if($trade_min15_k>=80 or $trade_min15_d >= 80){
 	$this->log -> log_work("comming huizhuan-rel-sell~~min15~~~~$trade_min15_k~~$trade_min15_d~"."\n");
 	$trade_type=6;    
-	huizhuan_sell_action($trade_type);  		       
+	$this->trade->huizhuan_sell_action($trade_type);  		       
   }	  
      if($trade_min30_k >= 80  or $trade_min30_d >= 80){
 	$this->log ->log_work("comming huizhuan-rel-sell~~min30~~~$trade_min30_k~~$trade_min30_d~~"."\n");
 	$trade_type=7;    
-	huizhuan_sell_action($trade_type);  
+	$this->trade->huizhuan_sell_action($trade_type);  
 	  }
     if($trade_min60_k >= 80  or $trade_min60_d >= 80){
 	$this->log -> log_work("comming huizhuan-rel-sell~~min60~~$trade_min60_k~$trade_min60_d~~~~"."\n");
 	$trade_type=8;    
-	huizhuan_sell_action($trade_type);  
+	$this->trade->huizhuan_sell_action($trade_type);  
 	  }
       if($trade_min120_k >= 80  or $trade_min120_d >= 80){
 	$this->log -> log_work("comming huizhuan-rel-sell~~min120~$trade_min120_k~~~$trade_min120_d~~"."\n");
 	$trade_type=9;    
-	huizhuan_sell_action($trade_type);  
+	$this->trade->huizhuan_sell_action($trade_type);  
 	  }
     } //卖出回转结束
 	 //回转买入开始 
@@ -196,7 +197,7 @@ $this->log -> log_work("回转buy开始\n");
        $this->log -> log_work("comming -huizhuan-buy~~min60~~~~~~"."\n");  
        $trade_type=25; 
        $trade_bite=$type25;	    
-       buy_action($code,$trade_code,$this->conn,$data[begin_point],$stat_date,$trade_stat_date,$trade_time_hour,$trade_time_min,$trade_type,$trade_buy_price,$trade_sell_price,$trade_bite);
+       $this->trade->buy_action($trade_type,$trade_bite);
       }
 	//回转买入，当前价低于最低卖出价5个点，即可等量/分批加码回收筹码；增加trade_type，标志回转交易，然后沿用status标志，这样比较好；如果这样的话不能判断出数据是否已经被处理了，所以我还需要一个步骤就是将已经对比的status的值=2;
        //判断已经交易完成的，然后处理结束后将status变更为2   
@@ -236,7 +237,7 @@ $this->log -> log_work("回转buy开始\n");
        $this->log -> log_work("coming huizhuan_buy:$loser_price~$buy_switched~$useable_money~$trade_day_k~$trade_day_k\n");
        $trade_type=26; 
        $trade_bite=$type26;	    
-       buy_action($trade_type,$trade_bite);  
+       $this->trade->buy_action($trade_type,$trade_bite);  
        $sql = "update trade_history set status=2 where id=$loser_price_id;";                                                                  
        $this->db->set_update($sql);    
       }
@@ -260,7 +261,7 @@ if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<
 	//插入交易历史  
 	$sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id,history_make_money) values ('$trade_id','$code','$stat_date','$time_hour','$time_min','0','0','$row[number]','$trade_type','$row[trade_buy_price]','$data[begin_point]','0','$row[id]',$row[history_make_money]);";                                                                  
 	$this->log -> log_work("$sql:cut_price sell 处理了！！！！\n");
-	$this->conn->query($sql);
+	$this->db->set_insert($sql);
 	//核销已经处理的前期订单，避免订单再次进入    
 	$sql = "update trade_history set connecttion_id='$trade_id',vifi_status='1' where id='$row[id]';";
 	$this->log ->log_work("$sql~cut_price 核销订单sql\n");
