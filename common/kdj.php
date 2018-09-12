@@ -4,21 +4,15 @@ class Kdj {
   function __construct() {
 	//获取code，table_name配置信息
 	$this->Runner=new Runner();
-	$this->table_name=$this->Runner->get_config()['table_name'];
-	echo "初始化：".$this->table_name=$this->Runner->get_config()['table_name']."\n";
-	echo "初始化：".$this->code=$this->Runner->get_config()['code']."\n";  
+	$this->table_name=$this->Runner->get_config()['table_name']; 
 	$this->code=$this->Runner->get_config()['code'];	
 	//获取db配置信息  
-	$this->db_config = new DB_Config_Inc(); 
-	$this->conn = $this->db_config->get_db_config();
 	//获取db操作信息
 	$this->db = new db();  
 	//初始化log对象  
 	$this->log = new logs();
 	//获取实时数据  
 	$this->MachiningPrice= new MachiningPrice();
-	//$this->begin_point=$this->MachiningPrice->get_machining_price()['begin_point'];
-	//$this->stat_date=$this->MachiningPrice->get_machining_price()['stat_date'];  
 	//测试代码，测试方法调用  
 }
   function set_kdjfifteen () {
@@ -42,12 +36,7 @@ class Kdj {
     $sql="update $this->table_name set min15_k='$k' , min15_d='$d' , min15_j='$j' order by id desc limit 1 ; ";
     $this->log -> log_work("开始更新15kdj:$sql\n");	  
     /*暂时注释掉，免得破坏数据，或者把desc 改成asc 这样就不存在了 */ 
-    if ($this->conn->query($sql) === TRUE) {
-      $this->log -> log_work("15kdjupdate:success\n");	     
-    } 
-    else {
-      $this->log -> log_work("maxError: " . $sql . $this->conn->error."\n"); 	    
-    }
+    $this->db->set_update($sql);
   
   }
 
@@ -74,13 +63,7 @@ class Kdj {
     $j=3*$k-2*$d;
     $this -> log -> log_work("30kdj:$k,$d,$j\n");	  
     $sql="update $this->table_name set min30_k='$k' , min30_d='$d' , min30_j='$j' order by id desc limit 1 ; ";
-    if ($this->conn->query($sql) === TRUE) 
-    {
-      $this -> log -> log_work("30kdjupdate:success:$sql\n");
-     } 
-    else {
-      $this -> log -> log_work("maxError: " . $sql . $this->conn->error."\n");
-    }  
+    $this->db->set_update($sql);
   }
 
   function set_kdjsixty () {
@@ -118,13 +101,7 @@ class Kdj {
     $j=3*$k-2*$d;
     $this->log -> log_work("60kdj:$k,$d,$j\n");
     $sql="update $this->table_name set min60_k='$k' , min60_d='$d' , min60_j='$j' order by id asc limit 1 ; ";
-       if ($this->conn->query($sql) === TRUE) 
-       {
-        $this->log -> log_work("60kdjupdate:success:$sql\n");
-         } 
-      else {
-        $this->log -> log_work("60kdjError: " . $sql . $this->conn->error."\n");
-    }  
+    $this->db->set_update($sql);
   }
 
   function set_kdjtwohour () {
@@ -135,7 +112,7 @@ class Kdj {
     $row=$this->db->get_select("select min(min15_point_min) from (select * from $this->table_name order by id desc limit 72) as a;");	   
     $min15_point_min=$row[0];
     if ($time_hour<13) {
-    $row=$this->db->get_select("select min120_k,min120_d from $this->table_name where stat_date<'$this->stat_date' order by id  desc  limit 0,1;");	  
+    $row=$this->db->get_select("select min120_k,min120_d from $this->table_name where stat_date<'$data[stat_date]' order by id  desc  limit 0,1;");	  
     $min120_k=$row[min120_k];
     $min120_d=$row[min120_d];
     }
@@ -151,13 +128,7 @@ class Kdj {
     $j=3*$k-2*$d;
     $this->log -> log_work("120kdj:$k,$d,$j\n");
     $sql="update $this->table_name set min120_k='$k' , min120_d='$d' , min120_j='$j' order by id desc limit 1 ; ";
-     if ($this->conn->query($sql) === TRUE) 
-     {
-      $this->log -> log_work("120kdjupdate:success:$sql\n");
-       } 
-    else {
-      $this->log -> log_work("120kdjError: " . $sql . $this->conn->error."\n");
-    }  
+    $this->db->set_update($sql);
   }
 
   function set_kdjday () {
@@ -166,7 +137,7 @@ class Kdj {
   $min15_point_max=$row[0];
   $row=$this->db->get_select("select min(min15_point_min) from (select * from $this->table_name order by id desc limit 144) as a;");	  
   $min15_point_min=$row[0];
-  $row=$this->db->get_select("select kdjday_k,kdjday_d from $this->table_name where stat_date<'$this->stat_date' order by id desc limit 1;");	  
+  $row=$this->db->get_select("select kdjday_k,kdjday_d from $this->table_name where stat_date<'$data[stat_date]' order by id desc limit 1;");	  
   $kdjday_k=$row[kdjday_k]; 
   $kdjday_d=$row[kdjday_d];
   $this->log -> log_work("begin_point:$data[begin_point]~min15_point_max:$min15_point_max~min15_point_min:$min15_point_min~kdjday_k:$kdjday_k~kdjday_d:$kdjday_d\n");                       
@@ -176,13 +147,7 @@ class Kdj {
   $j=3*$k-2*$d;
   $this->log -> log_work("daykdj:$k,$d,$j\n");
   $sql="update $this->table_name set kdjday_k='$k' , kdjday_d='$d' , kdjday_j='$j' order by id desc limit 1 ; ";
-   if ($this->conn->query($sql) === TRUE) 
-   {
-    $this->log -> log_work("daykdjupdate:success:$sql\n");	     
-     } 
-  else {
-    $this->log -> log_work("daykdj:updateError: " . $sql . $this->conn->error."\n");	    
-  }  
+  $this->db->set_update($sql); 
   }
 
 }
