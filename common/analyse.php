@@ -86,15 +86,15 @@ function set_analyse () {
       }
   $this->log -> log_work($switched."开始判断\n");	
   if($switched==1){
-  $this->log -> log_work($switched."判断开关开启了\n");		  
+  $this->log -> log_work($switched."判断开关开启了$useable_sell_number,$sell_switched,$trade_day_k,$trade_day_d\n");		  
       //sell判断
  //判断当前code是否具备卖出资格，后续可以在这里加上开关等限制性的行为；昨日的总数量，就是今日的可卖数量；$switched=1是开关打开状态
     if($useable_sell_number>1 and $sell_switched==1 and ($trade_day_k >= 85 or $trade_day_d >= 80)){ 
-    //if($useable_sell_number>=1 and $sell_switched==1 and ($trade_day_k >= 1 or $trade_day_d >= 1)){ 		    
+    //if($useable_sell_number>=1 and $sell_switched==0 and ($trade_day_k >= 1 or $trade_day_d >= 1)){ 		    
       //超买情况下的15分钟卖出指标
       $this->log -> log_work("comming $trade_min15_k daykdj $trade_min15_d-sell"."\n");
       if($trade_min15_k>=85 or $trade_min15_d>=80)
-    //  if($trade_min15_k>=1 or $trade_min15_d>=1)	      
+      //if($trade_min15_k>=1 or $trade_min15_d>=1)	      
       {
 	$this->log -> log_work("comming日线超买开始 daykdj-sell-15\n");
 	$trade_type=1;    
@@ -157,10 +157,12 @@ function set_analyse () {
   }    //日线超卖完成
   $this->log -> log_work("回转sell开始\n");	  
   if((($trade_day_k>=40 and $trade_day_k<65) or ($trade_day_d>=40 and $trade_day_d<65)) and $useable_sell_number>1 and $sell_switched==1){
-    //回转交易策略的位置,记录回转交易的标志是数据库字段status=2
+   //if($trade_day_k>1){
+	 //回转交易策略的位置,记录回转交易的标志是数据库字段status=2
 	//15分钟回转使用死叉交易卖出 switch
 	$this->log -> log_work("comming 回转交易开始-sell~~~~$trade_day_k~~~$trade_day_d~~"."\n");
-    if(($trade_min15_k>=75 or $trade_min15_d >= 75) and $trade_min15_j < $trade_min15_k and $trade_min15_j < $trade_min15_d){
+        if(($trade_min15_k>=75 or $trade_min15_d >= 75) and $trade_min15_j < $trade_min15_k and $trade_min15_j < $trade_min15_d){
+	//if($trade_min15_k>1){
 	$this->log -> log_work("comming huizhuan-rel-sell~~dead~~$trade_min15_k~~~$trade_min15_d~$trade_min15_j~"."\n");
 	$trade_type=5;    
 	$this->trade->huizhuan_sell_action($trade_type);     
