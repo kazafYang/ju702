@@ -73,11 +73,11 @@ function huizhuan_sell_action($trade_type) {
 			  $this->db->set_insert($sql);
 			  //核销已经处理的前期订单，避免订单再次进入
 			  $sql = "update trade_history set connecttion_id='$trade_id',vifi_status='1' where id='$connecttion_id';";
-			  $log -> log_work("核销已经处理的订单".$sql."\n");
+			  $this->log -> log_work("核销已经处理的订单".$sql."\n");
 			  $this->db->set_update($sql);
 		   }
 		   else{
-			  $this->log -> log_work("未达到条件不能触发回转卖出操作$this->begin_point，$huizhuan_sell_number，$number，$row[trade_buy_price]\n"); 
+			  $this->log -> log_work("未达到条件不能触发回转卖出操作$data[begin_point]，$huizhuan_sell_number，$number，$row[trade_buy_price]\n"); 
 	                } 
 	  }
 	   mysqli_free_result($result);  //循环结束释放结果集  
