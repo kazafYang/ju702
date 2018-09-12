@@ -93,7 +93,7 @@ function buy_action($trade_type,$trade_bite) {
       $useable_money=$row[useable_money];	
       //$sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=$trade_type;";
       $row=$this->db->get_select("select count(*) from trade_history where code='$this->code' and stat_date='$data[stat_date]' and stat_time_hour='$data[time_hour]' and trade_type=$trade_type;");
-      $log -> log_work("$useable_money~~~~~~$number~~~~$data[buy_one_price]\n");
+      $this->log -> log_work("$useable_money~~~~~~$number~~~~$data[buy_one_price]\n");
       if(($trade_type==5 or $trade_type==6 or $trade_type==7 or $trade_type==8 or $trade_type==9) and ($useable_money>=($number*100*$data[buy_one_price]))){
 	      $this->log -> log_work("回转达到条件触发买入操作，useable_money:$useable_money，row[0]:$row[0]，number:$number，$data[buy_one_price]\n");
 	      $trade_id=$this->db->get_id("trade_history");
