@@ -27,10 +27,10 @@ class db{
    public function set_update($sql){
 	$this -> log -> log_work("set_update函数执行的sql：$sql\n");
 	if ($this->conn->query($sql) === TRUE) {
-		$this->log -> log_work("新记录更新成功");
+		$this->log -> log_work("set_update更新成功");
 	} 
 	else {
-		$this->log -> log_work("新纪录更新Error: " . $sql . $this->conn->error."\n");
+		$this->log -> log_work("set_update-Error: " . $sql . $this->conn->error."\n");
 	}   
    }
 
