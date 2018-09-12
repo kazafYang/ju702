@@ -83,10 +83,10 @@ function huizhuan_sell_action($trade_type) {
 	   mysqli_free_result($result);  //循环结束释放结果集  
 	 //######################################################################## 
 }
-function buy_action($trade_type) {
-      $this->log -> log_work("coming buy_action~~~~".$trade_type."\n");
+function buy_action($trade_type,$trade_bite) {
+      $this->log -> log_work("coming buy_action~~~~".$trade_bite."\n");
       $data=$this->MachiningPrice->get_machining_price();	
-      $number=11/$data[buy_one_price]*1; //暂时将trade_bite写死，然后看看有啥更好的办法不
+      $number=11/$data[buy_one_price]*$trade_bite; //暂时将trade_bite写死，然后看看有啥更好的办法不
       $number=round($number);
       //每次发出指令以前都判断一下当前是否有足额可用资金	
       $row=$this->db->get_select("select useable_money from hive_number where code='$this->code' order by stat_date desc limit 1;");
