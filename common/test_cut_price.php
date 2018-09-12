@@ -20,7 +20,7 @@ $this->log -> log_work("comming test_cut_price\n");
 $data=$this->MachiningPrice->get_machining_price();	
 $sql="select * from trade_history where code=$this->code and vifi_status=0 and status=1 and trade_type>20 order by id desc;";
 //echo $sql;
-$result = $this->db->get_select($sql);
+$result = $this->db->get_resultselect($sql);
 	    while($row=mysqli_fetch_array($result)){
 	    //更新交易历史表中目标价格信息
            if($data[begin_point]>$row[cut_price]){
