@@ -9,5 +9,5 @@ php sz50.php  >>logs/test_sz50$d1.log &
 php yh.php  >>logs/test_yh$d1.log &
 php zq.php  >>logs/test_zq$d1.log &
 php cyb.php >>logs/test_cyb$d1.log   
-ps -ef|grep php|grep -v grep|awk '{print $2}'|xargs kill -9 #kill all find php
+#ps -ef|grep php|grep -v grep|awk '{print $2}'|xargs kill -9 #kill all find php
 exit 0
