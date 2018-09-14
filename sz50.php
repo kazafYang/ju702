@@ -49,9 +49,9 @@ while(1==1) {
     $data=$this->MachiningPrice->get_machining_price();	
     if ($data[time_hour]<9 or ($data[time_hour]==9 and $data[time_min]<30)) {
       $this->log -> log_work("comming mainwhile if--9\n");
-      $this->Runner->sleep_time();
+      $this->sleep_time();
     }elseif (($data[time_hour]=="11" and $data[time_min]>="30") or ($data[time_hour]>="12" and $data[time_hour]<"13")){
-      $this->Runner->sleep_time();  
+      $this->sleep_time();  
     }elseif ($data[time_hour]>="15") {
       $this->log -> log_work("3point!\n");
       //$a=$runoob->Runday_Point();  
