@@ -1,5 +1,6 @@
 <?php
 class Kdj {
+  public $kdj_data=array();	
   
   function __construct() {
 	//获取code，table_name配置信息
@@ -15,6 +16,14 @@ class Kdj {
 	$this->MachiningPrice= new MachiningPrice();
 	//测试代码，测试方法调用  
 }
+	
+  public function get_kdj(){
+  $this->log -> log_work("comming get_kdj~~~");
+  $row=$this->db->get_select("select * from $this->table_name order by id  desc  limit 1;");
+  print_r($row);	  
+  return $row;	  
+  }
+	
   function set_kdjfifteen () {
     $data=$this->MachiningPrice->get_machining_price();	  
     $row=$this->db->get_select("select max(min15_point_max) from (select * from $this->table_name order by id desc limit 9) as a;");	  
