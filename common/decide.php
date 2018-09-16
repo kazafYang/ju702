@@ -197,8 +197,17 @@ class Decide{
 	$minkdj120_score=$this->get_120kdjbuy_score();
 	$daykdj_score=$this->get_daykdjbuy_score();	
 	$trade_buy_score=($minkdj15_score+$minkdj30_score+$minkdj60_score+$minkdj120_score+$daykdj_score)/5;
-	echo "trade_buy_score:$trade_buy_score";  
-  return $trade_buy_score;   //获得kdj综合得分；
+	echo "trade_buy_score:$trade_buy_score";
+     if($trade_buy_score>=8){
+      $action_buy_number=4;
+      }
+      if($trade_buy_score>=5 and $trade_buy_score<8){
+      $action_buy_number=2;
+      }
+      if($trade_buy_score>=0 and $trade_buy_score<5){
+      $action_buy_number=0;
+      }  
+  return $action_buy_number;   //获得kdj综合得分；
   }	
 	
 }
