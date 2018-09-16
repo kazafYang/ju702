@@ -16,7 +16,10 @@ class Decide{
 	//测试代码，测试方法调用  
 }
   public function get_kdj_score(){
-  
+  $this->log->log_work("comming get_kdj_score");	  
+  $kdj = new Kdj(); 	  
+  $kdj_data=$kdj->get_kdj();
+  print_r $kdj_data; 	  
   }
   
   public function get_avg_score(){
