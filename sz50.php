@@ -6,6 +6,7 @@ include 'common/db.php';
 include 'common/kdj.php';
 include 'common/analyse.php';
 include 'common/trade.php';
+include 'common/decide.php';
 include 'common/test_cut_price.php';
 include 'common/nine_count.php';
 
@@ -80,8 +81,9 @@ while(1==1) {
  }	 
 }
 
-
-$Runner=new Runner();
-$Runner->run();
+$decide=new Decide();
+$decide->get_kdj_score();
+//$Runner=new Runner();
+//$Runner->run();
 	
 ?>
