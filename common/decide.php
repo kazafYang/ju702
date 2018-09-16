@@ -12,23 +12,194 @@ class Decide{
 	//初始化log对象  
 	$this->log = new logs();
 	//获取实时数据  
-	$this->MachiningPrice= new MachiningPrice(); 
+	$this->MachiningPrice= new MachiningPrice();   
 	//测试代码，测试方法调用  
 }
-  public function get_kdj_score(){
+  public function get_15kdjbuy_score(){
   $this->log->log_work("comming get_kdj_score");	  
   $kdj = new Kdj(); 	  
   $kdj_data=$kdj->get_kdj();
-  print_r $kdj_data; 	  
+	  
+     if($kdj_data[min15_k]>=90 or $kdj_data[min15_d]>=85){
+	  $trade_buy_score=0;    
+          echo "lalal15>80~$trade_buy_score\n";
+      }	  
+	  
+      if($kdj_data[min15_k]>=80 and $kdj_data[min15_k]<90){
+	  $trade_buy_score=2;    
+          echo "lalal15>80~$trade_buy_score\n";
+      }
+      if($kdj_data[min15_k]>=60 and $kdj_data[min15_k]<80){
+	  $trade_buy_score=4;    
+	 echo "lalal15>60~$trade_buy_score\n";
+      }
+       if($kdj_data[min15_k]>=20 and $kdj_data[min15_k]<60){
+	   $trade_buy_score=6;    
+	   echo "lalal15>60~$trade_buy_score\n";
+      }	
+	  
+       if($kdj_data[min15_k]>=10 or $kdj_data[min15_k]<20){
+	   $trade_buy_score=8;    
+	   echo "lalal15>60~$trade_buy_score\n";
+      }	
+
+      if($kdj_data[min15_k]<10 or $kdj_data[min15_d]<10){
+  	 $trade_buy_score=10;    
+   	 echo "lalal15>60~$trade_buy_score\n";
+      }
+	return $trade_buy_score;   
   }
   
-  public function get_avg_score(){
-  
+  public function get_30kdjbuy_score(){
+  $this->log->log_work("comming get_kdj_score");	  
+  $kdj = new Kdj(); 	  
+  $kdj_data=$kdj->get_kdj();
+	  
+     if($kdj_data[min30_k]>=90 or $kdj_data[min30_d]>=85){
+	  $trade_buy_score=0;    
+          echo "lalal30>80~$trade_buy_score\n";
+      }	  
+	  
+      if($kdj_data[min30_k]>=80 and $kdj_data[min30_k]<90){
+	  $trade_buy_score=2;    
+          echo "lalal30>80~$trade_buy_score\n";
+      }
+      if($kdj_data[min30_k]>=60 and $kdj_data[min30_k]<80){
+	  $trade_buy_score=4;    
+	 echo "lalal30>60~$trade_buy_score\n";
+      }
+       if($kdj_data[min30_k]>=20 and $kdj_data[min30_k]<60){
+	   $trade_buy_score=6;    
+	   echo "lalal30>60~$trade_buy_score\n";
+      }	
+	  
+       if($kdj_data[min30_k]>=10 or $kdj_data[min30_k]<20){
+	   $trade_buy_score=8;    
+	   echo "lalal30>60~$trade_buy_score\n";
+      }	
+
+      if($kdj_data[min30_k]<10 or $kdj_data[min30_d]<10){
+  	 $trade_buy_score=10;    
+   	 echo "lalal30>60~$trade_buy_score\n";
+      }
+	  return $trade_buy_score; 
   }
+	
+  public function get_60kdjbuy_score(){
+  $this->log->log_work("comming get_kdj_score");	  
+  $kdj = new Kdj(); 	  
+  $kdj_data=$kdj->get_kdj();
+	  
+     if($kdj_data[min60_k]>=90 or $kdj_data[min60_d]>=85){
+	  $trade_buy_score=0;    
+          echo "lalal60>80~$trade_buy_score\n";
+      }	  
+	  
+      if($kdj_data[min60_k]>=80 and $kdj_data[min60_k]<90){
+	  $trade_buy_score=2;    
+          echo "lalal60>80~$trade_buy_score\n";
+      }
+      if($kdj_data[min60_k]>=60 and $kdj_data[min60_k]<80){
+	  $trade_buy_score=4;    
+	 echo "lalal60>60~$trade_buy_score\n";
+      }
+       if($kdj_data[min60_k]>=20 and $kdj_data[min60_k]<60){
+	   $trade_buy_score=6;    
+	   echo "lalal60>60~$trade_buy_score\n";
+      }	
+	  
+       if($kdj_data[min60_k]>=10 or $kdj_data[min60_k]<20){
+	   $trade_buy_score=8;    
+	   echo "lalal60>60~$trade_buy_score\n";
+      }	
+
+      if($kdj_data[min60_k]<10 or $kdj_data[min60_d]<10){
+  	 $trade_buy_score=10;    
+   	 echo "lalal60>60~$trade_buy_score\n";
+      }	
+	  return $trade_buy_score; 
+  }	
   
-  public function get_avg_score(){
-  
+  public function get_120kdjbuy_score(){
+  $this->log->log_work("comming get_kdj_score");	  
+  $kdj = new Kdj(); 	  
+  $kdj_data=$kdj->get_kdj();
+	  
+     if($kdj_data[min120_k]>=90 or $kdj_data[min120_d]>=85){
+	  $trade_buy_score=0;    
+          echo "lalal120>80~$trade_buy_score\n";
+      }	  
+	  
+      if($kdj_data[min120_k]>=80 and $kdj_data[min120_k]<90){
+	  $trade_buy_score=2;    
+          echo "lalal120>80~$trade_buy_score\n";
+      }
+      if($kdj_data[min120_k]>=60 and $kdj_data[min120_k]<80){
+	  $trade_buy_score=4;    
+	 echo "lalal120>60~$trade_buy_score\n";
+      }
+       if($kdj_data[min120_k]>=20 and $kdj_data[min120_k]<60){
+	   $trade_buy_score=6;    
+	   echo "lalal120>60~$trade_buy_score\n";
+      }	
+	  
+       if($kdj_data[min120_k]>=10 or $kdj_data[min120_k]<20){
+	   $trade_buy_score=8;    
+	   echo "lalal120>60~$trade_buy_score\n";
+      }	
+
+      if($kdj_data[min120_k]<10 or $kdj_data[min120_d]<10){
+  	 $trade_buy_score=10;    
+   	 echo "lalal120>60~$trade_buy_score\n";
+      }	
+	  return $trade_buy_score; 
   }
-  
+ 
+  public function get_daykdjbuy_score(){
+  $this->log->log_work("comming get_kdj_score");	  
+  $kdj = new Kdj(); 	  
+  $kdj_data=$kdj->get_kdj();
+	  
+     if($kdj_data[kdjday_k]>=90 or $kdj_data[kdjday_d]>=85){
+	  $trade_buy_score=0;    
+          echo "lalalday>80~$trade_buy_score\n";
+      }	  
+	  
+      if($kdj_data[kdjday_k]>=80 and $kdj_data[kdjday_k]<90){
+	  $trade_buy_score=2;    
+          echo "lalalday>80~$trade_buy_score\n";
+      }
+      if($kdj_data[kdjday_k]>=60 and $kdj_data[kdjday_k]<80){
+	  $trade_buy_score=4;    
+	 echo "lalalday>60~$trade_buy_score\n";
+      }
+       if($kdj_data[kdjday_k]>=20 and $kdj_data[kdjday_k]<60){
+	   $trade_buy_score=6;    
+	   echo "lalalday>60~$trade_buy_score\n";
+      }	
+	  
+       if($kdj_data[kdjday_k]>=10 or $kdj_data[kdjday_k]<20){
+	   $trade_buy_score=8;    
+	   echo "lalalday>60~$trade_buy_score\n";
+      }	
+
+      if($kdj_data[kdjday_k]<10 or $kdj_data[kdjday_k]<10){
+  	 $trade_buy_score=10;    
+   	 echo "lalalday>60~$trade_buy_score\n";
+      }
+	return $trade_buy_score; 
+  }
+	
+  public function main(){
+      $minkdj15_score=$this->get_15kdjbuy_score();	
+      $minkdj30_score=$this->get_30kdjbuy_score();
+	$minkdj60_score=$this->get_60kdjbuy_score();	
+	$minkdj120_score=$this->get_120kdjbuy_score();
+	$daykdj_score=$this->get_daykdjbuy_score();	
+	$trade_buy_score=($minkdj15_score+$minkdj30_score+$minkdj60_score+$minkdj120_score+$daykdj_score)/5;
+	echo "trade_buy_score:$trade_buy_score";  
+  return $trade_buy_score;   //获得kdj综合得分；
+  }	
+	
 }
 ?>
