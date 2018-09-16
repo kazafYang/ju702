@@ -1,6 +1,7 @@
 <?php
 class Decide{
-
+  public $trade_buy_score;
+	
   function __construct() {
 	//获取code，table_name配置信息
 	$this->Runner=new Runner();
