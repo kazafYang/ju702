@@ -83,7 +83,8 @@ while(1==1) {
 
 //$decide=new Decide();
 //$decide->main();
-$Runner=new Runner();
-$Runner->run();
-	
+//$Runner=new Runner();
+//$Runner->run();
+$trade=new Trade();
+$trade->buy_action(10,1);
 ?>
