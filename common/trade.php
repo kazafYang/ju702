@@ -84,6 +84,10 @@ function huizhuan_sell_action($trade_type) {
 	 //######################################################################## 
 }
 function buy_action($trade_type,$trade_bite) {
+      /*
+      $decide=new Decide();
+      $action_buy_degree=$decide->main();
+      */
       $this->log -> log_work("coming buy_action~~~~".$trade_bite."\n");
       $data=$this->MachiningPrice->get_machining_price();	
       $number=11/$data[buy_one_price]*$trade_bite; //暂时将trade_bite写死，然后看看有啥更好的办法不
