@@ -5,8 +5,8 @@ include 'common/db_config_inc.php';
 include 'common/db.php';
 include 'common/kdj.php';
 include 'common/analyse.php';
-include 'common/trade.php';
 include 'common/decide.php';
+include 'common/trade.php';
 include 'common/test_cut_price.php';
 include 'common/nine_count.php';
 
