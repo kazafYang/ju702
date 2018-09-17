@@ -250,7 +250,7 @@ if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<
   	
   $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$stat_date' order by id desc;";
   //$row=$this->db->get_select("select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$stat_date' order by id desc;");
-  $result = $this->db->resultselect($sql);
+  $result = $this->db->get_resultselect($sql);
   while($row=mysqli_fetch_array($result)){
   //while($row){	  
    //故意将比例调高到3.02避免cut_price因为四舍五入取整后造成判断失效的问题，也可以将取出来的数据也取整，但是个人感觉这样更简单一点	  
