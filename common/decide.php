@@ -190,13 +190,33 @@ class Decide{
 	return $trade_buy_score; 
   }
 	
+   public function get_daypoint_score(){
+    $this->log->log_work("comming daypoint");
+    $sql="select sum(make_bite) from day_point order by stat_date desc limit 5;";	  
+    $row=$this->db->get_select($sql);
+    if($row[0]>=2){
+       $trade_buy_score=10;	    
+    }
+    if($row[0]>=0 and $row[0]<2){
+       $trade_buy_score=8;	    
+    }	
+    if($row[0]>=-2 and $row[0]<0){
+       $trade_buy_score=4;	    
+    }
+     if($row[0]<-2){
+       $trade_buy_score=0;	    
+    }
+    return $trade_buy_score; 	   
+  }	
+	
   public function main(){
       $minkdj15_score=$this->get_15kdjbuy_score();	
       $minkdj30_score=$this->get_30kdjbuy_score();
 	$minkdj60_score=$this->get_60kdjbuy_score();	
 	$minkdj120_score=$this->get_120kdjbuy_score();
-	$daykdj_score=$this->get_daykdjbuy_score();	
-	$trade_buy_score=($minkdj15_score+$minkdj30_score+$minkdj60_score+$minkdj120_score+$daykdj_score)/5;
+	$daykdj_score=$this->get_daykdjbuy_score();
+	$daypoint_score=$this->get_daypoint_score();
+	$trade_buy_score=($minkdj15_score+$minkdj30_score+$minkdj60_score+$minkdj120_score+$daykdj_score+$daypoint_score)/6;
 	echo "trade_buy_score:$trade_buy_score";
      if($trade_buy_score>=8){
       $action_buy_degree=4;
@@ -208,7 +228,6 @@ class Decide{
       $action_buy_degree=0;
       }  
   return $action_buy_degree;   //获得kdj综合得分；
-  }	
-	
+  }		
 }
 ?>
