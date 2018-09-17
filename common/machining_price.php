@@ -1,15 +1,22 @@
 <?php
 class MachiningPrice{
   var $data = array();
-  var $code;
+  
+  function __construct() {
+	//获取code，table_name配置信息
+	$this->Runner=new Runner();
+	$this->code=$this->Runner->get_config()['code'];	
+	//测试代码，测试方法调用  
+}
+  
   function get_machining_price () {
   $code=159915;   
   $log=new logs();  
   $log -> log_work("comming machining_price");  
   if ($code<500000) {
-  $url='http://hq.sinajs.cn/list=sz'.$code; 
+  $url='http://hq.sinajs.cn/list=sz'.$this->code; 
   }  else{
-  $url='http://hq.sinajs.cn/list=sh'.$code; 
+  $url='http://hq.sinajs.cn/list=sh'.$this->code; 
   }
   do {
   $log -> log_work("开始调用接口拿数据\n");  
