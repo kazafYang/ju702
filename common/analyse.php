@@ -18,6 +18,7 @@ function __construct() {
 	
 function set_analyse () {	
       $this->log -> log_work("comming analyse\n");
+      $data=$this->MachiningPrice->get_machining_price();	
       //五日十日均线数据计算	
       $row=$this->db->get_select("select avg(now_price) from (select now_price from $this->table_name order by id desc limit 0,80) as a;");	
       $first_min5_avgprice=$row[0];
@@ -248,7 +249,7 @@ $this->log -> log_work("cut_sell_开始\n");
 //cut_price卖出开始开始	  
 if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<80) and $useable_sell_number>1){
   	
-  $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$stat_date' order by id desc;";
+  $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$data[stat_date]' order by id desc;";
   //$row=$this->db->get_select("select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$stat_date' order by id desc;");
   $result = $this->db->get_resultselect($sql);
   while($row=mysqli_fetch_array($result)){
@@ -273,7 +274,7 @@ if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<
          $this->log -> log_work("不符合cut_price函数条件，不执行!begin_point:$data[begin_point],cut_price:$row[cut_price],trade_buy_price:$row[trade_buy_price]");
     } 	  
 }
-   mysqli_free_result($result);  //循环结束释放结果集  
+  // mysqli_free_result($result);  //循环结束释放结果集  
 	
 }
               
