@@ -1,6 +1,8 @@
 <?php
 class Analyse{
 	
+public $data=array();
+	
 function __construct() {
 	//获取code，table_name配置信息
 	$this->Runner=new Runner();
@@ -249,7 +251,7 @@ $this->log -> log_work("cut_sell_开始\n");
 //cut_price卖出开始开始	  
 if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<80) and $useable_sell_number>1){
   	
-  $sql="select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$data[stat_date]' order by id desc;";
+  $sql="select * from trade_history where code=$this->code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$data[stat_date]' order by id desc;";
   //$row=$this->db->get_select("select * from trade_history where code=$code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$stat_date' order by id desc;");
   $result = $this->db->get_resultselect($sql);
   while($row=mysqli_fetch_array($result)){
