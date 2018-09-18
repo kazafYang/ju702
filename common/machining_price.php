@@ -1,16 +1,16 @@
 <?php
 class MachiningPrice{
   var $data = array();
-  
+  /*
   function __construct() {
 	//获取code，table_name配置信息
 	$this->Runner=new Runner();
 	$this->code=$this->Runner->get_config()['code'];	
 	//测试代码，测试方法调用  
 }
-  
+*/  
   function get_machining_price () {
-  $code=159915;   
+  $code=510050;   
   $log=new logs();  
   $log -> log_work("comming machining_price");  
   if ($code<500000) {
