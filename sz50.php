@@ -36,7 +36,8 @@ class Runner{
   }
   
   public function sleep_time () {
-	$this->log -> log_work("comming sleep_time\n");
+	$data=$this->MachiningPrice->get_machining_price();
+	$this->log -> log_work("comming sleep_time:$data[time_hour]\n");
 	while(($data[time_hour]==9 and $data[time_min]<30) or ($data[time_hour]<13 and $data[time_hour]>=11) or $data[time_hour]<9) {
 	$data=$this->MachiningPrice->get_machining_price();	
   }
