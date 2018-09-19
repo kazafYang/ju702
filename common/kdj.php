@@ -108,7 +108,7 @@ class Kdj {
     $d=2/3*$min60_d+1/3*$k;
     $j=3*$k-2*$d;
     $this->log -> log_work("60kdj:$k,$d,$j\n");
-    $sql="update $this->table_name set min60_k='$k' , min60_d='$d' , min60_j='$j' order by id asc limit 1 ; ";
+    $sql="update $this->table_name set min60_k='$k' , min60_d='$d' , min60_j='$j' order by id desc limit 1 ; ";
     $this->db->set_update($sql);
   }
 
