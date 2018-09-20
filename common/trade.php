@@ -50,7 +50,7 @@ function huizhuan_sell_action($trade_type) {
       //####################################################################### 
 	  $data=$this->MachiningPrice->get_machining_price();
 	  $this->log -> log_work("comming huizhuan_sell_action\n");
-	  $row=$this->db->get_select("select count(*) from trade_history where code=$this->code and vifi_status=1 and status=1 and trade_type<20 and stat_date='$data[stat_date]' and stat_time_hour='$data[trade_time_hour]';");
+	  $row=$this->db->get_select("select count(*) from trade_history where code=$this->code and vifi_status=1 and status=1 and trade_type<20 and stat_date='$data[stat_date]' and stat_time_hour='$data[time_hour]';");
 	  $huizhuan_sell_number=$row[0];
 	
 	  $sql="select * from trade_history where code=$this->code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$data[stat_date]' order by id asc;";
