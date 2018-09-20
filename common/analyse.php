@@ -30,6 +30,7 @@ function set_analyse () {
       $second_min5_avgprice=$row[0];
       $row=$this->db->get_select("select avg(now_price) from (select now_price from $this->table_name order by id desc limit 16,160) as a;");	
       $second_min10_avgprice=$row[0];
+      $this->log -> log_work("$first_min5_avgprice~$first_min10_avgprice~$second_min5_avgprice~$second_min10_avgprice~\n");	
       //获取分时kdj数据;
       $row=$this->db->get_select("SELECT code,stat_date,stat_time_hour,stat_time_min,min15_k,min15_d,min15_j,min30_k,min30_d,min30_j,min60_k,min60_d,min60_j,min120_k,min120_d,min120_j,kdjday_k,kdjday_d,kdjday_j,cci,buy_one_price,sell_one_price FROM $this->table_name order by id desc limit 1");	
       $trade_code=$row[code];$trade_buy_price=$row[buy_one_price];$trade_sell_price=$row[sell_one_price];
