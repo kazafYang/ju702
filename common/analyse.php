@@ -242,8 +242,10 @@ $this->log -> log_work("回转buy开始\n");
      if ($loser_price>0 and $buy_switched==1 and $useable_money>1000 and ($trade_day_k<80 and $trade_day_d<75)){
        $this->log -> log_work("coming huizhuan_buy:$loser_price~$buy_switched~$useable_money~$trade_day_k~$trade_day_k\n");
        $trade_type=26; 
-       $trade_bite=$type26;	    
-       $this->trade->buy_action($trade_type,$trade_bite);  
+       $trade_bite=$type26;
+       $cut_price=$loser_price+($loser_price*3/100);	     
+       $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$loser_price','$loser_price','$cut_price','0');";
+       $this->db->set_insert($sql);  
        $sql = "update trade_history set status=2 where id=$loser_price_id;";                                                                  
        $this->db->set_update($sql);    
       }
