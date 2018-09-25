@@ -615,7 +615,7 @@ $log -> log_work("回转buy开始\n");
       }
 	//回转买入，当前价低于最低卖出价5个点，即可等量/分批加码回收筹码；增加trade_type，标志回转交易，然后沿用status标志，这样比较好；如果这样的话不能判断出数据是否已经被处理了，所以我还需要一个步骤就是将已经对比的status的值=2;
        //判断已经交易完成的，然后处理结束后将status变更为2   
-      $row=result_select("select id,number,trade_sell_price,trade_type from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type in(5,6,7,8,9) and status=1 limit 1;");
+      $row=result_select("select id,number,trade_sell_price,trade_type from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and trade_type in(5,6,7,8,9) and status=1 limit 1;");
       $number=$row[number];
       $number=round($number); 	  
       switch ($row[trade_type])
