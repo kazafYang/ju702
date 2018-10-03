@@ -63,21 +63,21 @@ function set_analyse () {
       $this->log -> log_work($type1.$type2.$type3.$type4.$type5.$type6.$type7.$type8."trade_bate\n");
       mysqli_free_result($result);  //释放结果集
       //判断当日数据是否已经存在
-      $row=$this->db->get_select("select count(*) from hive_number where code='$trade_code' and stat_date='$trade_stat_date';");	
+      $row=$this->db->get_select("select count(*) from hive_number where code='$this->code' and stat_date='$trade_stat_date';");	
       $this->log -> log_work("当日数据是否存在判断\n");	
       if($row[0]==0){
 	      $this->log -> log_work("当日数据不存在，开始新增数据\n");
 	      //拿取hive_number表数据条数获得插入的下一个id
 	      $hive_number_id=$this->db->get_id("hive_number");
 	      $this->log -> log_work("拿取到的hive_number_id：$hive_number_id.\n");	      
-	      $row=$this->db->get_select("select switched,sell_switched,buy_switched,total_money,useable_money,total_number,useable_sell_number,total_sell_number,market_value,cost_price,make_money from hive_number where code='$trade_code' order by stat_date desc limit 1;");	      
-	      $switched=$row[switched];$sell_switched=$row[sell_switched];$buy_switched=$row[buy_switched];$total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[total_number];$total_sell_number=$row[total_number];$cost_price=$row[cost_price];$make_money=$row[make_money];$market_value=$row[market_value];
-	      $this->log -> log_work($switched.$sell_switched.$buy_switched."开关\n");	      
+	      $row=$this->db->get_select("select * from hive_number where code='$this->code' order by stat_date desc limit 1;");	      
+	      $switched=$row[switched];$sell_switched=$row[sell_switched];$return_switched=$row[return_switched];$buy_switched=$row[buy_switched];$total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[total_number];$total_sell_number=$row[total_number];$cost_price=$row[cost_price];$make_money=$row[make_money];$market_value=$row[market_value];
+	      $this->log -> log_work($switched.$sell_switched.$buy_switched.$return_switched."开关\n");	      
 	      //计算最近2日的平均买入成本   switch
 	      $cost_stat_date=date("Y-m-d",strtotime("-2 day"));    
 	      $row=$this->db->get_select("select avg(trade_sell_price) from trade_history where code='$this->code' and trade_type>=5 and stat_date>='$cost_stat_date';");
 	      $cost_price=round($row[0],3);
-	      $sql = "insert into hive_number values ('$hive_number_id','$trade_code','$switched','$sell_switched','$buy_switched','$total_money','$useable_money','$total_number','$useable_sell_number','$total_sell_number','$market_value','$cost_price','$make_money','$trade_stat_date');";                                                                  
+	      $sql = "insert into hive_number values ('$hive_number_id','$trade_code','$switched','$sell_switched','$return_switched','$buy_switched','$total_money','$useable_money','$total_number','$useable_sell_number','$total_sell_number','$market_value','$cost_price','$make_money','$trade_stat_date');";                                                                  
 	      $this->log -> log_work($sql."插入hive_number\n");	      
 	      $this->db->set_insert($sql);   
       } 
@@ -85,8 +85,8 @@ function set_analyse () {
       //拿取hive_number的基础属性
 	      $this->log -> log_work("当日hive_number已经存在，开始获取最新hive_number数据\n");		  
 	      $switched.$sell_switched.$buy_switched."开关\n";		   
-	      $row=$this->db->get_select("select switched,sell_switched,buy_switched,total_money,useable_money,total_number,useable_sell_number,total_sell_number,cost_price from hive_number where code='$trade_code' order by stat_date desc limit 1;");
-	      $switched=$row[switched];$sell_switched=$row[sell_switched];$buy_switched=$row[buy_switched];$total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[useable_sell_number];$total_sell_number=$row[$total_sell_number];$cost_price=$row[cost_price];
+	      $row=$this->db->get_select("select switched,sell_switched,return_switched,buy_switched,total_money,useable_money,total_number,useable_sell_number,total_sell_number,cost_price from hive_number where code='$trade_code' order by stat_date desc limit 1;");
+	      $switched=$row[switched];$sell_switched=$row[sell_switched];$return_switched=$row[return_switched];$buy_switched=$row[buy_switched];$total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[useable_sell_number];$total_sell_number=$row[$total_sell_number];$cost_price=$row[cost_price];
       }
   $this->log -> log_work($switched."开始判断\n");	
   if($switched==1){
@@ -160,7 +160,7 @@ function set_analyse () {
       }  	  
   }    //日线超卖完成
   $this->log -> log_work("回转sell开始\n");	  
-  if((($trade_day_k>=40 and $trade_day_k<65) or ($trade_day_d>=40 and $trade_day_d<65)) and $useable_sell_number>1 and $sell_switched==1){
+  if((($trade_day_k>=40 and $trade_day_k<65) or ($trade_day_d>=40 and $trade_day_d<65)) and $useable_sell_number>1 and $return_switched==1){
    //if($trade_day_k>1){
 	 //回转交易策略的位置,记录回转交易的标志是数据库字段status=2
 	//15分钟回转使用死叉交易卖出 switch
