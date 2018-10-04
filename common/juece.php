@@ -15,10 +15,14 @@ function get_sell($trade_type){
 
 }
 
-function get_return($trade_type){
-  $this->log -> log_work("comming get_return\n");
+function get_returnbuy($trade_type){
+  $this->log -> log_work("comming get_returnbuy\n");
 
 }
 
+function get_returnsell($trade_type){
+  $this->log -> log_work("comming get_returnsell\n");
+
+}
 }
 ?>
