@@ -32,7 +32,7 @@ function set_analyse () {
       $second_min10_avgprice=$row[0];
       $this->log -> log_work("$first_min5_avgprice~$first_min10_avgprice~$second_min5_avgprice~$second_min10_avgprice~\n");	
       //获取分时kdj数据;
-      $row=$this->db->get_select("SELECT code,stat_date,stat_time_hour,stat_time_min,min15_k,min15_d,min15_j,min30_k,min30_d,min30_j,min60_k,min60_d,min60_j,min120_k,min120_d,min120_j,kdjday_k,kdjday_d,kdjday_j,cci,buy_one_price,sell_one_price FROM $this->table_name order by id desc limit 1");	
+      $row=$this->db->get_select("SELECT * FROM $this->table_name order by id desc limit 1");	
       $trade_code=$row[code];$trade_buy_price=$row[buy_one_price];$trade_sell_price=$row[sell_one_price];
       $trade_stat_date=$row[stat_date];$trade_time_hour=$row[stat_time_hour];$trade_time_min=$row[stat_time_min];
       $trade_min15_k=round($row[min15_k],2);$trade_min15_d=round($row[min15_d],2);$trade_min15_j=round($row[min15_j],2);
@@ -41,7 +41,7 @@ function set_analyse () {
       $trade_min120_k=round($row[min120_k],2);$trade_min120_d=round($row[min120_d],2);$trade_min120_j=round($row[min120_j],2);	  
       $trade_day_k=round($row[kdjday_k],2);$trade_day_d=round($row[kdjday_d],2);$trade_day_j=round($row[kdjday_j],2);	  
       //获取上一次分时kdj数据用来判断kdj金叉死叉;
-      $row=$this->db->get_select("SELECT code,stat_date,stat_time_hour,stat_time_min,min15_k,min15_d,min15_j,min30_k,min30_d,min30_j,min60_k,min60_d,min60_j,min120_k,min120_d,min120_j,kdjday_k,kdjday_d,kdjday_j,cci,buy_one_price,sell_one_price FROM $this->table_name order by id desc limit 1,1");
+      $row=$this->db->get_select("SELECT * FROM $this->table_name order by id desc limit 1,1");
       $trade_second_min15_k=round($row[min15_k],2);$trade_second_min15_d=round($row[min15_d],2);$trade_second_min15_j=round($row[min15_j],2);
       $trade_second_min30_k=round($row[min30_k],2);$trade_second_min30_d=round($row[min30_d],2);$trade_second_min30_j=round($row[min30_j],2);
       $trade_second_min60_k=round($row[min60_k],2);$trade_second_min60_d=round($row[min60_d],2);$trade_second_min60_j=round($row[min60_j],2);
@@ -85,7 +85,7 @@ function set_analyse () {
       //拿取hive_number的基础属性
 	      $this->log -> log_work("当日hive_number已经存在，开始获取最新hive_number数据\n");		  
 	      $switched.$sell_switched.$buy_switched."开关\n";		   
-	      $row=$this->db->get_select("select switched,sell_switched,return_switched,buy_switched,total_money,useable_money,total_number,useable_sell_number,total_sell_number,cost_price from hive_number where code='$trade_code' order by stat_date desc limit 1;");
+	      $row=$this->db->get_select("select * from hive_number where code='$trade_code' order by stat_date desc limit 1;");
 	      $switched=$row[switched];$sell_switched=$row[sell_switched];$return_switched=$row[return_switched];$buy_switched=$row[buy_switched];$total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[useable_sell_number];$total_sell_number=$row[$total_sell_number];$cost_price=$row[cost_price];
       }
   $this->log -> log_work($switched."开始判断\n");	
