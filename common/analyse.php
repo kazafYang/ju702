@@ -94,8 +94,11 @@ function set_analyse () {
 /*
   $this->log -> log_work("开始每日常规做T操作");
   $row=$this->db->get_select("select * from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and trade_type= and status=1 limit 1;");
-  if $row[0]<1{
+  if(count($arr)<1){
     echo "小于1"；
+    $trade_type=22; 
+    $trade_bite=$type22;	    
+    $this->trade->buy_action($trade_type,$trade_bite);
   }else{
     echo "大于等于1";
   }
