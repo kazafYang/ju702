@@ -90,7 +90,18 @@ function set_analyse () {
       }
   $this->log -> log_work($switched."开始判断\n");	
   if($switched==1){
-  $this->log -> log_work($switched."判断开关开启了$useable_sell_number,$sell_switched,$trade_day_k,$trade_day_d\n");		  
+  $this->log -> log_work($switched."判断开关开启了$useable_sell_number,$sell_switched,$trade_day_k,$trade_day_d\n");
+/*
+  $this->log -> log_work("开始每日常规做T操作");
+  $row=$this->db->get_select("select * from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and trade_type= and status=1 limit 1;");
+  if $row[0]<1{
+    echo "小于1"；
+  }else{
+    echo "大于等于1";
+  }
+*/
+	  
+	  
       //sell判断
  //判断当前code是否具备卖出资格，后续可以在这里加上开关等限制性的行为；昨日的总数量，就是今日的可卖数量；$switched=1是开关打开状态
     if($useable_sell_number>1 and $sell_switched==1 and ($trade_day_k >= 85 or $trade_day_d >= 80)){ 
