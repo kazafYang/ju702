@@ -196,8 +196,8 @@ class Decide{
 	    $data['sell_switched'] = $row[sell_switched];  //总开关
             $data['return_switched'] = $row[return_switched];  //总开关
 	    $data['buy_switched'] = $row[buy_switched];  //总开关
-	    echo "test";
 	    print_r($data);
+	    return $data;
     
 	}
 	
