@@ -189,6 +189,17 @@ class Decide{
       }
 	return $trade_buy_score; 
   }
+	public get_status(){
+	$data=$this->MachiningPrice->get_machining_price();
+	$row=$this->db->get_select("select * from hive_number where code=$this->code and stat_date<'$data[stat_date]' order by id desc limit 1;");
+	    $data['switched'] = $row[switched];  //总开关
+	    $data['sell_switched'] = $row[sell_switched];  //总开关
+            $data['return_switched'] = $row[return_switched];  //总开关
+	    $data['buy_switched'] = $row[buy_switched];  //总开关
+	    echo "test";
+	    print_r($data);
+    
+	}
 	
    public function get_daypoint_score(){
     $this->log->log_work("comming daypoint");
