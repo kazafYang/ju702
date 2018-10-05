@@ -32,12 +32,21 @@ class Juece{
 	 return $row;   
     }
 	
-    function decide_number(){
-         $row=$this->db->get_select("select * from hive_number where code='$this->code' order by stat_date desc limit 1;");
-	 print_r($row);
-	 $switched=$row[switched];$sell_switched=$row[sell_switched];$return_switched=$row[return_switched];$buy_switched=$row[buy_switched];$total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[useable_sell_number];$total_sell_number=$row[$total_sell_number];$cost_price=$row[cost_price];
-         $this->log->log_work($switched);
-	 return $row;   
+    function decide_sell_number(){
+	  //获取数量  
+          $data=$this->MachiningPrice->get_machining_price();
+	  $this->log -> log_work("comming decide_number\n");
+	  $sql="select * from trade_history where code=$this->code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$data[stat_date]' order by id asc;";
+	  $result = $this->db->get_resultselect($sql);
+	  while($row=mysqli_fetch_array($this->decide_sell_number())){
+	      $connecttion_id=$row[id];
+              $number=$row[number];   
+              $this->log -> log_work("connecttion_id:$connecttion_id\n");    
+	      if($begin_point>$row[trade_buy_price] and $row[cut_price] < ($row[trade_buy_price]+$row[trade_buy_price]*3.02/100)){
+	          echo "这里就可以调用action了";	      
+	      }
+	  
+	   } 
     }
 	
     function decide_runner(){
