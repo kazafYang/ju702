@@ -82,8 +82,8 @@ while(1==1) {
  }	 
 }
 
-//$decide=new Decide();
-//$decide->main();
+$decide=new Decide();
+$decide->get_status();
 $Runner=new Runner();
 $Runner->run();
 //$trade=new Trade();
