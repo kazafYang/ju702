@@ -6,6 +6,7 @@ include 'common/db.php';
 include 'common/kdj.php';
 include 'common/analyse.php';
 include 'common/decide.php';
+include 'common/juece.php';
 include 'common/trade.php';
 include 'common/test_cut_price.php';
 include 'common/nine_count.php';
@@ -82,10 +83,13 @@ while(1==1) {
  }	 
 }
 
-$decide=new Decide();
-$decide->get_status();
+//$decide=new Decide();
+//$decide->get_status();
 $Runner=new Runner();
-$Runner->run();
+$juece = new Juece();
+$juece -> decide_type(25);   
+//$Runner->run();
+
 //$trade=new Trade();
 //$trade->buy_action(10,1);
 ?>
