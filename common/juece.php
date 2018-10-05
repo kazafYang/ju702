@@ -5,6 +5,12 @@ class Juece{
 		$this->log = new logs();
 
 	}
+	
+	function get_status($trade_type){
+	  $this->log -> log_work("comming get_status\n");
+	  
+	}
+	
 	function get_buy($trade_type){
 	  $this->log -> log_work("comming get_buy\n");
 		
