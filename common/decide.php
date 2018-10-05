@@ -189,7 +189,7 @@ class Decide{
       }
 	return $trade_buy_score; 
   }
-	public get_status(){
+	public function get_status(){
 	$data=$this->MachiningPrice->get_machining_price();
 	$row=$this->db->get_select("select * from hive_number where code=$this->code and stat_date<'$data[stat_date]' order by id desc limit 1;");
 	    $data['switched'] = $row[switched];  //总开关
