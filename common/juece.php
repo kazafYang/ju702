@@ -18,7 +18,12 @@ class Juece{
     function decide_type($trade_type){
         if($trade_type>20){
 	    echo "buy";
+	    if($trade_type== 20 or $trade_type==25){ 	
+	    echo "回转类型";	    
 	    $this -> decide_runner();
+	    }else{
+	    echo "非回转类型";
+	    } 	
         }else{
             echo "sell";
         }
