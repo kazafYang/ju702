@@ -58,14 +58,14 @@ while(1==1) {
     }elseif ($data[time_hour]>="15") {
       $this->log -> log_work("3point!\n");
       //$a=$runoob->Runday_Point();  
-      exit(0);    
+      //exit(0);    
     }
       
     $sql = "select id,stat_time_min from $this->table_name order by id desc limit 1;";    
     $row=$this->db->get_select($sql);
     $this->log -> log_work("stat_time_min:$row[stat_time_min]\n");
     $stat_time_min=$row[stat_time_min];
-        if ($stat_time_min<>$data[time_min] and ($data[time_min]==0 or $data[time_min]==15 or $data[time_min]==30 or $data[time_min]==45)){
+        if ($stat_time_min<>$data[time_min] or ($data[time_min]==0 or $data[time_min]==15 or $data[time_min]==30 or $data[time_min]==45)){
            $this->log -> log_work("table:$this->table_name\n");    
            $time_out_begin=($data[time_hour]*3600)+($data[time_min]*60)+900;
            $time_out_now=($data[time_hour]*3600)+($data[time_min]*60);
@@ -83,13 +83,13 @@ while(1==1) {
  }	 
 }
 
-$decide=new Decide();
-$decide->get_status();
+//$decide=new Decide();
+//$decide->get_status();
 $Runner=new Runner();
-$Runner->run();
+//$Runner->run();
 
-//$juece = new Juece();
-//$juece -> decide_type(25);   
+$juece = new Juece();
+$juece -> decide_distribution();   
 //$trade=new Trade();
 //$trade->buy_action(10,1);
 ?>
