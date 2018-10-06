@@ -37,6 +37,14 @@ class Juece{
 	 return $row;   
     }
 	
+    function decide_distribution(){
+         $row=$this->db->get_select("select count(*) from trade_history where code='$this->code' and stat_data='$data[stat_date]' and stat_time_hour='$data[time_hour]' and status=0 and trade_type=27;");
+	 print_r($row);
+	 $switched=$row[switched];$sell_switched=$row[sell_switched];$return_switched=$row[return_switched];$buy_switched=$row[buy_switched];$total_money=$row[total_money];$useable_money=$row[useable_money]; $total_number=$row[total_number];$useable_sell_number=$row[useable_sell_number];$total_sell_number=$row[$total_sell_number];$cost_price=$row[cost_price];
+         $this->log->log_work($switched);
+	 return $row;   
+    }
+	
     function decide_sell_number(){
 	  //获取数量  
           $data=$this->MachiningPrice->get_machining_price();
