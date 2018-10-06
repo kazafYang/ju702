@@ -83,13 +83,13 @@ while(1==1) {
  }	 
 }
 
-//$decide=new Decide();
-//$decide->get_status();
+$decide=new Decide();
+$decide->get_status();
 $Runner=new Runner();
-$juece = new Juece();
-$juece -> decide_type(25);   
-//$Runner->run();
+$Runner->run();
 
+//$juece = new Juece();
+//$juece -> decide_type(25);   
 //$trade=new Trade();
 //$trade->buy_action(10,1);
 ?>
