@@ -19,8 +19,10 @@ function __construct() {
 }
 	
 function set_analyse () {	
-      $this->log -> log_work("comming analyse\n");
-      $data=$this->MachiningPrice->get_machining_price();	
+      $this->log -> log_work("comming analyse");
+      $data=$this->MachiningPrice->get_machining_price();
+      $today_bite = ($data[begin_point] - $data[yesterday_price])/$data[yesterday_price] * 100
+      $this->log -> log_work("今日涨跌幅：$today_bite");
       //五日十日均线数据计算	
       $row=$this->db->get_select("select avg(now_price) from (select now_price from $this->table_name order by id desc limit 0,80) as a;");	
       $first_min5_avgprice=$row[0];
@@ -192,6 +194,19 @@ function set_analyse () {
 	$trade_type=9;    
 	$this->trade->huizhuan_sell_action($trade_type);  
 	  }
+      //当日高开超过0.5每15分钟卖出1000块作为实验，看效果如何？
+      if($today_bite>=0.5){
+      	$this->log -> log_work("今日涨幅大于等于：$today_bite%,今日开盘价：$data[open_price]，昨日收盘价：$data[open_price]");
+        $trade_type=12;$trade_bite=1;
+        $number=11/$data[sell_one_price]*$trade_bite;
+        $cut_price=$date[begin_point]+($date[begin_point]*3/100);
+        $trade_id=$this->db->get_id($this->conn,"trade_history");
+        $totay_row=$this->db->get_select("select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=$trade_type;");
+        if($totay_row[0]<1 and $useable_sell_number>$number){
+           $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$data[sell_one_price]','$data[sell_one_price]','$cut_price','0');";
+           $this->db->set_insert($sql);  
+	} 
+      }
     } //卖出回转结束
 	 //回转买入开始 
 	//回转60分钟买入
@@ -250,6 +265,18 @@ $this->log -> log_work("回转buy开始\n");
        $this->db->set_update($sql);    
       }
  }
+      if($today_bite<=-0.5){
+      	$this->log -> log_work("今日涨幅小于等于：$today_bite%,今日开盘价：$data[open_price]，昨日收盘价：$data[open_price]");
+        $trade_type=27;$trade_bite=1;
+        $number=11/$data[buy_one_price]*$trade_bite;
+        $cut_price=$date[begin_point]+($date[begin_point]*3/100);
+        $trade_id=$this->db->get_id($this->conn,"trade_history");
+        $totay_row=$this->db->get_select("select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=$trade_type;");
+        if($totay_row[0]<1 and $useable_sell_number>$number){
+           $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$data[buy_one_price]','$data[buy_one_price]','$cut_price','0');";
+           $this->db->set_insert($sql);  
+	} 
+      }
 $this->log -> log_work("cut_sell_开始\n");		  
 //cut_price卖出开始开始	  
 if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<80) and $useable_sell_number>1){
