@@ -110,7 +110,7 @@ function buy_action($trade_type,$trade_bite) {
       }else{
 		$this->log -> log_work("回转未达到条件不能触发买入操作，$useable_money，$action_buy_degree，$number，$data[buy_one_price]\n"); 
       }	
-      if($trade_type!=26 and $row[0] < 4 and $useable_money>=($number*100*$trade_buy_price)){
+      if($trade_type!=26 and $row[0]<$action_buy_degree and $useable_money>=($number*100*$trade_buy_price)){
       //if($row[0]==0 or $useable_money>=($number*100*$trade_buy_price)){	      
 	      $this->log -> log_work("非回转达到条件触发买入操作，useable_money:$useable_money，action_buy_degree:$action_buy_degree，number:$number，$data[buy_one_price]\n");
 	      $trade_id=$this->db->get_id("trade_history");
