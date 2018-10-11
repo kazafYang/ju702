@@ -272,7 +272,7 @@ $this->log -> log_work("回转buy开始\n");
         $cut_price=$date[begin_point]+($date[begin_point]*3/100);
         $trade_id=$this->db->get_id($this->conn,"trade_history");
         $totay_row=$this->db->get_select("select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=$trade_type;");
-        if($totay_row[0]<1 and $useable_sell_number>$number){
+        if($totay_row[0]<1 and $useable_money>=1000){
            $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$data[buy_one_price]','$data[buy_one_price]','$cut_price','0');";
            $this->db->set_insert($sql);  
 	} 
