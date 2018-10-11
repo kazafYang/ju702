@@ -86,10 +86,10 @@ while(1==1) {
 //$decide=new Decide();
 //$decide->get_status();
 $Runner=new Runner();
-//$Runner->run();
+$Runner->run();
 
-$juece = new Juece();
-$juece -> decide_distribution();   
+//$juece = new Juece();
+//$juece -> decide_distribution();   
 //$trade=new Trade();
 //$trade->buy_action(10,1);
 ?>
