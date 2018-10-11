@@ -24,6 +24,7 @@ class MachiningPrice{
   $log -> log_work("开始调用接口拿数据\n");  
   $html = file_get_contents($url); 
   $pieces = explode(",", $html);
+  $data['yesterday_price'] = $pieces[2];  //昨日 
   $data['begin_point'] = $pieces[3];  //当前 
   $data['buy_one_price'] = $pieces[6]; //买一 
   $data['sell_one_price'] = $pieces[7]; //卖一 
