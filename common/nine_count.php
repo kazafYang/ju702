@@ -51,7 +51,7 @@ class Nine_Count{
 	      $this->db->set_update($sql);	  
 	      $this->log -> log_work($sql."\n");
   }
-	  if ($this->begin_point<=$min)
+	  if ($data[begin_point]<=$min)
 	  {
 	      $min=$data[begin_point]; 
 	      $sql="update " .$this->table_name." set min15_point_min=$min order by id desc limit 1 ; ";
