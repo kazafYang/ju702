@@ -26,8 +26,8 @@ function sell_action($trade_type) {
 		   $connecttion_id=$row[id];
 		   $number=$row[number];   
 		   $this->log -> log_work("connecttion_id:$connecttion_id\n");
-		   if($begin_point>$row[trade_buy_price] and $row[cut_price] < ($row[trade_buy_price]+$row[trade_buy_price]*3.02/100)){
-			  $this->log -> log_work("达到条件触发卖出操作，$begin_point，$row[trade_buy_price]，$number,$row[cut_price]\n"); 
+		   if($data[begin_point]>$row[trade_buy_price] and $row[cut_price] < ($row[trade_buy_price]+$row[trade_buy_price]*3.02/100)){
+			  $this->log -> log_work("达到条件触发卖出操作，$data[begin_point]，$row[trade_buy_price]，$number,$row[cut_price]\n"); 
 			  $trade_id=$this->db->get_id("trade_history"); 
 			  $this->log -> log_work("trade_id:$trade_id\n");	   
 			  //插入交易历史  
@@ -50,7 +50,7 @@ function huizhuan_sell_action($trade_type) {
       //####################################################################### 
 	  $data=$this->MachiningPrice->get_machining_price();
 	  $this->log -> log_work("comming huizhuan_sell_action\n");
-	  $row=$this->db->get_select("select count(*) from trade_history where code=$this->code and vifi_status=1 and status=1 and trade_type<20 and stat_date='$data[stat_date]' and stat_time_hour='$data[time_hour]';");
+	  $row=$this->db->get_select("select count(*) from trade_history where code=$this->code and vifi_status=1 and status=1 and trade_type < $trade_type and stat_date='$data[stat_date]' and stat_time_hour='$data[time_hour]';");
 	  $huizhuan_sell_number=$row[0];
 	
 	  $sql="select * from trade_history where code=$this->code and vifi_status=0 and status=1 and trade_type>20 and stat_date<'$data[stat_date]' order by id asc;";
@@ -63,7 +63,7 @@ function huizhuan_sell_action($trade_type) {
 		   $number=$row[number];
 		   $cut_price=$data[buy_one_price]+$data[buy_one_price]*3/100;
 		   $this->log -> log_work("connecttion_id:"."$connecttion_id~$cut_price\n");
-		   if($data[begin_point]>$row[trade_buy_price] and $huizhuan_sell_number==0 and $row[cut_price] < ($row[trade_buy_price]+$row[trade_buy_price]*3.02/100)){
+		   if($data[begin_point]>$row[trade_buy_price] and $huizhuan_sell_number<=4 and $row[cut_price] < ($row[trade_buy_price]+$row[trade_buy_price]*3.02/100)){
 			  $this->log -> log_work("达到条件触发卖出操作$data[begin_point]，$huizhuan_sell_number，$number，$row[trade_buy_price],$row[cut_price]\n"); 
 			  $trade_id=$this->db->get_id("trade_history"); 
 			  $this->log -> log_work("trade_id:".$trade_id);	   
@@ -85,8 +85,8 @@ function huizhuan_sell_action($trade_type) {
 }
 function buy_action($trade_type,$trade_bite) {
       
-      $decide=new Decide();
-      $action_buy_degree=$decide->main();
+      //$decide=new Decide();
+      //$action_buy_degree=$decide->main();
       /*暂定吧*/
       $this->log -> log_work("coming buy_action~~~~".$trade_bite."\n");
       $data=$this->MachiningPrice->get_machining_price();	
@@ -96,10 +96,10 @@ function buy_action($trade_type,$trade_bite) {
       $row=$this->db->get_select("select useable_money from hive_number where code='$this->code' order by stat_date desc limit 1;");
       $useable_money=$row[useable_money];	
       //$sql = "select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=$trade_type;";
-      $row=$this->db->get_select("select count(*) from trade_history where code='$this->code' and stat_date='$data[stat_date]' and stat_time_hour='$data[time_hour]';"); //暂时先去掉这个条件： and trade_type=$trade_type
+      $row=$this->db->get_select("select count(*) from trade_history where code='$this->code' and stat_date='$data[stat_date]' and stat_time_hour='$data[time_hour]' and trade_type=$trade_type;"); //暂时先去掉这个条件： and trade_type=$trade_type
       $this->log -> log_work("$useable_money~~~~~~$number~~~~$data[buy_one_price]\n");
-      if($trade_type==26 and ($useable_money>=($number*100*$data[buy_one_price]))){
-	      $this->log -> log_work("回转达到条件触发买入操作，useable_money:$useable_money，row[0]:$row[0]，number:$number，$data[buy_one_price]\n");
+      if($row[0]<=4 and $trade_type!=25 and ($useable_money>=($number*100*$data[buy_one_price]))){
+	      $this->log -> log_work("非回转达到条件触发买入操作，useable_money:$useable_money，row[0]:$row[0]，number:$number，$data[buy_one_price]\n");
 	      $trade_id=$this->db->get_id("trade_history");
 	      $cut_price=$data[buy_one_price]+($data[buy_one_price]*3/100);
 	      $this->log -> log_work("cut_price:$cut_price\n");
@@ -110,9 +110,9 @@ function buy_action($trade_type,$trade_bite) {
       }else{
 		$this->log -> log_work("回转未达到条件不能触发买入操作，$useable_money，$action_buy_degree，$number，$data[buy_one_price]\n"); 
       }	
-      if($trade_type!=26 and $row[0]<$action_buy_degree and $useable_money>=($number*100*$trade_buy_price)){
+      if($trade_type==25 and $row[0]<=4 and $useable_money>=($number*100*$trade_buy_price)){
       //if($row[0]==0 or $useable_money>=($number*100*$trade_buy_price)){	      
-	      $this->log -> log_work("非回转达到条件触发买入操作，useable_money:$useable_money，action_buy_degree:$action_buy_degree，number:$number，$data[buy_one_price]\n");
+	      $this->log -> log_work("回转达到条件触发买入操作，useable_money:$useable_money，action_buy_degree:$action_buy_degree，number:$number，$data[buy_one_price]\n");
 	      $trade_id=$this->db->get_id("trade_history");
 	      $cut_price=$data[buy_one_price]+($data[buy_one_price]*3/100);
 	      $this->log -> log_work("cut_price:$cut_price\n");
