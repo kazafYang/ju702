@@ -21,7 +21,7 @@ function __construct() {
 function set_analyse () {	
       $this->log -> log_work("comming analyse");
       $data=$this->MachiningPrice->get_machining_price();
-      $today_bite = ($data[begin_point] - $data[yesterday_price])/$data[yesterday_price] * 100
+      $today_bite = ($data[begin_point] - $data[yesterday_price])/$data[yesterday_price] * 100;
       $this->log -> log_work("今日涨跌幅：$today_bite");
       //五日十日均线数据计算	
       $row=$this->db->get_select("select avg(now_price) from (select now_price from $this->table_name order by id desc limit 0,80) as a;");	
