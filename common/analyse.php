@@ -194,8 +194,9 @@ function set_analyse () {
 	$trade_type=9;    
 	$this->trade->huizhuan_sell_action($trade_type);  
 	  }
-      //当日高开超过0.5每15分钟卖出1000块作为实验，看效果如何？
-      if($today_bite>=0.5){
+    } //卖出回转结束
+//当日高开超过0.5每15分钟卖出1000块作为实验，看效果如何？
+if($today_bite>=0.5 and $sell_switched==1){
       	$this->log -> log_work("今日涨幅大于等于：$today_bite%,今日开盘价：$data[open_price]，昨日收盘价：$data[open_price]");
         $trade_type=12;$trade_bite=1;
         $number=11/$data[sell_one_price]*$trade_bite;
@@ -207,7 +208,6 @@ function set_analyse () {
            $this->db->set_insert($sql);  
 	} 
       }
-    } //卖出回转结束
 	 //回转买入开始 
 	//回转60分钟买入
 $this->log -> log_work("回转buy开始\n");	  
