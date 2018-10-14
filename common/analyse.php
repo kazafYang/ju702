@@ -196,7 +196,7 @@ function set_analyse () {
 	  }
     } //卖出回转结束
 //当日高开超过0.5每15分钟卖出1000块作为实验，看效果如何？
-if($today_bite>=0.5 and $sell_switched==1){
+if($today_bite>=0.5 and $sell_switched==1 and ($trade_day_k<80 or $trade_day_d<80)){
       	$this->log -> log_work("今日涨幅大于等于：$today_bite%,今日开盘价：$data[open_price]，昨日收盘价：$data[open_price]");
         $trade_type=12;$trade_bite=1;
         $number=11/$data[sell_one_price]*$trade_bite;
@@ -208,7 +208,7 @@ if($today_bite>=0.5 and $sell_switched==1){
            $this->db->set_insert($sql);  
 	} 
       }
-if($today_bite<=-0.5){
+if($today_bite<=-0.5 and $buy_switched==1 and ($trade_day_k<80 or $trade_day_d<80)){
       	$this->log -> log_work("今日涨幅小于等于：$today_bite%,今日开盘价：$data[open_price]，昨日收盘价：$data[open_price]");
         $trade_type=27;$trade_bite=1;
         $number=11/$data[buy_one_price]*$trade_bite;
