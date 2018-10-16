@@ -201,7 +201,7 @@ if($today_bite>=0.5 and $sell_switched==1 and ($trade_day_k<80 or $trade_day_d<8
         $trade_type=12;$trade_bite=1;
         $number=11/$data[sell_one_price]*$trade_bite;
         $cut_price=$date[begin_point]+($date[begin_point]*3/100);
-        $trade_id=$this->db->get_id($this->conn,"trade_history");
+        $trade_id=$this->db->get_id("trade_history");
         $totay_row=$this->db->get_select("select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=$trade_type;");
         if($totay_row[0]<1 and $useable_sell_number>$number){
            $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$data[sell_one_price]','$data[sell_one_price]','$cut_price','0');";
@@ -213,7 +213,7 @@ if($today_bite<=-0.5 and $buy_switched==1 and ($trade_day_k<80 or $trade_day_d<8
         $trade_type=27;$trade_bite=1;
         $number=11/$data[buy_one_price]*$trade_bite;
         $cut_price=$date[begin_point]+($date[begin_point]*3/100);
-        $trade_id=$this->db->get_id($this->conn,"trade_history");
+        $trade_id=$this->db->get_id("trade_history");
         $totay_row=$this->db->get_select("select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=$trade_type;");
         if($totay_row[0]<1 and $useable_money>=1000){
            $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$data[buy_one_price]','$data[buy_one_price]','$cut_price','0');";
@@ -291,7 +291,7 @@ if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<
 	$trade_type=10;
 	$this->log -> log_work ("cut_price开始".$row[id]."~".$row[cut_price]."~".$data[begin_point]."~".$row[trade_buy_price]."~".$row[number]."\n");
 	$this->log -> log_work($code."~".$data[begin_point]."~".$stat_date."\n");
-	$trade_id=$this->db->get_id($this->conn,"trade_history");
+	$trade_id=$this->db->get_id("trade_history");
 	$this->log -> log_work("trade_id:$trade_id");	   
 	//插入交易历史  
 	$sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id,history_make_money) values ('$trade_id','$code','$stat_date','$time_hour','$time_min','0','0','$row[number]','$trade_type','$row[trade_buy_price]','$data[begin_point]','0','$row[id]',$row[history_make_money]);";                                                                  
