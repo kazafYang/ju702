@@ -197,7 +197,7 @@ function set_analyse () {
     } //卖出回转结束
 //当日高开超过0.5每15分钟卖出1000块作为实验，看效果如何？
 if($today_bite>=0.5 and $sell_switched==1 and ($trade_day_k<80 or $trade_day_d<80)){
-      	$this->log -> log_work("今日涨幅大于等于：$today_bite%,今日开盘价：$data[open_price]，昨日收盘价：$data[open_price]");
+      	$this->log -> log_work("今日涨幅大于等于：$today_bite%,今日开盘价：$data[open_price]，昨日收盘价：$data[open_price],day_k=$trade_day_k,day_d:$trade_day_d");
         $trade_type=12;$trade_bite=1;
         $number=11/$data[sell_one_price]*$trade_bite;
         $cut_price=$date[begin_point]+($date[begin_point]*3/100);
@@ -206,10 +206,12 @@ if($today_bite>=0.5 and $sell_switched==1 and ($trade_day_k<80 or $trade_day_d<8
         if($totay_row[0]<1 and $useable_sell_number>$number){
            $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$data[sell_one_price]','$data[sell_one_price]','$cut_price','0');";
            $this->db->set_insert($sql);  
+	}else{
+      	$this->log -> log_work("不符合条件：今日涨幅大于等于：$today_bite%,今日开盘价：$data[open_price]，昨日收盘价：$data[open_price],day_k=$trade_day_k,day_d:$trade_day_d");
 	} 
       }
 if($today_bite<=-0.5 and $buy_switched==1 and ($trade_day_k<80 or $trade_day_d<80)){
-      	$this->log -> log_work("今日涨幅小于等于：$today_bite%,今日开盘价：$data[open_price]，昨日收盘价：$data[open_price]");
+      	$this->log -> log_work("今日涨幅大于等于：$today_bite%,今日开盘价：$data[open_price]，昨日收盘价：$data[open_price],day_k=$trade_day_k,day_d:$trade_day_d");
         $trade_type=27;$trade_bite=1;
         $number=11/$data[buy_one_price]*$trade_bite;
         $cut_price=$date[begin_point]+($date[begin_point]*3/100);
@@ -218,6 +220,8 @@ if($today_bite<=-0.5 and $buy_switched==1 and ($trade_day_k<80 or $trade_day_d<8
         if($totay_row[0]<1 and $useable_money>=1000){
            $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$data[buy_one_price]','$data[buy_one_price]','$cut_price','0');";
            $this->db->set_insert($sql);  
+	}else{
+      	$this->log -> log_work("不符合条件：今日涨幅大于等于：$today_bite%,今日开盘价：$data[open_price]，昨日收盘价：$data[open_price],day_k=$trade_day_k,day_d:$trade_day_d");
 	} 
       }
 	 //回转买入开始 
