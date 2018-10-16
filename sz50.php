@@ -56,7 +56,7 @@ while(1==1) {
     }elseif (($data[time_hour]=="11" and $data[time_min]>="30") or ($data[time_hour]>="12" and $data[time_hour]<"13")){
       $this->sleep_time();  
     }elseif ($data[time_hour]>="15") {
-      $this->log -> log_work("3point!\n");
+      $this->log -> log_work("3point!");
       //$a=$runoob->Runday_Point();  
       exit(0);    
     }
@@ -65,7 +65,7 @@ while(1==1) {
     $row=$this->db->get_select($sql);
     $this->log -> log_work("stat_time_min:$row[stat_time_min]\n");
     $stat_time_min=$row[stat_time_min];
-        if ($stat_time_min<>$data[time_min] and ($data[time_min]==0 or $data[time_min]==15 or $data[time_min]==30 or $data[time_min]==45)){
+        if ($stat_time_min<>$data[time_min] and ($data[time_min]==0 or $data[time_min]==15 or $data[time_min]==30 or $data[time_min]==45) and ($data[time_min] !=30 and $data[time_hour] !=11)){
            $this->log -> log_work("table:$this->table_name\n");    
            $time_out_begin=($data[time_hour]*3600)+($data[time_min]*60)+900;
            $time_out_now=($data[time_hour]*3600)+($data[time_min]*60);
