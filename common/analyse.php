@@ -310,6 +310,20 @@ if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<
 	$sql = "update trade_history set connecttion_id='$trade_id',vifi_status='1' where id='$row[id]';";
 	$this->log ->log_work("$sql~cut_price 核销订单sql\n");
 	$this->db->set_update($sql);
+    }elseif($row[trade_type]==28 $data[begin_point] <= ($row[cut_price]-$row[cut_price]*0.3/100) and $row[cut_price] > ($row[trade_buy_price]+$row[trade_buy_price]*0.6/100) and $row[trade_buy_price] <> "0" and $data[begin_point]>$row[trade_buy_price]){
+   	$trade_type=10;
+	$this->log -> log_work ("cut_price开始".$row[id]."~".$row[cut_price]."~".$data[begin_point]."~".$row[trade_buy_price]."~".$row[number]."\n");
+	$this->log -> log_work($code."~".$data[begin_point]."~".$stat_date."\n");
+	$trade_id=$this->db->get_id("trade_history");
+	$this->log -> log_work("trade_id:$trade_id");	   
+	//插入交易历史  
+	$sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id,history_make_money) values ('$trade_id','$code','$stat_date','$time_hour','$time_min','0','0','$row[number]','$trade_type','$row[trade_buy_price]','$data[begin_point]','0','$row[id]',$row[history_make_money]);";                                                                  
+	$this->log -> log_work("$sql:cut_price sell 处理了28号类型！！！！\n");
+	$this->db->set_insert($sql);
+	//核销已经处理的前期订单，避免订单再次进入    
+	$sql = "update trade_history set connecttion_id='$trade_id',vifi_status='1' where id='$row[id]';";
+	$this->log ->log_work("$sql~cut_price 核销订单sql\n");
+	$this->db->set_update($sql);
     }
     else{
          $this->log -> log_work("不符合cut_price函数条件，不执行!begin_point:$data[begin_point],cut_price:$row[cut_price],trade_buy_price:$row[trade_buy_price]");
