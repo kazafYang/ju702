@@ -213,7 +213,7 @@ if($today_bite>=0.5 and $sell_switched==1 and ($trade_day_k<80 or $trade_day_d<8
 //这个位置待增加一个止损位，发生亏损及时出局
 if($today_bite<=-0.5 and $buy_switched==1 and ($trade_day_k<80 or $trade_day_d<80)){
       	$this->log -> log_work("今日涨幅大于等于：$today_bite%,今日开盘价：$data[open_price]，昨日收盘价：$data[open_price],day_k=$trade_day_k,day_d:$trade_day_d");
-        $trade_type=27;$trade_bite=1;
+        $trade_type=28;$trade_bite=1;
         $number=11/$data[buy_one_price]*$trade_bite;
         $cut_price=$date[begin_point]+($date[begin_point]*3/100);
         $trade_id=$this->db->get_id("trade_history");
@@ -238,8 +238,8 @@ $this->log -> log_work("回转buy开始\n");
        $this->trade->buy_action($trade_type,$trade_bite);
       }
 	//回转买入，当前价低于最低卖出价5个点，即可等量/分批加码回收筹码；增加trade_type，标志回转交易，然后沿用status标志，这样比较好；如果这样的话不能判断出数据是否已经被处理了，所以我还需要一个步骤就是将已经对比的status的值=2;
-       //判断已经交易完成的，然后处理结束后将status变更为2   
-      $row=$this->db->get_select("select id,number,trade_sell_price,trade_type from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type in(5,6,7,8,9) and status=1 limit 1;");
+       //判断已经交易完成的，然后处理结束后将status变更为2,暂时去掉这个条件 and stat_time_min='$trade_time_min'   
+      $row=$this->db->get_select("select id,number,trade_sell_price,trade_type from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and trade_type in(5,6,7,8,9,12) and status=1 limit 1;");
       $number=$row[number];
       $number=round($number); 	  
       switch ($row[trade_type])
@@ -263,6 +263,10 @@ $this->log -> log_work("回转buy开始\n");
        case 9:
 	     $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*3/100); //回转120分钟超买
 	     $loser_price=round($loser_price,3);	      
+       break;
+       case 12:
+       $loser_price=$row[trade_sell_price]-($row[trade_sell_price]*0.5/100); //回转120分钟超买
+       $loser_price=round($loser_price,3);	      
        break;
        default:
        $this->log -> log_work("No number 超买");
