@@ -215,7 +215,7 @@ if($today_bite<=-0.5 and $buy_switched==1 and ($trade_day_k<80 or $trade_day_d<8
       	$this->log -> log_work("今日涨幅大于等于：$today_bite%,今日开盘价：$data[open_price]，昨日收盘价：$data[open_price],day_k=$trade_day_k,day_d:$trade_day_d");
         $trade_type=28;$trade_bite=1;
         $number=11/$data[buy_one_price]*$trade_bite;
-        $cut_price=$date[begin_point]+($date[begin_point]*3/100);
+        $cut_price=$date[begin_point]+($date[begin_point]*0.6/100);
         $trade_id=$this->db->get_id("trade_history");
         $totay_row=$this->db->get_select("select count(*) from trade_history where code='$trade_code' and stat_date='$trade_stat_date' and stat_time_hour='$trade_time_hour' and stat_time_min='$trade_time_min' and trade_type=$trade_type;");
         if($totay_row[0]<1 and $useable_money>=1000){
