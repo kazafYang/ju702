@@ -195,7 +195,7 @@ function set_analyse () {
 	$this->trade->huizhuan_sell_action($trade_type);  
 	  }
     } //卖出回转结束
-//当日高开超过0.5每15分钟卖出1000块作为实验，看效果如何？
+//当日高开超过0.5每15分钟卖出1000块作为实验，看效果如何？我觉得这样做台随机了，应该在加入一个追涨杀跌的程序；
 if($today_bite>=0.5 and $sell_switched==1 and ($trade_day_k<80 or $trade_day_d<80)){
       	$this->log -> log_work("今日涨幅大于等于：$today_bite%,今日开盘价：$data[open_price]，昨日收盘价：$data[open_price],day_k=$trade_day_k,day_d:$trade_day_d");
         $trade_type=12;$trade_bite=1;
@@ -210,6 +210,7 @@ if($today_bite>=0.5 and $sell_switched==1 and ($trade_day_k<80 or $trade_day_d<8
       	$this->log -> log_work("不符合条件：今日涨幅大于等于：$today_bite%,今日开盘价：$data[open_price]，昨日收盘价：$data[open_price],day_k=$trade_day_k,day_d:$trade_day_d");
 	} 
       }
+//这个位置待增加一个止损位，发生亏损及时出局
 if($today_bite<=-0.5 and $buy_switched==1 and ($trade_day_k<80 or $trade_day_d<80)){
       	$this->log -> log_work("今日涨幅大于等于：$today_bite%,今日开盘价：$data[open_price]，昨日收盘价：$data[open_price],day_k=$trade_day_k,day_d:$trade_day_d");
         $trade_type=27;$trade_bite=1;
