@@ -66,18 +66,22 @@ while(1==1) {
     $this->log -> log_work("stat_time_min:$row[stat_time_min]\n");
     $stat_time_min=$row[stat_time_min];
         if ($stat_time_min<>$data[time_min] and ($data[time_min]==0 or $data[time_min]==15 or $data[time_min]==30 or $data[time_min]==45)){
-           $this->log -> log_work("table:$this->table_name\n");    
+           $this->log -> log_work("table:$this->table_name\n"); 
            $time_out_begin=($data[time_hour]*3600)+($data[time_min]*60)+900;
            $time_out_now=($data[time_hour]*3600)+($data[time_min]*60);
            $this->log -> log_work($time_out_now."\n");     
            $this->log -> log_work("当前时间".(intval($time_out_now/3600)).":".(($time_out_now%3600)/60)."\n");
            $this->log -> log_work( $time_out_begin."\n");    
            $this->log -> log_work("结束时间".(intval($time_out_begin/3600)).":".(($time_out_begin%3600)/60)."\n");
-           $row[id]=$row[id]+1;   
+           $row[id]=$row[id]+1;  
+	   if($data[time_min]==30 and $data[time_hour]==11){
+	        $this->log -> log_work("已经到11点半了");
+	   }else{
            $sql = "insert into $this->table_name (id,stat_date,stat_time_hour,stat_time_min,begin_point,min15_k,min15_d,min30_k,min30_d,min60_k,min60_d,min120_k,min120_d,kdjday_k,kdjday_d) VALUES ('$row[id]','$data[stat_date]','$data[time_hour]','$data[time_min]','$data[begin_point]',50,50,50,50,50,50,50,50,50,50);";    
            $this->db->set_insert($sql);
 	     $nine = new Nine_Count();	
-             $nine->nine_count($time_out_begin,$time_out_now);     
+             $nine->nine_count($time_out_begin,$time_out_now);
+	   }
          }
       } 
  }	 
