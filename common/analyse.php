@@ -310,7 +310,7 @@ if(($trade_day_k>=20 and $trade_day_k<85) or ($trade_day_d>=20 and $trade_day_d<
 	$sql = "update trade_history set connecttion_id='$trade_id',vifi_status='1' where id='$row[id]';";
 	$this->log ->log_work("$sql~cut_price 核销订单sql\n");
 	$this->db->set_update($sql);
-    }elseif($row[trade_type]==28 $data[begin_point] <= ($row[cut_price]-$row[cut_price]*0.3/100) and $row[cut_price] > ($row[trade_buy_price]+$row[trade_buy_price]*0.6/100) and $row[trade_buy_price] <> "0" and $data[begin_point]>$row[trade_buy_price]){
+    }elseif($row[trade_type]==28 and $data[begin_point] <= ($row[cut_price]-$row[cut_price]*0.3/100) and $row[cut_price] > ($row[trade_buy_price]+$row[trade_buy_price]*0.6/100) and $row[trade_buy_price] <> "0" and $data[begin_point] > $row[trade_buy_price]){
    	$trade_type=10;
 	$this->log -> log_work ("cut_price开始".$row[id]."~".$row[cut_price]."~".$data[begin_point]."~".$row[trade_buy_price]."~".$row[number]."\n");
 	$this->log -> log_work($code."~".$data[begin_point]."~".$stat_date."\n");
