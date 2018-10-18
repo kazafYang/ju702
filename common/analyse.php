@@ -225,6 +225,21 @@ if($today_bite<=-0.5 and $buy_switched==1 and ($trade_day_k<80 or $trade_day_d<8
       	$this->log -> log_work("不符合条件：今日涨幅大于等于：$today_bite%,今日开盘价：$data[open_price]，昨日收盘价：$data[open_price],day_k=$trade_day_k,day_d:$trade_day_d");
 	} 
       }
+    //这是当日的错误，及时止损；
+     $sql="select * from trade_history where code=$this->code and vifi_status=0 and status=1 and trade_type==28 and stat_date='$data[stat_date]'  order by id desc;"; // and stat_date<'$data[stat_date]'   
+     $result = $this->db->get_resultselect($sql);
+     while($row=mysqli_fetch_array($result)){ 
+     if($data[begin_point] < ($row[trade_buy_price]-$row[trade_buy_price]*0.5){
+	   $trade_type=29;$trade_bite=1;
+           $number=$row[number];
+           $cut_price=$date[begin_point]+($date[begin_point]*0.6/100);
+           $trade_id=$this->db->get_id("trade_history");
+           if($sell_switched==1 and $useable_sell_number>=$row[number]){
+	   $sql = "insert into trade_history (id,code,stat_date,stat_time_hour,stat_time_min,status,vifi_status,number,trade_type,trade_buy_price,trade_sell_price,cut_price,connecttion_id) values ('$trade_id','$trade_code','$trade_stat_date','$trade_time_hour','$trade_time_min','0','0','$number','$trade_type','$data[buy_one_price]','$data[buy_one_price]','$cut_price','0');";
+           $this->db->set_insert($sql);   
+	   }
+     }
+   }
 	 //回转买入开始 
 	//回转60分钟买入
 $this->log -> log_work("回转buy开始\n");	  
