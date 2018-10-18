@@ -229,7 +229,7 @@ if($today_bite<=-0.5 and $buy_switched==1 and ($trade_day_k<80 or $trade_day_d<8
      $sql="select * from trade_history where code=$this->code and vifi_status=0 and status=1 and trade_type in (27,28) and stat_date='$data[stat_date]'  order by id desc;"; // and stat_date<'$data[stat_date]'   
      $result = $this->db->get_resultselect($sql);
      while($row=mysqli_fetch_array($result)){ 
-     if($data[begin_point] < ($row[trade_buy_price]-$row[trade_buy_price]*0.5){
+     if($data[begin_point] < ($row[trade_buy_price]-$row[trade_buy_price]*0.5)){
 	   $trade_type=29;$trade_bite=1;
            $number=$row[number];
            $cut_price=$date[begin_point]+($date[begin_point]*0.6/100);
