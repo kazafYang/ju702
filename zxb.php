@@ -58,7 +58,7 @@ while(1==1) {
     }elseif ($data[time_hour]>="15") {
       $this->log -> log_work("3point!");
       //$a=$runoob->Runday_Point();  
-      //exit(0);    
+      exit(0);    
     }
     $sql = "select id,stat_time_min from $this->table_name order by id desc limit 1;";    
     $row=$this->db->get_select($sql);
